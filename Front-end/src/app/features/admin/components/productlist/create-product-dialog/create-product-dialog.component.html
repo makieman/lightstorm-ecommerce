@@ -7,79 +7,58 @@
           <form [formGroup]="createForm">
             <div class="mb-3">
               <label for="productName" class="form-label">Product Name</label>
-              <input
-                formControlName="title"
-                type="text"
-                class="form-control"
-                id="productName"
-                placeholder="Enter product name"
-              />
+              <input formControlName="title" type="text" class="form-control" id="productName"
+                placeholder="Enter product name" />
             </div>
             <div class="mb-3">
-              <label for="productDescription" class="form-label"
-                >Product Description</label
-              >
-              <textarea
-                formControlName="details"
-                class="form-control"
-                id="productDescription"
-                rows="3"
-                placeholder="Enter product description"
-              ></textarea>
+              <label for="productDescription" class="form-label">Product Description</label>
+              <textarea formControlName="details" class="form-control" id="productDescription" rows="3"
+                placeholder="Enter product description"></textarea>
             </div>
             <div class="mb-3">
               <label for="productPrice" class="form-label">Product Price</label>
-              <input
-                formControlName="price"
-                type="number"
-                class="form-control"
-                id="productPrice"
-                placeholder="Enter product price"
-              />
+              <input formControlName="price" type="number" class="form-control" id="productPrice"
+                placeholder="Enter product price" />
             </div>
             <div class="mb-3">
-              <label for="productQuantity" class="form-label"
-                >Product Quantity</label
-              >
-              <input
-                formControlName="productQuantity"
-                type="number"
-                class="form-control"
-                id="productQuantity"
-                placeholder="Enter Product Quantity"
-              />
+              <label for="productQuantity" class="form-label">Product Quantity</label>
+              <input formControlName="productQuantity" type="number" class="form-control" id="productQuantity"
+                placeholder="Enter Product Quantity" />
             </div>
             <div class="mb-3">
-              <label for="productCategory" class="form-label"
-                >Product Category</label
-              >
-              <select
-                formControlName="productCategory"
-                class="form-select"
-                id="productCategory"
-                aria-label="Select Category"
-              >
+              <label for="productCategory" class="form-label">Product Category</label>
+              <select formControlName="productCategory" class="form-select" id="productCategory"
+                aria-label="Select Category">
                 <option value="" selected disabled>Select Category</option>
+                <option value="Solar Panel">Solar Panel</option>
+                <option value="Battery">Battery</option>
+                <option value="Inverter">Inverter</option>
+                <option value="Charge Controller">Charge Controller</option>
                 <option value="Table">Table</option>
                 <option value="Chair">Chair</option>
                 <option value="Sofa">Sofa</option>
               </select>
             </div>
             <div class="mb-3">
-              <label for="productImage" class="form-label">Product Image</label>
-              <input
-                type="file"
-                class="form-control"
-                id="productImage"
-                placeholder="Enter product image"
-                (change)="onFileSelected($event)"
-              />
+              <label for="wattage" class="form-label">Wattage (Optional)</label>
+              <input formControlName="wattage" type="text" class="form-control" id="wattage" placeholder="e.g. 450W" />
             </div>
-            <button
-              type="submit"
-              class="btn btn-primary"
-              (click)="sumbitForm()"
-            >
+            <div class="mb-3">
+              <label for="voltage" class="form-label">Voltage (Optional)</label>
+              <input formControlName="voltage" type="text" class="form-control" id="voltage"
+                placeholder="e.g. 12V / 24V" />
+            </div>
+            <div class="mb-3">
+              <label for="batteryType" class="form-label">Battery Type (Optional)</label>
+              <input formControlName="batteryType" type="text" class="form-control" id="batteryType"
+                placeholder="e.g. Lithium-Ion, Gel" />
+            </div>
+            <div class="mb-3">
+              <label for="productImage" class="form-label">Product Image</label>
+              <input type="file" class="form-control" id="productImage" placeholder="Enter product image"
+                (change)="onFileSelected($event)" />
+            </div>
+            <button type="submit" class="btn btn-primary" (click)="sumbitForm()">
               Add Product
             </button>
           </form>

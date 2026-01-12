@@ -1,8 +1,8 @@
 // ---------------------------------- All Requires -------------------------------------
-const UserModel = require("../models/user.model");
-const OrderModel = require("../models/order.model");
-const ProductModel = require("../models/product.model");
-const UserValidate = require("../middlewares/user.validation");
+const UserModel = require("../Models/user.model");
+const OrderModel = require("../Models/order.model");
+const ProductModel = require("../Models/product.model");
+const UserValidate = require("../Middlewares/user.validation");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
@@ -78,7 +78,7 @@ const UpdateUser = async (req, res) => {
     user.image = uploadedImage.url;
   }
 
-  if(req.body.orders){
+  if (req.body.orders) {
     user.orders = req.body.orders
   }
 
@@ -225,47 +225,47 @@ let AddProductToOrder = async (req, res) => {
   const userId = req.params.id;
 
   try {
-      const user = await UserModel.findById(userId);
+    const user = await UserModel.findById(userId);
 
-      if (!user) {
-          return res.status(404).json({ message: "User not found" });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const productIds = user.carts.map(item => item.product);
+    const products = await ProductModel.find({ _id: { $in: productIds } });
+
+    let totalPrice = 0;
+    user.carts.forEach(item => {
+      const product = products.find(p => p._id.toString() === item.product.toString());
+      if (product) {
+        totalPrice += product.price * item.quantity;
       }
+    });
+    totalPrice += 300;
 
-      const productIds = user.carts.map(item => item.product);
-      const products = await ProductModel.find({ _id: { $in: productIds } });
+    const orderProducts = user.carts.map(item => item.product);
 
-      let totalPrice = 0;
-      user.carts.forEach(item => {
-          const product = products.find(p => p._id.toString() === item.product.toString());
-          if (product) {
-              totalPrice += product.price * item.quantity;
-          }
-      });
-      totalPrice += 300;
+    user.carts = [];
 
-      const orderProducts = user.carts.map(item => item.product);
+    await user.save();
 
-      user.carts = [];
+    const order = new OrderModel({
+      userId: user._id,
+      username: user.username,
+      date: new Date(),
+      totalPrice: totalPrice,
+      products: orderProducts,
+      status: "Pending"
+    });
 
-      await user.save();
+    await order.save();
+    user.orders.push(order._id);
+    await user.save();
 
-      const order = new OrderModel({
-          userId: user._id,
-          username: user.username,
-          date: new Date(),
-          totalPrice: totalPrice,
-          products: orderProducts,
-          status: "Pending"
-      });
-
-      await order.save();
-      user.orders.push(order._id);
-      await user.save();
-
-      res.status(200).json({ message: "Products added to order successfully" });
+    res.status(200).json({ message: "Products added to order successfully" });
   } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: "Server error" });
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
   }
 };
 

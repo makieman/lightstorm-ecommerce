@@ -1,6 +1,6 @@
 const express = require("express");
 const route = express.Router();
-const orderController = require("../controllers/order.controller");
+const orderController = require("../Controllers/order.controller");
 
 route.get("/weeklySales", orderController.weeklySales);
 route.get("/salesPerWeek", orderController.salesPerWeek);

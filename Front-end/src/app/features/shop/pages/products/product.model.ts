@@ -4,5 +4,9 @@ export interface Product {
   image: string;
   price: number;
   details: string;
-  quantity: Number;
+  quantity: number;
+  category?: string;
+  wattage?: string;
+  voltage?: string;
+  batteryType?: string;
 }

@@ -1,7 +1,7 @@
 const express = require("express");
 const Router = express.Router();
-const UserController = require("../controllers/user.controller");
-const multerConfig = require("../middlewares/multer");
+const UserController = require("../Controllers/user.controller");
+const multerConfig = require("../Middlewares/multer");
 
 Router.post("/:id/cart", UserController.AddProductToCart);
 Router.get("/", UserController.GetAllUsers);

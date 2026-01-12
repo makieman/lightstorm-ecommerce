@@ -22,6 +22,9 @@ export class EditProductDialogComponent {
     details: new FormControl(''),
     productQuantity: new FormControl(''),
     poductCategory: new FormControl(''),
+    wattage: new FormControl(''),
+    voltage: new FormControl(''),
+    batteryType: new FormControl(''),
     image: new FormControl(''),
   });
   constructor(
@@ -39,6 +42,9 @@ export class EditProductDialogComponent {
       details: this.product.details,
       productQuantity: this.product.quantity,
       poductCategory: this.product.category,
+      wattage: this.product.wattage,
+      voltage: this.product.voltage,
+      batteryType: this.product.batteryType,
     });
   }
   onFileSelected(event: any) {
@@ -60,6 +66,9 @@ export class EditProductDialogComponent {
     this.productUpdated.append('details', this.editForm.value.details);
     this.productUpdated.append('quantity', this.editForm.value.productQuantity);
     this.productUpdated.append('category', this.editForm.value.poductCategory);
+    this.productUpdated.append('wattage', this.editForm.value.wattage);
+    this.productUpdated.append('voltage', this.editForm.value.voltage);
+    this.productUpdated.append('batteryType', this.editForm.value.batteryType);
     // this.productUpdated.append('reviews', this.product.reviews);
     if (this.imageFile) {
       this.productUpdated.append('image', this.imageFile);

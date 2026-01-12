@@ -1,7 +1,7 @@
 const express = require("express");
 const route = express.Router();
-const productsController = require("../controllers/product.controller");
-const multerConfig = require("../middlewares/multer");
+const productsController = require("../Controllers/product.controller");
+const multerConfig = require("../Middlewares/multer");
 
 route.get("/:id", productsController.getProductByID);
 route.post("/", multerConfig, productsController.createNewProduct);

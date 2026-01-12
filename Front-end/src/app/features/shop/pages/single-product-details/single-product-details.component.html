@@ -37,6 +37,24 @@
                     </p>
                 </div>
 
+                @if(product.wattage || product.voltage || product.batteryType) {
+                <div class="specs-container mt-3 mb-4 p-3 bg-light rounded border">
+                    <h6 class="fw-bold mb-2">Technical Specifications</h6>
+                    <ul class="list-unstyled mb-0">
+                        @if(product.wattage) {
+                        <li><span class="text-secondary">Wattage:</span> <strong>{{ product.wattage }}</strong></li>
+                        }
+                        @if(product.voltage) {
+                        <li><span class="text-secondary">Voltage:</span> <strong>{{ product.voltage }}</strong></li>
+                        }
+                        @if(product.batteryType) {
+                        <li><span class="text-secondary">Battery Type:</span> <strong>{{ product.batteryType }}</strong>
+                        </li>
+                        }
+                    </ul>
+                </div>
+                }
+
                 <div class="container">
                     <div class="row d-flex justify-content-between">
                         <div class="number-input d-flex align-items-center col-2 col-lg-2 col-md-2 col-sm-2 p-0">
@@ -55,10 +73,8 @@
                 <hr>
 
                 <div class="d-flex">
-                    <p class="me-2"><b>Categories: </b> </p>
-                    <a href="#" class="text-decoration-none nav-link">Chair,</a>
-                    <a href="#" class="text-decoration-none nav-link">Table,</a>
-                    <a href="#" class="text-decoration-none nav-link">Sofa</a>
+                    <p class="me-2"><b>Category: </b> </p>
+                    <a class="text-decoration-none nav-link">{{ product.category }}</a>
                 </div>
 
 
@@ -197,7 +213,7 @@
                     <div class="container review-table p-0">
                         <div class="row">
                             <div class="col-12 p-5 col-lg-12 col-md-12 col-sm-12 pt-3">
-                                <h4><b>Be the first to review “Desktop Table with Drawers”</b></h4>
+                                <h4><b>Be the first to review “{{ product.title }}”</b></h4>
                                 <h6>Your email address will not be published. Required fields are marked *</h6>
                                 <form [formGroup]="reviewForm">
                                     <div class="d-flex flex-sm-column flex-lg-row mt-4">

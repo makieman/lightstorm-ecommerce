@@ -1,6 +1,6 @@
-const productModel = require("../models/product.model");
-const productValidate = require("../middlewares/product.validation");
-const userModel = require("../models/user.model");
+const productModel = require("../Models/product.model");
+const productValidate = require("../Middlewares/product.validation");
+const userModel = require("../Models/user.model");
 const jwt = require("jsonwebtoken");
 const cloudUpload = require("../services/cloudinary.service");
 
@@ -57,25 +57,39 @@ let getProductByID = async (req, res) => {
  * Create a new Product
  */
 let createNewProduct = async (req, res) => {
-  console.log(req.body);
   try {
-    let { error } = productValidate(req.body);
-    if (error) {
-      return res.status(400).json({ message: error.details[0].message });
+    // Convert string prices/quantities to numbers for validation
+    if (req.body.price) req.body.price = Number(req.body.price);
+    if (req.body.productQuantity) req.body.quantity = Number(req.body.productQuantity);
+    if (req.body.quantity) req.body.quantity = Number(req.body.quantity);
+    if (req.body.productCategory) req.body.category = req.body.productCategory;
+
+    const isValid = productValidate(req.body);
+    if (!isValid) {
+      return res.status(400).json({
+        message: productValidate.errors.map(err => `${err.instancePath} ${err.message}`).join(', ')
+      });
     }
+
     let uploadedImage = await cloudUpload(req.files[0].path);
 
     let product = new productModel({
       title: req.body.title,
       details: req.body.details,
       price: req.body.price,
-      quantity: req.body.productQuantity,
-      category: req.body.productCategory,
+      quantity: req.body.quantity,
+      category: req.body.category,
+      type: req.body.type || 'product',
       image: uploadedImage.url,
+      wattage: req.body.wattage,
+      voltage: req.body.voltage,
+      batteryType: req.body.batteryType
     });
+
     await product.save();
     return res.json({ message: "Product Added Successfully" });
   } catch (error) {
+    console.error(error);
     return res.status(500).json({ message: "Internal server error" });
   }
 };
@@ -96,13 +110,23 @@ let updateProductByID = async (req, res) => {
       product.image = uploadedImage.url;
     }
 
-    // Update only fields sent in the request
-    const { title, details, price, quantity, category } = req.body;
-    if (title) product.title = title;
-    if (details) product.details = details;
-    if (price) product.price = price;
-    if (quantity) product.quantity = quantity;
-    if (category) product.category = category;
+    // Standardize body fields
+    const {
+      title, details, price, quantity, productQuantity,
+      category, productCategory, type, wattage, voltage, batteryType
+    } = req.body;
+
+    if (title !== undefined) product.title = title;
+    if (details !== undefined) product.details = details;
+    if (price !== undefined) product.price = Number(price);
+    if (quantity !== undefined) product.quantity = Number(quantity);
+    if (productQuantity !== undefined) product.quantity = Number(productQuantity);
+    if (category !== undefined) product.category = category;
+    if (productCategory !== undefined) product.category = productCategory;
+    if (type !== undefined) product.type = type;
+    if (wattage !== undefined) product.wattage = wattage;
+    if (voltage !== undefined) product.voltage = voltage;
+    if (batteryType !== undefined) product.batteryType = batteryType;
 
     // Save the document
     const productUpdated = await product.save();

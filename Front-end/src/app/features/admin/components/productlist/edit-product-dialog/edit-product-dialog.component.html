@@ -7,88 +7,61 @@
           <form [formGroup]="editForm">
             <div class="mb-3">
               <label for="productName" class="form-label">Product Name</label>
-              <input
-                formControlName="title"
-                type="text"
-                class="form-control"
-                id="productName"
-                placeholder="Enter product name"
-                value="{{ product.title }}"
-              />
+              <input formControlName="title" type="text" class="form-control" id="productName"
+                placeholder="Enter product name" value="{{ product.title }}" />
             </div>
             <div class="mb-3">
-              <label for="productDescription" class="form-label"
-                >Product Description</label
-              >
-              <textarea
-                formControlName="details"
-                class="form-control"
-                id="productDescription"
-                rows="3"
-                placeholder="Enter product description"
-                value="{{ product.details }}"
-              ></textarea>
+              <label for="productDescription" class="form-label">Product Description</label>
+              <textarea formControlName="details" class="form-control" id="productDescription" rows="3"
+                placeholder="Enter product description" value="{{ product.details }}"></textarea>
             </div>
             <div class="mb-3">
               <label for="productPrice" class="form-label">Product Price</label>
-              <input
-                formControlName="price"
-                type="number"
-                class="form-control"
-                id="productPrice"
-                placeholder="Enter product price"
-                value="{{ product.price }}"
-              />
+              <input formControlName="price" type="number" class="form-control" id="productPrice"
+                placeholder="Enter product price" value="{{ product.price }}" />
             </div>
             <div class="mb-3">
-              <label for="productQuantity" class="form-label"
-                >Product Quantity</label
-              >
-              <input
-                formControlName="productQuantity"
-                type="number"
-                class="form-control"
-                id="productQuantity"
-                placeholder="Enter Product Quantity"
-                value="{{ product.quantity }}"
-              />
+              <label for="productQuantity" class="form-label">Product Quantity</label>
+              <input formControlName="productQuantity" type="number" class="form-control" id="productQuantity"
+                placeholder="Enter Product Quantity" value="{{ product.quantity }}" />
             </div>
             <div class="mb-3">
-              <label for="poductCategory" class="form-label"
-                >Product Category</label
-              >
-              <select
-                formControlName="poductCategory"
-                class="form-select"
-                id="poductCategory"
-                aria-label="Select Category"
-              >
-                <option
-                  [value]="product.category"
-                  [attr.selected]="product.category ? 'selected' : null"
-                >
+              <label for="poductCategory" class="form-label">Product Category</label>
+              <select formControlName="poductCategory" class="form-select" id="poductCategory"
+                aria-label="Select Category">
+                <option [value]="product.category" [attr.selected]="product.category ? 'selected' : null">
                   {{ product.category }}
                 </option>
+                <option value="Solar Panel">Solar Panel</option>
+                <option value="Battery">Battery</option>
+                <option value="Inverter">Inverter</option>
+                <option value="Charge Controller">Charge Controller</option>
                 <option value="table">Table</option>
                 <option value="chair">Chair</option>
                 <option value="sofa">Sofa</option>
               </select>
             </div>
             <div class="mb-3">
-              <label for="productImage" class="form-label">Product Image</label>
-              <input
-                type="file"
-                class="form-control"
-                id="productImage"
-                placeholder="Enter product image"
-                (change)="onFileSelected($event)"
-              />
+              <label for="wattage" class="form-label">Wattage (Optional)</label>
+              <input formControlName="wattage" type="text" class="form-control" id="wattage" placeholder="e.g. 450W"
+                value="{{ product.wattage }}" />
             </div>
-            <button
-              type="submit"
-              class="btn btn-primary"
-              (click)="editFormSubmit()"
-            >
+            <div class="mb-3">
+              <label for="voltage" class="form-label">Voltage (Optional)</label>
+              <input formControlName="voltage" type="text" class="form-control" id="voltage"
+                placeholder="e.g. 12V / 24V" value="{{ product.voltage }}" />
+            </div>
+            <div class="mb-3">
+              <label for="batteryType" class="form-label">Battery Type (Optional)</label>
+              <input formControlName="batteryType" type="text" class="form-control" id="batteryType"
+                placeholder="e.g. Lithium-Ion, Gel" value="{{ product.batteryType }}" />
+            </div>
+            <div class="mb-3">
+              <label for="productImage" class="form-label">Product Image</label>
+              <input type="file" class="form-control" id="productImage" placeholder="Enter product image"
+                (change)="onFileSelected($event)" />
+            </div>
+            <button type="submit" class="btn btn-primary" (click)="editFormSubmit()">
               Update Product
             </button>
           </form>

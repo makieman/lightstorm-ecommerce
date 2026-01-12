@@ -1,6 +1,5 @@
-const OrderModel = require("../models/order.model");
-const orderModel = require("../models/order.model");
-const orderValidate = require("../middlewares/order.validation");
+const OrderModel = require("../Models/order.model");
+const orderValidate = require("../Middlewares/order.validation");
 
 /**
  * Get all orders
@@ -27,7 +26,7 @@ let getAllOrders = async (req, res) => {
       },
     },
   ];
-  let orders = await orderModel.aggregate(pipeline);
+  let orders = await OrderModel.aggregate(pipeline);
   return res.json(orders);
 };
 
@@ -59,7 +58,7 @@ let createNewOrder = (req, res) => {
  */
 let updateOrderByID = async (req, res) => {
   try {
-    let order = await orderModel.findByIdAndUpdate(req.params.id, req.body, {
+    let order = await OrderModel.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
     });
 
@@ -116,7 +115,7 @@ let weeklyOrders = async (req, res) => {
         },
       },
     ];
-    let orders = await orderModel.aggregate(pipeline);
+    let orders = await OrderModel.aggregate(pipeline);
     return res.json(orders);
   } catch (error) {
     return res
@@ -147,11 +146,11 @@ let dailyOrders = async (req, res) => {
       {
         $group: {
           _id: null,
-          totalOrders: { $sum: 1 }, 
+          totalOrders: { $sum: 1 },
         },
       },
     ];
-    let orders = await orderModel.aggregate(pipeline);
+    let orders = await OrderModel.aggregate(pipeline);
     console.log(orders);
     if (orders.length === 0) {
       return res.status(404).json({ message: "No orders found" });
@@ -185,7 +184,7 @@ let weeklySales = async (req, res) => {
         },
       },
     ];
-    let orders = await orderModel.aggregate(pipeline);
+    let orders = await OrderModel.aggregate(pipeline);
     return res.json(orders);
   } catch (error) {
     return res
@@ -213,7 +212,7 @@ let dailySales = async (req, res) => {
         },
       },
     ];
-    let orders = await orderModel.aggregate(pipeline);
+    let orders = await OrderModel.aggregate(pipeline);
     return res.json(orders);
   } catch (error) {
     return res
@@ -234,7 +233,7 @@ let salesPerWeek = async (req, res) => {
         },
       },
     ];
-    let orders = await orderModel.aggregate(pipeline);
+    let orders = await OrderModel.aggregate(pipeline);
     return res.json(orders);
   } catch (error) {
     return res

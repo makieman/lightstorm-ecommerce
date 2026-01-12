@@ -32,6 +32,9 @@ export class CreateProductDialogComponent implements OnInit {
       details: new FormControl(''),
       productQuantity: new FormControl(''),
       productCategory: new FormControl(''),
+      wattage: new FormControl(''),
+      voltage: new FormControl(''),
+      batteryType: new FormControl(''),
     });
   }
 
@@ -56,6 +59,9 @@ export class CreateProductDialogComponent implements OnInit {
       'productCategory',
       this.createForm.value.productCategory
     );
+    this.product.append('wattage', this.createForm.value.wattage);
+    this.product.append('voltage', this.createForm.value.voltage);
+    this.product.append('batteryType', this.createForm.value.batteryType);
     this.product.append('image', this.imageFile);
 
     this.productService.createProduct(this.product).subscribe(

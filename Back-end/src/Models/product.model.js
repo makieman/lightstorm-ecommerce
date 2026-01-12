@@ -9,15 +9,17 @@ let reviewsSchema = new mongoose.Schema({
 });
 
 const productsSchema = new mongoose.Schema({
-  id: String,
-  title: String,
-  price: Number,
-  stock: { type: Number, minimum: 0 }, // availability
+  title: { type: String, required: true },
+  price: { type: Number, required: true },
+  quantity: { type: Number, min: 0, default: 0 },
   type: { type: String, enum: ['product', 'service'], default: 'product' },
-  description: String,
-  images: [String],
+  details: String,
+  image: String,
   category: String,
-  reviews: [reviewsSchema] || [],
-});
+  wattage: String,
+  voltage: String,
+  batteryType: String,
+  reviews: [reviewsSchema],
+}, { timestamps: true });
 
 module.exports = mongoose.model("products", productsSchema);
