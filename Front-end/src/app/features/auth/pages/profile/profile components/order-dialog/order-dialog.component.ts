@@ -3,7 +3,7 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Observable, forkJoin } from 'rxjs';
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
-import { HomeProductService } from '@app/core/services/home-product.service';
+import { CoreProductService } from '@app/core/services/core-product.service';
 
 @Component({
   selector: 'app-order-dialog',
@@ -17,9 +17,9 @@ export class OrderDialogComponent implements OnInit {
 
 
   constructor(
-    private productService: HomeProductService,
+    private productService: CoreProductService,
     @Inject(MAT_DIALOG_DATA) public dialogData: { order: any }
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     const productIds = this.dialogData.order.products;  // Assuming it's an array of IDs
@@ -29,7 +29,7 @@ export class OrderDialogComponent implements OnInit {
     }
   }
 
-  private fetchProducts(productIds: string[]){
+  private fetchProducts(productIds: string[]) {
     const observables = productIds.map(id => this.productService.getProductById(id));
     forkJoin(observables).subscribe({
       next: (product) => {

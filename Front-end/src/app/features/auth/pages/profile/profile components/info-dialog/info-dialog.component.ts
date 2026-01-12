@@ -67,7 +67,7 @@ export class InfoDialogComponent implements OnInit {
 
   authSingleProducts() {
     this.http
-      .get<any>('http://localhost:7000/api/users/user/user', {
+      .get<any>('/api/users/user/user', {
         withCredentials: true,
       })
       .subscribe({

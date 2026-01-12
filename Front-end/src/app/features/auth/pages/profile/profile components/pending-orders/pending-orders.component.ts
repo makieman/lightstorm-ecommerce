@@ -7,7 +7,6 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { OrderDialogComponent } from '../order-dialog/order-dialog.component';
 import { CommonModule } from '@angular/common';
 import { UserServiceService } from '@app/core/services/user-service.service';
-import { HomeProductService } from '@app/core/services/home-product.service';
 import { OrderServiceService } from '@app/core/services/order-service.service';
 
 @Component({
@@ -27,18 +26,18 @@ export class PendingOrdersComponent implements OnInit {
   pendingOrders: any[] = [];
   orders: any[] = [];
   updatedOrders: any[] = [];
-  orderAfterDelete:any[]=[];
+  orderAfterDelete: any[] = [];
 
-  id:any;
-  updatedUserInfo:any;
+  id: any;
+  updatedUserInfo: any;
 
 
   constructor(
     private orderService: OrderServiceService,
     private matDialog: MatDialog,
     private http: HttpClient,
-    private usersSerive:UserServiceService
-  ) {}
+    private usersSerive: UserServiceService
+  ) { }
 
   ngOnInit() {
     this.authSingleProducts();
@@ -67,20 +66,20 @@ export class PendingOrdersComponent implements OnInit {
     });
   }
 
-  authSingleProducts(){
-    this.http.get<any>("http://localhost:7000/api/users/user/user", { withCredentials: true })
-    .subscribe({
-      next: (response) => {
+  authSingleProducts() {
+    this.http.get<any>("/api/users/user/user", { withCredentials: true })
+      .subscribe({
+        next: (response) => {
           this.id = response.data._id;
-          this.orders=response.data.orders;
+          this.orders = response.data.orders;
           console.log('Order Info before:', this.orders);
           console.log(this.id);
           this.loadPendingOrders();
           //response.data.orders=this.updatedOrders;
-      },
-      error: (error) => {
-      }
-    });
+        },
+        error: (error) => {
+        }
+      });
   }
 
   deleteOrder(orderId: string): void {

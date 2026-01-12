@@ -1,6 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { ProductService } from '../../../admin/Services/product.service';
+import { CoreProductService } from '@app/core/services/core-product.service';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import Swal from 'sweetalert2';
@@ -12,7 +12,6 @@ import { Router } from '@angular/router';
   imports: [ReactiveFormsModule, HttpClientModule],
   templateUrl: './edit-product-dialog.component.html',
   styleUrl: './edit-product-dialog.component.css',
-  providers: [ProductService],
 })
 export class EditProductDialogComponent {
   imageFile: File | null = null;
@@ -27,7 +26,7 @@ export class EditProductDialogComponent {
   });
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private productService: ProductService,
+    private productService: CoreProductService,
     private dialog: MatDialogRef<any>,
     private router: Router
   ) {

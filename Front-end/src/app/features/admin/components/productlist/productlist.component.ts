@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
-import { ProductsService } from '../../../../core/services/products.service';
+import { CoreProductService } from '@app/core/services/core-product.service';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
@@ -21,13 +21,13 @@ export class ProductlistComponent implements OnInit {
   image =
     'https://w7.pngwing.com/pngs/249/759/png-transparent-chair-comfort-furniture-commode-comfortable-chairs-angle-furniture-fashion-thumbnail.png';
   constructor(
-    private myproductService: ProductsService,
+    private myproductService: CoreProductService,
     private dialog: MatDialog,
     private router: Router,
     private http: HttpClient
-  ) {}
+  ) { }
   ngOnInit() {
-    this.myproductService.getProducts().subscribe((data) => {
+    this.myproductService.getAllProducts().subscribe((data) => {
       this.products = data;
       console.log(this.products);
     });
@@ -85,7 +85,7 @@ export class ProductlistComponent implements OnInit {
   logout(): void {
     this.http
       .post(
-        'http://localhost:7000/api/users/user/logout',
+        '/api/users/user/logout',
         {},
         { withCredentials: true }
       )

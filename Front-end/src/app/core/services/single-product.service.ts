@@ -9,8 +9,8 @@ export class SingleProductService {
 
   constructor(private http:HttpClient) { }
 
-  DB_Config = "http://localhost:7000/api/products/";
-  DB_Config_order = "http://localhost:7000/api/orders";
+  DB_Config = "/api/products/";
+  DB_Config_order = "/api/orders";
   
 
   getProductById(id:number): Observable<any>

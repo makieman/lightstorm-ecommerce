@@ -73,7 +73,7 @@ export class RegisterComponent implements OnInit {
       });
       return;
     }
-    this.http.post('http://localhost:7000/api/users/register', user, 
+    this.http.post('/api/users/register', user, 
     {
         withCredentials: true,
       })

@@ -46,7 +46,7 @@ export class LoginComponent implements OnInit {
       });
       return;
     } 
-    this.http.post<any>('http://localhost:7000/api/users/login', user, { withCredentials: true })
+    this.http.post<any>('/api/users/login', user, { withCredentials: true })
       .subscribe({ next:(response) => {
           let loggedInUser = response.user;
           if(loggedInUser && loggedInUser.isAdmin == true){
@@ -74,7 +74,7 @@ export class LoginComponent implements OnInit {
   }
 // ----------------------------- Check if user is already logged in --------------------------------
   checkLogin(){
-    this.http.get<any>('http://localhost:7000/api/users/user/user', { withCredentials: true }).subscribe({
+    this.http.get<any>('/api/users/user/user', { withCredentials: true }).subscribe({
       next: (response) => {
         if(response.data){
           Swal.fire({

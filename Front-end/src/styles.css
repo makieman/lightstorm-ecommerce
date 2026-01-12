@@ -1,4 +1,38 @@
-/* You can add global styles to this file, and also import other style files */
+html,
+body {
+    height: 100%;
+}
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body {
+    margin: 0;
+    font-family: 'Inter', Roboto, "Helvetica Neue", sans-serif;
+}
+
+:root {
+    --solar-green: #7cbb3b;
+    --solar-lime: #B9D32A;
+    --solar-dark-green: #219753;
+    --solar-gradient: linear-gradient(-180deg, #d6df22 0%, #7cbb3b 30%, #219753 100%);
+    --solar-accent: #ffc107;
+    /* Sunflower yellow/gold */
+}
+
+/* Global utility classes */
+.bg-solar-gradient {
+    background: var(--solar-gradient) !important;
+}
+
+.text-solar-green {
+    color: var(--solar-green) !important;
+}
+
+.btn-solar {
+    background-color: var(--solar-green);
+    color: white;
+    border: none;
+}
+
+.btn-solar:hover {
+    background-color: var(--solar-dark-green);
+    color: white;
+}

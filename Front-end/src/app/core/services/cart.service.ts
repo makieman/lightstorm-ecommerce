@@ -8,7 +8,7 @@ export class CartService {
 
   constructor(private http: HttpClient) { }
 
-  private readonly URL_DB = 'http://localhost:7000/api/users';
+  private readonly URL_DB = '/api/users';
 
   getUsers() {
     return this.http.get(this.URL_DB);

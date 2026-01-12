@@ -3,12 +3,12 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FieldsetModule } from 'primeng/fieldset';
-import { SingleProductService } from '@app/core/services/single-product.service';
+import { CoreProductService } from '@app/core/services/core-product.service';
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { OneProductComponent } from './one-product/one-product.component';
-import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import Swal from 'sweetalert2';
 import { HeaderComponent } from '../../../../shared/components/header/header.component';
 import { CartProductsCountService } from '../../../../core/services/cart-products-count.service';
@@ -48,8 +48,7 @@ export interface Product {
   templateUrl: './single-product-details.component.html',
   styleUrl: './single-product-details.component.css'
 })
-export class SingleProductDetailsComponent implements OnInit
-{
+export class SingleProductDetailsComponent implements OnInit {
   ID: any;
   product: Product | any;
   quantity: number = 1;
@@ -69,15 +68,14 @@ export class SingleProductDetailsComponent implements OnInit
   submitted: boolean = false;
   ratingSelected: boolean = false;
 
-  constructor( 
-    private route: ActivatedRoute, 
-    private router:Router, 
-    private productService:SingleProductService,
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private productService: CoreProductService,
     private formBuilder: FormBuilder,
     private productsCount: CartProductsCountService,
     private dialog: MatDialog
-  ) 
-  {
+  ) {
     this.ID = route.snapshot.params["id"];
   }
 
@@ -88,22 +86,20 @@ export class SingleProductDetailsComponent implements OnInit
       panelClass: 'full-screen-dialog'
     });
   }
-  
-  
-  ngOnInit(): void
-  {
+
+
+  ngOnInit(): void {
 
     /******* get single product ********/
     this.productService.getProductById(this.ID).subscribe({
-      next:(data: any)=>{
-        if(data == null)
-        {
+      next: (data: any) => {
+        if (data == null) {
           this.router.navigate(['/']);
         }
         this.product = data;
-        
+
       },
-      error:(err: any)=>{
+      error: (err: any) => {
         console.log("cannot get the product !!");
       }
     })
@@ -123,7 +119,7 @@ export class SingleProductDetailsComponent implements OnInit
             this.relatedProducts.push(data[i]);
           }
         }
-    
+
         /************ for updating current index for product pagination ************/
         let storedIndex = localStorage.getItem('currentProductIndex');
         this.currentProductIndex = storedIndex ? parseInt(storedIndex, 10) : 0;
@@ -134,8 +130,8 @@ export class SingleProductDetailsComponent implements OnInit
         console.log('cannot get related products !!', err);
       }
     });
-    
-    
+
+
 
     /********** get user token ***********/
 
@@ -156,37 +152,31 @@ export class SingleProductDetailsComponent implements OnInit
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]]
     });
-    
+
   }
 
   /**************** Quantity input ****************/
-  incrementQuantity() 
-  {
+  incrementQuantity() {
     this.quantity++;
   }
 
-  decrementQuantity() 
-  {
-    if (this.quantity > 1) 
-    {
+  decrementQuantity() {
+    if (this.quantity > 1) {
       this.quantity--;
     }
   }
 
-  onQuantityChange() 
-  {
+  onQuantityChange() {
     console.log('Quantity changed to: ', this.quantity);
   }
 
   /********************** Desc and Reviews btns **********************/
 
-  showDescription() 
-  {
+  showDescription() {
     this.selectedTab = 'description';
   }
 
-  showReviews() 
-  {
+  showReviews() {
     this.selectedTab = 'reviews';
   }
 
@@ -196,9 +186,8 @@ export class SingleProductDetailsComponent implements OnInit
     this.newReview.rating = index;
 
     let allReviews = this.product.reviews;
-    for(let i = 0; i < allReviews.length; i++) {
-      if(allReviews[i].user_id === this.user_id) 
-      {
+    for (let i = 0; i < allReviews.length; i++) {
+      if (allReviews[i].user_id === this.user_id) {
         allReviews[i].rating = index;
         return;
       }
@@ -206,13 +195,12 @@ export class SingleProductDetailsComponent implements OnInit
   }
 
 
-  resetStarStates() 
-  {
+  resetStarStates() {
     for (let i = 1; i <= 5; i++) {
       this.isStarFilled(i);
     }
   }
-  
+
   isStarFilled(index: number): boolean {
     return this.newReview.rating >= index;
   }
@@ -225,18 +213,16 @@ export class SingleProductDetailsComponent implements OnInit
 
   /***************************** Validate add review form **************************/
 
-  get f() 
-  {
+  get f() {
     return this.reviewForm.controls;
   }
 
   /************************* Add review to database *****************/
-  addReview() 
-  {
+  addReview() {
 
     this.submitted = true;
     if (!this.reviewForm.invalid) {
-    
+
       const newReview = {
         user_id: this.user_id,
         name: this.reviewForm.value.name,
@@ -250,8 +236,7 @@ export class SingleProductDetailsComponent implements OnInit
             this.product.reviews = [];
           }
           const existingReviewIndex = this.product.reviews.findIndex((review: { user_id: string; }) => review.user_id === this.user_id);
-          if (existingReviewIndex !== -1) 
-          {
+          if (existingReviewIndex !== -1) {
             this.product.reviews[existingReviewIndex] = data.review;
             Swal.fire({
               icon: 'success',
@@ -293,14 +278,12 @@ export class SingleProductDetailsComponent implements OnInit
   navigateToRelatedProduct(productId: string) {
     this.router.navigate(['/product', productId]);
   }
-  
+
 
   /****************** paginate to next and prev product ****************/
 
-  navigateToPreviousProduct() 
-  {
-    if (this.currentProductIndex > 0) 
-    {
+  navigateToPreviousProduct() {
+    if (this.currentProductIndex > 0) {
       this.currentProductIndex--;
       this.updateCurrentProductIndexInStorage();
       window.location.href = '/product/' + this.allProducts[this.currentProductIndex]._id;
@@ -309,10 +292,8 @@ export class SingleProductDetailsComponent implements OnInit
     this.checkFirstAndLastProducts();
   }
 
-  navigateToNextProduct() 
-  {
-    if (this.currentProductIndex < this.allProducts.length - 1) 
-    {
+  navigateToNextProduct() {
+    if (this.currentProductIndex < this.allProducts.length - 1) {
       this.currentProductIndex++;
       this.updateCurrentProductIndexInStorage();
       window.location.href = '/product/' + this.allProducts[this.currentProductIndex]._id;
@@ -320,24 +301,20 @@ export class SingleProductDetailsComponent implements OnInit
     this.checkFirstAndLastProducts();
   }
 
-  checkFirstAndLastProducts() 
-  {
+  checkFirstAndLastProducts() {
     this.isFirstProduct = this.currentProductIndex === 0;
     this.isLastProduct = this.currentProductIndex === this.allProducts.length - 1;
   }
 
-  updateCurrentProductIndexInStorage() 
-  {
+  updateCurrentProductIndexInStorage() {
     localStorage.setItem('currentProductIndex', String(this.currentProductIndex));
   }
-  
+
   /*********************** Product img movement *************************/
-  moveImage(event: MouseEvent) 
-  {
+  moveImage(event: MouseEvent) {
     const img = event.target as HTMLImageElement;
     const container = img.parentElement;
-    if (container) 
-    {
+    if (container) {
       const containerRect = container.getBoundingClientRect();
 
       const containerWidth = containerRect.width;
@@ -346,7 +323,7 @@ export class SingleProductDetailsComponent implements OnInit
       const containerAspectRatio = containerWidth / containerHeight;
 
       const imgAspectRatio = img.width / img.height;
-      
+
       let maxWidth = containerWidth;
       let maxHeight = containerHeight;
       if (imgAspectRatio > containerAspectRatio) {
@@ -362,10 +339,8 @@ export class SingleProductDetailsComponent implements OnInit
 
   /*********************** Add product to cart *************************/
 
-  addProductToCart() 
-  {
-    if(this.product.quantity >= this.quantity)
-    {
+  addProductToCart() {
+    if (this.product.quantity >= this.quantity) {
       this.productService.addProductToCart(this.user_id, this.ID, this.quantity)
         .subscribe({
           next: (data: any) => {
@@ -395,7 +370,7 @@ export class SingleProductDetailsComponent implements OnInit
   }
 
   /********************************************************************/
-  
+
 
 }
 

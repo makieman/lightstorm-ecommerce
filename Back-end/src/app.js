@@ -3,6 +3,7 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
+const path = require('path');
 require('dotenv').config();
 
 const userRoutes = require('./routes/user.routes');
@@ -15,8 +16,8 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cors({
-    credentials: true,
-    origin: ["http://localhost:4200"]
+  credentials: true,
+  origin: ["http://localhost:4200", "http://localhost:7000"]
 }));
 app.use(cookieParser());
 
@@ -38,10 +39,31 @@ app.use("/api/users", userRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
 
+// Static files
+const angularDistPath = path.join(__dirname, '../../Front-end/dist/lightstorm-ecommerce/browser');
+const landingPagePath = path.join(__dirname, '../../landing-page');
+
+// Serve Angular app at /shop
+app.use('/shop', express.static(angularDistPath));
+
+// Serve Landing page at root
+app.use(express.static(landingPagePath));
+
+// Catch-all for Angular routing
+app.get('/shop/*', (req, res) => {
+  res.sendFile(path.join(angularDistPath, 'index.html'));
+});
+
+// Catch-all for Landing page navigation
+app.get('*', (req, res, next) => {
+  if (req.url.startsWith('/api')) return next();
+  res.sendFile(path.join(landingPagePath, 'index.html'));
+});
+
 // Error handling
 app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).send('Something broke!');
+  console.error(err.stack);
+  res.status(500).send('Something broke!');
 });
 
 module.exports = app;

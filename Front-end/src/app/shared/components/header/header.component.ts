@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { MatMenuModule } from '@angular/material/menu';
 import { RouterModule } from '@angular/router';
-import {MatIconModule} from '@angular/material/icon';
-import {MatToolbarModule} from '@angular/material/toolbar';
-import {MatBadgeModule} from '@angular/material/badge';
-import { SingleProductService } from '@app/core/services/single-product.service';
+import { MatIconModule } from '@angular/material/icon';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatBadgeModule } from '@angular/material/badge';
+import { CoreProductService } from '@app/core/services/core-product.service';
 import { CartProductsCountService } from '@app/core/services/cart-products-count.service';
 
 
@@ -21,41 +21,41 @@ import { CartProductsCountService } from '@app/core/services/cart-products-count
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
 })
-export class HeaderComponent implements OnInit{
-matMenu: any;
+export class HeaderComponent implements OnInit {
+  matMenu: any;
   data: number = 0;
   oredersTotalPrice: number = 0;
   user_id: any;
 
-  constructor(private productService: SingleProductService, private productsCount: CartProductsCountService) { }
+  constructor(private productService: CoreProductService, private productsCount: CartProductsCountService) { }
 
   ngOnInit() {
-        this.productService.getUserToken().subscribe({
-          next: (data: any) => {
-            this.data = data.data.carts.length;
-            data.data.orders.forEach((element: { totalPrice: number; }) => {
-              this.productService.getOrderById(element).subscribe({
-                next: (data: any) => {
-                  if(data && data.totalPrice){
-                    this.oredersTotalPrice += data.totalPrice;
-                  }
-                },
-                error: (err) => {
-                  console.log('cannot get user token !!', err);
-                }
-              });
-            });
-          },
-          error: (err) => {
-            console.log('cannot get user token !!', err);
-          }
+    this.productService.getUserToken().subscribe({
+      next: (data: any) => {
+        this.data = data.data.carts.length;
+        data.data.orders.forEach((element: { totalPrice: number; }) => {
+          this.productService.getOrderById(element).subscribe({
+            next: (data: any) => {
+              if (data && data.totalPrice) {
+                this.oredersTotalPrice += data.totalPrice;
+              }
+            },
+            error: (err) => {
+              console.log('cannot get user token !!', err);
+            }
+          });
         });
+      },
+      error: (err) => {
+        console.log('cannot get user token !!', err);
+      }
+    });
 
-        this.productsCount.data$.subscribe({
-          next: (data) => {
-            this.data = data;
-          }
-        });
+    this.productsCount.data$.subscribe({
+      next: (data) => {
+        this.data = data;
+      }
+    });
   }
 
 }

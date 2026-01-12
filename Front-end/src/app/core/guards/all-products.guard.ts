@@ -15,7 +15,7 @@ export class AllProductsGuard implements CanActivate {
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> {
-    return this.http.get<any>("http://localhost:7000/api/users/user/user", { withCredentials: true })
+    return this.http.get<any>("/api/users/user/user", { withCredentials: true })
       .pipe(
         map(response => {
           if (!response.data) {

@@ -1,44 +1,51 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
-import {MatIconModule} from '@angular/material/icon';
-import {MatDialog, MatDialogModule} from '@angular/material/dialog';
-import {MatButtonModule} from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
 
 import { Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { ActivatedRoute } from '@angular/router';
-import { SingleProductService } from '@app/core/services/single-product.service';
-import { HomeProductService } from '@app/core/services/home-product.service';
+import { CoreProductService } from '@app/core/services/core-product.service';
 import { CartProductsCountService } from '@app/core/services/cart-products-count.service';
 
 @Component({
   selector: 'app-product',
   standalone: true,
-  imports: [CommonModule,MatIconModule],
+  imports: [CommonModule, MatIconModule],
   templateUrl: './product.component.html',
   styleUrl: './product.component.css'
 })
 
-export class ProductComponent implements OnInit{
-  constructor(private productService: HomeProductService,public dialog: MatDialog){}
-  FourProducts:any[]=[];
+export class ProductComponent implements OnInit {
+  constructor(private productService: CoreProductService, public dialog: MatDialog) { }
+  FourProducts: any[] = [];
+  categoryMap: Record<string, string> = {
+    'Chair': 'Solar Panels',
+    'Table': 'Inverters',
+    'Coach': 'Batteries',
+    'Sofa': 'Charge Controllers',
+    'Lamp': 'Solar Lighting',
+    'Bed': 'Mounting Systems'
+  };
   ngOnInit(): void {
-      this.productService.getFourProducts().subscribe(
-        {
-          next:(data: any)=>{
-            for(let i =0;i<4;i++){
+    this.productService.getFourProducts().subscribe(
+      {
+        next: (data: any) => {
+          for (let i = 0; i < 4; i++) {
             this.FourProducts.push(data[i]);
-              console.log(data[i]);
-            }
-            // data.forEach((element: any) => {
-            //   this.FourProducts.push(element);
-            // });
-            //console.log(data);
+            console.log(data[i]);
           }
+          // data.forEach((element: any) => {
+          //   this.FourProducts.push(element);
+          // });
+          //console.log(data);
         }
+      }
     );
   }
   openDialog(productId: string) {
@@ -75,7 +82,7 @@ export class DialogContentExampleDialog {
   constructor(
     public dialogRef: MatDialogRef<DialogContentExampleDialog>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private productService:SingleProductService,
+    private productService: CoreProductService,
     private route: ActivatedRoute,
     private productsCount: CartProductsCountService
   ) {
@@ -95,7 +102,7 @@ export class DialogContentExampleDialog {
         this.products_number = data.data.carts.length;
         // console.log(this.user_id);
       },
-      error: (err :any) => {
+      error: (err: any) => {
         console.log('cannot get user token !!', err);
       }
     });
@@ -103,33 +110,27 @@ export class DialogContentExampleDialog {
 
 
   /**************** Quantity input ****************/
-  incrementQuantity()
-  {
+  incrementQuantity() {
     this.quantity++;
   }
 
-  decrementQuantity()
-  {
-    if (this.quantity > 1)
-    {
+  decrementQuantity() {
+    if (this.quantity > 1) {
       this.quantity--;
     }
   }
 
-  onQuantityChange()
-  {
+  onQuantityChange() {
     console.log('Quantity changed to: ', this.quantity);
   }
 
 
   /**************** Add to cart ****************/
-  addProductToCart() 
-  {
-    if(this.product.quantity >= this.quantity)
-    {
+  addProductToCart() {
+    if (this.product.quantity >= this.quantity) {
       this.productService.addProductToCart(this.user_id, this.ID, this.quantity)
         .subscribe({
-          next: (data:any) => {
+          next: (data: any) => {
             console.log(data);
             Swal.fire({
               icon: 'success',

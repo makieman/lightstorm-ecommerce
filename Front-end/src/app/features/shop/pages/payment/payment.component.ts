@@ -1,23 +1,23 @@
 import { Component, AfterViewInit, OnInit } from '@angular/core';
 import { UserService } from '../checkout/user.service';
-import { ProductsService } from '../products/product.service';
+import { CoreProductService } from '@app/core/services/core-product.service';
 import { Router } from '@angular/router';
-import { HttpClientModule } from '@angular/common/http'; 
+import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-payment',
   standalone: true,
-  imports: [CommonModule,HttpClientModule],
+  imports: [CommonModule, HttpClientModule],
   templateUrl: './payment.component.html',
   styleUrls: ['./payment.component.css'],
 })
 export class PaymentComponent implements OnInit, AfterViewInit {
 
-  constructor(private userService: UserService, 
-    private productService: ProductsService,
-    private router: Router, 
+  constructor(private userService: UserService,
+    private productService: CoreProductService,
+    private router: Router,
     private snackBar: MatSnackBar) { }
 
   ngAfterViewInit() {
@@ -27,13 +27,13 @@ export class PaymentComponent implements OnInit, AfterViewInit {
     const cardCvcInput = document.getElementById('card-cvc') as HTMLInputElement;
     const payButton = document.querySelector('.pay-btn') as HTMLButtonElement;
 
-    cardNumberInput.addEventListener('input', function(event) {
+    cardNumberInput.addEventListener('input', function (event) {
       let cardNumber = this.value.replace(/\D/g, '');
       cardNumber = cardNumber.replace(/(.{4})/g, '$1 ').trim();
       this.value = cardNumber;
     });
 
-    cardExpiryInput.addEventListener('input', function(event) {
+    cardExpiryInput.addEventListener('input', function (event) {
       let expiryDate = this.value.replace(/\D/g, '');
       expiryDate = expiryDate.replace(/(\d{2})(\d{2})/, '$1/$2').trim();
 
@@ -44,7 +44,7 @@ export class PaymentComponent implements OnInit, AfterViewInit {
       }
     });
 
-    cardCvcInput.addEventListener('input', function(event) {
+    cardCvcInput.addEventListener('input', function (event) {
       let cvc = this.value.replace(/\D/g, '');
 
       if (cvc.length > 3) {
@@ -70,14 +70,14 @@ export class PaymentComponent implements OnInit, AfterViewInit {
       if (!expiryDateRegex.test(expiryDate)) {
         return false;
       }
-    
+
       const [month, year] = expiryDate.split('/');
       const currentYear = new Date().getFullYear().toString().substr(-2);
       const currentMonth = (new Date().getMonth() + 1).toString().padStart(2, '0');
-    
+
       return year >= currentYear && (year !== currentYear || month >= currentMonth);
     }
-    
+
     function isValidCvc(cvc: string) {
       const cvcRegex = /^[0-9]{3}$/;
       return cvcRegex.test(cvc);
@@ -118,21 +118,21 @@ export class PaymentComponent implements OnInit, AfterViewInit {
   }
 
   placeOrder() {
-    this.productService.getUserByToken().subscribe((response: any) => {
-        const userId = response.data._id;
-        this.userService.addProductToOrder(userId).subscribe(
-            (response) => {
-                console.log('Order placed successfully', response);
-                // Clear cart and user info from local storage
-                localStorage.removeItem('cart');
-                localStorage.removeItem('userInfo');
-                // Navigate to confirmation page or home page
-                this.router.navigate(['/confirm']);
-            },
-            (error) => {
-                console.error('Failed to place order:', error);
-            }
-        );
+    this.productService.getUserToken().subscribe((response: any) => {
+      const userId = response.data._id;
+      this.userService.addProductToOrder(userId).subscribe(
+        (response) => {
+          console.log('Order placed successfully', response);
+          // Clear cart and user info from local storage
+          localStorage.removeItem('cart');
+          localStorage.removeItem('userInfo');
+          // Navigate to confirmation page or home page
+          this.router.navigate(['/confirm']);
+        },
+        (error) => {
+          console.error('Failed to place order:', error);
+        }
+      );
     });
-}
+  }
 }

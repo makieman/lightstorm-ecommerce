@@ -26,7 +26,7 @@ export class AdminComponent {
   logout(): void {
     this.http
       .post(
-        'http://localhost:7000/api/users/user/logout',
+        '/api/users/user/logout',
         {},
         { withCredentials: true }
       )

@@ -1,15 +1,16 @@
 .image-background2 {
-  background-image: url('/assets/minimal-zoom-virtual-backgrounds-office-wall-plain-white-room-with-plants-background.jpg');
+  background-image: url('assets/minimal-zoom-virtual-backgrounds-office-wall-plain-white-room-with-plants-background.jpg');
   background-size: cover;
-  background-position:center;
+  background-position: center;
   color: rgb(0, 0, 0);
   margin: auto;
 }
 
-.heading2{
+.heading2 {
   margin-left: 80px;
   margin-top: 100px;
-  line-height: 1.2; /* Default line height */
+  line-height: 1.2;
+  /* Default line height */
 }
 
 
@@ -20,7 +21,7 @@
   transform: translate(-50%, -50%);
 }
 
-.font{
+.font {
   font-size: larger;
 }
 
@@ -30,10 +31,12 @@
     height: 25vh;
     background-position: center;
   }
-  .heading2{
+
+  .heading2 {
     margin-left: 20px;
     margin-top: 30px;
-    line-height: 1.2; /* Default line height */
+    line-height: 1.2;
+    /* Default line height */
   }
 
 
@@ -54,10 +57,11 @@
 
   }
 
-  .heading2{
+  .heading2 {
     margin-left: 50px;
     margin-top: 30px;
-    line-height: 1.2; /* Default line height */
+    line-height: 1.2;
+    /* Default line height */
   }
 
 
@@ -68,11 +72,11 @@
     transform: translate(-50%, -50%);
   }
 
-  a :hover{
+  a :hover {
     color: white;
   }
 
-  .font{
+  .font {
     font-size: small;
   }
 
@@ -84,10 +88,12 @@
     height: 45vh;
     background-position: center;
   }
-  .heading2{
+
+  .heading2 {
     margin-left: 50px;
     margin-top: 30px;
-    line-height: 1.2; /* Default line height */
+    line-height: 1.2;
+    /* Default line height */
   }
 
 
@@ -99,6 +105,7 @@
   }
 
 }
+
 /* Medium devices (landscape tablets, 768px and up) */
 @media (min-width: 769px) and (max-width: 992px) {
   .image-background {
@@ -106,10 +113,11 @@
     background-position: center;
   }
 
-  .heading2{
+  .heading2 {
     margin-left: 50px;
     margin-top: 30px;
-    line-height: 1.2; /* Default line height */
+    line-height: 1.2;
+    /* Default line height */
   }
 
 
@@ -129,10 +137,12 @@
     background-position: center;
     height: 350px;
   }
-  .heading2{
+
+  .heading2 {
     margin-left: 80px;
     margin-top: 30px;
-    line-height: 1.2; /* Default line height */
+    line-height: 1.2;
+    /* Default line height */
     font-size: medium;
   }
 
@@ -148,15 +158,18 @@
 
 /* Large devices (laptops/desktops, 992px and up) */
 @media (min-width: 992px) and (max-width: 1199px) {
-  .image-background2{
+  .image-background2 {
     background-position: center;
     height: 380px;
   }
-  .heading2{
+
+  .heading2 {
     margin-left: 50px;
     margin-top: 80px;
-    line-height: 1.2; /* Default line height */
+    line-height: 1.2;
+    /* Default line height */
   }
+
   .button2 {
     position: relative;
     left: 8%;
@@ -169,15 +182,18 @@
 
 /* Extra large devices (large desktops, 1200px and up) */
 @media (min-width: 1200px) {
-  .image-background2{
+  .image-background2 {
     background-position: center;
     height: 380px;
   }
-  .heading2{
+
+  .heading2 {
     margin-left: 50px;
     margin-top: 80px;
-    line-height: 1.2; /* Default line height */
+    line-height: 1.2;
+    /* Default line height */
   }
+
   .button2 {
     position: relative;
     left: 6%;
@@ -186,4 +202,3 @@
   }
 
 }
-

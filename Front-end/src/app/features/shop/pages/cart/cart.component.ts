@@ -1,4 +1,4 @@
-import { ProductsService } from '@app/core/services/products.service';
+import { CoreProductService } from '@app/core/services/core-product.service';
 import { CartService } from '@app/core/services/cart.service';
 import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpClientModule } from '@angular/common/http'; // Import HttpClientModule
@@ -29,7 +29,7 @@ export class CartComponent implements OnInit {
 
   deletedProduct: { _id: string, title: string, image: string, quantity: number, price: number } | null = null;
 
-  constructor(private userService: CartService, private productsService: ProductsService, private http: HttpClient) { }
+  constructor(private userService: CartService, private productsService: CoreProductService, private http: HttpClient) { }
 
   updateTotal() {
     this.total = 0;
@@ -108,7 +108,7 @@ export class CartComponent implements OnInit {
   }
 
   getAuthUser(): Observable<string> {
-    return this.http.get<any>("http://localhost:7000/api/users/user/user", { withCredentials: true })
+    return this.http.get<any>("/api/users/user/user", { withCredentials: true })
       .pipe(
         map(response => response.data._id)
       );

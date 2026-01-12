@@ -1,15 +1,15 @@
 import { Component, Input } from '@angular/core';
-import {MatIconModule} from '@angular/material/icon';
-import {MatDialog, MatDialogModule} from '@angular/material/dialog';
-import {MatButtonModule} from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
 import { FormsModule } from '@angular/forms';
 
 import { Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { SingleProductService } from '../../../../../../app/core/services/single-product.service';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { CoreProductService } from '@app/core/services/core-product.service';
+import { CartProductsCountService } from '../../../../../../app/core/services/cart-products-count.service';
 import Swal from 'sweetalert2';
 import { HttpClientModule } from '@angular/common/http';
-import { CartProductsCountService } from '../../../../../../app/core/services/cart-products-count.service';
 
 
 
@@ -23,22 +23,20 @@ import { CartProductsCountService } from '../../../../../../app/core/services/ca
   templateUrl: './one-product.component.html',
   styleUrl: './one-product.component.css'
 })
-export class OneProductComponent 
-{
+export class OneProductComponent {
   @Input() product: any;
 
   constructor(public dialog: MatDialog) {
 
   }
 
-  openDialog() 
-  {
+  openDialog() {
     const dialogRef = this.dialog.open(DialogContentExampleDialog, {
       data: {
         product: this.product
       }
-  });
-  
+    });
+
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`);
     });
@@ -63,7 +61,7 @@ export class DialogContentExampleDialog {
   constructor(
     public dialogRef: MatDialogRef<DialogContentExampleDialog>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private productService:SingleProductService,
+    private productService: CoreProductService,
     private productsCount: CartProductsCountService
   ) {
 
@@ -87,33 +85,27 @@ export class DialogContentExampleDialog {
 
 
   /**************** Quantity input ****************/
-  incrementQuantity() 
-  {
+  incrementQuantity() {
     this.quantity++;
   }
 
-  decrementQuantity() 
-  {
-    if (this.quantity > 1) 
-    {
+  decrementQuantity() {
+    if (this.quantity > 1) {
       this.quantity--;
     }
   }
 
-  onQuantityChange() 
-  {
+  onQuantityChange() {
     console.log('Quantity changed to: ', this.quantity);
   }
 
 
   /**************** Add to cart ****************/
-  addProductToCart() 
-  {
-    if(this.product.quantity >= this.quantity)
-    {
+  addProductToCart() {
+    if (this.product.quantity >= this.quantity) {
       this.productService.addProductToCart(this.user_id, this.ID, this.quantity)
         .subscribe({
-          next: (data:any) => {
+          next: (data: any) => {
             Swal.fire({
               icon: 'success',
               title: 'Product added to cart successfully',
@@ -140,5 +132,5 @@ export class DialogContentExampleDialog {
     }
   }
 
-  
+
 }

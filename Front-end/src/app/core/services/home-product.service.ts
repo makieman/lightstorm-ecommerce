@@ -8,7 +8,7 @@ import { map } from 'rxjs';
 export class HomeProductService {
 
   constructor(private readonly myClient: HttpClient) { }
-  private readonly URL_API ="http://localhost:7000/api/products";
+  private readonly URL_API ="/api/products";
 
   GetAllProduct(){
     return this.myClient.get(this.URL_API);

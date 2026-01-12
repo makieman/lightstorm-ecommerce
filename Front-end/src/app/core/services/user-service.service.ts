@@ -7,7 +7,7 @@ import { map } from 'rxjs/operators';
 export class UserServiceService {
 
   constructor(private readonly myClient: HttpClient) { }
-  private readonly URL_API = "http://localhost:7000/api/users";
+  private readonly URL_API = "/api/users";
 
 
   getUserById(id: string) {

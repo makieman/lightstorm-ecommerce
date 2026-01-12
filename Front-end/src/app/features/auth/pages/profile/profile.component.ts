@@ -23,7 +23,7 @@ export class ProfileComponent {
 
   // -------------------------------------- logout function --------------------------------------------
   logout() : void{
-    this.http.post("http://localhost:7000/api/users/user/logout", {},{ withCredentials: true }).subscribe({
+    this.http.post("/api/users/user/logout", {},{ withCredentials: true }).subscribe({
       complete:()=> this.router.navigate(["/login"])
     })
   }

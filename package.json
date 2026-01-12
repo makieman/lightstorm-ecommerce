@@ -1,21 +1,21 @@
 {
-  "name": "ecommerce-furniture-website",
+  "name": "lightstorm-ecommerce",
   "version": "1.0.0",
-  "description": "Welcome to our Online E-commerce Furniture Store! This platform is designed to offer a seamless shopping experience for customers looking for high-quality furniture, providing a comprehensive admin panel for store managers to oversee operations.",
+  "description": "Lightstorm Technologies E-commerce Platform with a static landing page and an Angular-based shop, powered by a Node.js and Express backend.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/NourhanRadwan145/ecommerce-furniture-website.git"
+    "url": "git+https://github.com/makieman/lightstorm-ecommerce.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "bugs": {
-    "url": "https://github.com/NourhanRadwan145/ecommerce-furniture-website/issues"
+    "url": "https://github.com/makieman/lightstorm-ecommerce/issues"
   },
-  "homepage": "https://github.com/NourhanRadwan145/ecommerce-furniture-website#readme"
+  "homepage": "https://github.com/makieman/lightstorm-ecommerce#readme"
 }

@@ -86,27 +86,30 @@ let createNewProduct = async (req, res) => {
 let updateProductByID = async (req, res) => {
   try {
     let product = await productModel.findById(req.params.id);
-    if (req.files[0] !== undefined) {
-      let uploadedImage = await cloudUpload(req.files[0].path);
-      product.image = uploadedImage.url;
-    }
-    product.title = req.body.title;
-    product.details = req.body.details;
-    product.price = req.body.price;
-    product.quantity = req.body.quantity;
-    product.category = req.body.category;
-
-    let productUpdated = await productModel.findByIdAndUpdate(
-      req.params.id,
-      product,
-      { new: true }
-    );
     if (!product) {
       return res.status(404).json({ message: "Product not found" });
     }
+
+    // Update image if uploaded
+    if (req.files && req.files[0]) {
+      let uploadedImage = await cloudUpload(req.files[0].path);
+      product.image = uploadedImage.url;
+    }
+
+    // Update only fields sent in the request
+    const { title, details, price, quantity, category } = req.body;
+    if (title) product.title = title;
+    if (details) product.details = details;
+    if (price) product.price = price;
+    if (quantity) product.quantity = quantity;
+    if (category) product.category = category;
+
+    // Save the document
+    const productUpdated = await product.save();
+
     return res.json(productUpdated);
   } catch (error) {
-    return res.status(500).json(error.message);
+    return res.status(500).json({ message: error.message });
   }
 };
 

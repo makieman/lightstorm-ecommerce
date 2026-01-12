@@ -1,7 +1,7 @@
 import { HttpClientModule } from '@angular/common/http';
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { ProductService } from '../../../admin/Services/product.service';
+import { CoreProductService } from '@app/core/services/core-product.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
@@ -12,7 +12,6 @@ import Swal from 'sweetalert2';
   imports: [ReactiveFormsModule, HttpClientModule],
   templateUrl: './create-product-dialog.component.html',
   styleUrl: './create-product-dialog.component.css',
-  providers: [ProductService],
 })
 export class CreateProductDialogComponent implements OnInit {
   product: any;
@@ -22,7 +21,7 @@ export class CreateProductDialogComponent implements OnInit {
   createForm: any;
   imageFile: File | null = null;
   constructor(
-    private productService: ProductService,
+    private productService: CoreProductService,
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialog: MatDialogRef<any>,
     private router: Router
@@ -36,7 +35,7 @@ export class CreateProductDialogComponent implements OnInit {
     });
   }
 
-  ngOnInit() {}
+  ngOnInit() { }
   onFileSelected(event: any) {
     if (event.target.files.length > 0) {
       const file = event.target.files[0];

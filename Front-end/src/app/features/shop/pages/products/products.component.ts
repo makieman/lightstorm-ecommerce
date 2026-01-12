@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { ProductsService } from './product.service';
+import { CoreProductService } from '@app/core/services/core-product.service';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
@@ -9,7 +9,7 @@ import { UserService } from '../checkout/user.service';
 @Component({
   selector: 'app-products',
   standalone: true,
-  imports: [CommonModule,HttpClientModule,FormsModule],
+  imports: [CommonModule, HttpClientModule, FormsModule],
   templateUrl: './products.component.html',
   styleUrl: './products.component.css',
   encapsulation: ViewEncapsulation.None
@@ -22,13 +22,21 @@ export class ProductsComponent implements OnInit {
   minPrice: number | undefined;
   maxPrice: number | undefined;
   isLargeView: boolean = false;
+  categoryMap: Record<string, string> = {
+    'Chair': 'Solar Panels',
+    'Table': 'Inverters',
+    'Coach': 'Batteries',
+    'Sofa': 'Charge Controllers',
+    'Lamp': 'Solar Lighting',
+    'Bed': 'Mounting Systems'
+  };
 
   constructor(
     private userService: UserService,
-    private productService: ProductsService,
+    private productService: CoreProductService,
     private route: ActivatedRoute,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
@@ -47,7 +55,7 @@ export class ProductsComponent implements OnInit {
         console.error('Error loading products:', error);
       }
     );
-  }  
+  }
 
   //Apply The Filter by Category 
   applyCategoryFilter(): void {
@@ -60,7 +68,7 @@ export class ProductsComponent implements OnInit {
       );
     }
   }
-  
+
   // Apply price filter
   applyPriceFilter(): void {
     this.filteredProducts = this.products.filter((product) => {
@@ -71,7 +79,7 @@ export class ProductsComponent implements OnInit {
       );
     });
   }
-  
+
   // Reset price filter
   resetPriceFilter(): void {
     this.minPrice = undefined;
@@ -92,7 +100,7 @@ export class ProductsComponent implements OnInit {
   }
 
   addToCart(product: any): void {
-    this.productService.getUserByToken().subscribe(
+    this.productService.getUserToken().subscribe(
       (response: any) => {
         const userId = response.data._id;
         const quantity = 1;
@@ -117,40 +125,40 @@ export class ProductsComponent implements OnInit {
         }
       }
     );
-  }  
-  
+  }
+
   ngAfterViewInit(): void {
 
     // Set default view mode to grid
-  const setDefaultGridView = () => {
-    document.querySelector('.grid')?.classList.add('active');
-    document.querySelector('.large')?.classList.remove('active');
-    document.querySelectorAll('.products-area-wrapper').forEach((view) => {
-      view.classList.remove('tableView', 'largeView');
-      view.classList.add('gridView');
-    });
-    this.isLargeView = false;
-  };
+    const setDefaultGridView = () => {
+      document.querySelector('.grid')?.classList.add('active');
+      document.querySelector('.large')?.classList.remove('active');
+      document.querySelectorAll('.products-area-wrapper').forEach((view) => {
+        view.classList.remove('tableView', 'largeView');
+        view.classList.add('gridView');
+      });
+      this.isLargeView = false;
+    };
 
-  // Event listener for grid view
-  document.querySelector('.grid')?.addEventListener('click', () => {
+    // Event listener for grid view
+    document.querySelector('.grid')?.addEventListener('click', () => {
+      setDefaultGridView();
+    });
+
+    // Event listener for large view
+    document.querySelector('.large')?.addEventListener('click', () => {
+      document.querySelector('.grid')?.classList.remove('active');
+      document.querySelector('.large')?.classList.add('active');
+      document.querySelectorAll('.products-area-wrapper').forEach((view) => {
+        view.classList.remove('tableView', 'gridView');
+        view.classList.add('largeView');
+      });
+      this.isLargeView = true;
+    });
+
+    // Set default view mode to grid
     setDefaultGridView();
-  });
 
-  // Event listener for large view
-  document.querySelector('.large')?.addEventListener('click', () => {
-    document.querySelector('.grid')?.classList.remove('active');
-    document.querySelector('.large')?.classList.add('active');
-    document.querySelectorAll('.products-area-wrapper').forEach((view) => {
-      view.classList.remove('tableView', 'gridView');
-      view.classList.add('largeView');
-    });
-    this.isLargeView = true;
-  });
-
-  // Set default view mode to grid
-  setDefaultGridView();
-  
     // Event listener for filter menu
     document.querySelector('.jsFilter')?.addEventListener('click', () => {
       document.querySelector('.filter-menu')?.classList.toggle('active');

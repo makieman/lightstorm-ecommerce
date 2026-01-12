@@ -8,7 +8,7 @@ import { map } from 'rxjs/operators';
 export class OrderServiceService {
 
   constructor(private readonly myClient: HttpClient) { }
-  private readonly URL_API = "http://localhost:7000/api/orders";
+  private readonly URL_API = "/api/orders";
 
   // Get orders by status and user ID
   getOrdersByStatusAndUserId(status: string, userId: string) {
