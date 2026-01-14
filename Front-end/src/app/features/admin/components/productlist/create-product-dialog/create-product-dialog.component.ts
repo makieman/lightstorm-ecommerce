@@ -51,21 +51,24 @@ export class CreateProductDialogComponent implements OnInit {
     this.product.append('title', this.createForm.value.title);
     this.product.append('price', this.createForm.value.price);
     this.product.append('details', this.createForm.value.details);
-    this.product.append(
-      'productQuantity',
-      this.createForm.value.productQuantity
-    );
-    this.product.append(
-      'productCategory',
-      this.createForm.value.productCategory
-    );
+    this.product.append('quantity', this.createForm.value.productQuantity);
+    this.product.append('category', this.createForm.value.productCategory);
     this.product.append('wattage', this.createForm.value.wattage);
     this.product.append('voltage', this.createForm.value.voltage);
     this.product.append('batteryType', this.createForm.value.batteryType);
     this.product.append('image', this.imageFile);
 
+    // Debug: Log what we're sending
+    console.log('=== FRONTEND DEBUG ===');
+    console.log('Form values:', this.createForm.value);
+    console.log('Image file:', this.imageFile);
+    console.log('FormData entries:');
+    this.product.forEach((value: any, key: string) => {
+      console.log(`  ${key}:`, value);
+    });
+
     this.productService.createProduct(this.product).subscribe(
-      (data) => {
+      (data: any) => {
         console.log(data); // id has a random value now
         this.dialog.close();
         Swal.fire({

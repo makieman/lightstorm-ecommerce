@@ -1,7 +1,16 @@
 const multer = require("multer");
+const path = require("path");
+const fs = require("fs");
+
+// Ensure uploads directory exists
+const uploadDir = path.join(__dirname, "uploads");
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
+}
+
 //Storing Files on disk
 const filestorage = multer.diskStorage({
-  destination: "../Middlewares/uploads",
+  destination: uploadDir,
   filename: function (req, file, cb) {
     cb(null, file.originalname);
   },

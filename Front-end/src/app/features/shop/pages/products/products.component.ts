@@ -21,6 +21,7 @@ export class ProductsComponent implements OnInit {
   selectedCategory: string = 'All Categories';
   minPrice: number | undefined;
   maxPrice: number | undefined;
+  searchTerm: string = '';
   isLargeView: boolean = false;
   categoryMap: Record<string, string> = {
     'Chair': 'Solar Panels',
@@ -49,7 +50,7 @@ export class ProductsComponent implements OnInit {
     this.productService.getAllProducts().subscribe(
       (response: any) => {
         this.products = response.filter((product: any) => product.quantity > 0);
-        this.applyCategoryFilter();
+        this.filterProducts();
       },
       (error) => {
         console.error('Error loading products:', error);
@@ -57,42 +58,46 @@ export class ProductsComponent implements OnInit {
     );
   }
 
+  // Centralized Filter Logic
+  filterProducts(): void {
+    this.filteredProducts = this.products.filter((product) => {
+      // 1. Category Check
+      const matchesCategory = this.selectedCategory === 'All Categories' ||
+        product.category.toLowerCase() === this.selectedCategory.toLowerCase();
+
+      // 2. Price Check
+      const matchesPrice = (this.minPrice === undefined || product.price >= this.minPrice) &&
+        (this.maxPrice === undefined || product.price <= this.maxPrice);
+
+      // 3. Name/Search Check
+      const matchesSearch = this.searchTerm === '' ||
+        product.title.toLowerCase().includes(this.searchTerm.toLowerCase());
+
+      return matchesCategory && matchesPrice && matchesSearch;
+    });
+  }
+
   //Apply The Filter by Category 
   applyCategoryFilter(): void {
-    if (this.selectedCategory === 'All Categories') {
-      this.filteredProducts = this.products;
-      console.log(this.filteredProducts);
-    } else {
-      this.filteredProducts = this.products.filter((product) =>
-        product.category.toLowerCase() === this.selectedCategory.toLowerCase()
-      );
-    }
+    this.filterProducts();
   }
 
   // Apply price filter
   applyPriceFilter(): void {
-    this.filteredProducts = this.products.filter((product) => {
-      const price = product.price;
-      return (
-        (this.minPrice === undefined || price >= this.minPrice) &&
-        (this.maxPrice === undefined || price <= this.maxPrice)
-      );
-    });
+    this.filterProducts();
   }
 
   // Reset price filter
   resetPriceFilter(): void {
     this.minPrice = undefined;
     this.maxPrice = undefined;
-    this.filteredProducts = this.products;
+    this.filterProducts();
   }
 
   //Apply Name Filter
   applyNameFilter(event: Event): void {
-    const searchTerm = (event.target as HTMLInputElement).value;
-    this.filteredProducts = this.products.filter((product) =>
-      product.title.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    this.searchTerm = (event.target as HTMLInputElement).value;
+    this.filterProducts();
   }
 
   navigateToProductDetails(productId: string): void {

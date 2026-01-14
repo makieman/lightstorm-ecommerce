@@ -58,14 +58,46 @@ let getProductByID = async (req, res) => {
  */
 let createNewProduct = async (req, res) => {
   try {
+    // Debug: Log EVERYTHING
+    console.log('\n=== BACKEND DEBUG ===');
+    console.log('Content-Type:', req.headers['content-type']);
+    console.log('Raw req.body from multer:', req.body);
+    console.log('req.body type:', typeof req.body);
+    console.log('req.body constructor:', req.body?.constructor?.name);
+    console.log('Files:', req.files);
+    console.log('Body keys:', Object.keys(req.body || {}));
+
     // Convert string prices/quantities to numbers for validation
     if (req.body.price) req.body.price = Number(req.body.price);
-    if (req.body.productQuantity) req.body.quantity = Number(req.body.productQuantity);
-    if (req.body.quantity) req.body.quantity = Number(req.body.quantity);
-    if (req.body.productCategory) req.body.category = req.body.productCategory;
+
+    // Map frontend field names to backend expected names
+    if (req.body.productQuantity) {
+      req.body.quantity = Number(req.body.productQuantity);
+      delete req.body.productQuantity;
+    } else if (req.body.quantity) {
+      req.body.quantity = Number(req.body.quantity);
+    }
+
+    if (req.body.productCategory) {
+      req.body.category = req.body.productCategory;
+      delete req.body.productCategory;
+    }
+
+    // Only remove empty optional fields (not required ones)
+    const optionalFields = ['wattage', 'voltage', 'batteryType', 'type'];
+    optionalFields.forEach(field => {
+      if (req.body[field] === '' || req.body[field] === undefined || req.body[field] === null) {
+        delete req.body[field];
+      }
+    });
+
+    // Debug logging
+    console.log('Request body before validation:', req.body);
+    console.log('Request body keys:', Object.keys(req.body));
 
     const isValid = productValidate(req.body);
     if (!isValid) {
+      console.error('Validation errors:', productValidate.errors);
       return res.status(400).json({
         message: productValidate.errors.map(err => `${err.instancePath} ${err.message}`).join(', ')
       });
