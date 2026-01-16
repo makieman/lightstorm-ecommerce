@@ -22,4 +22,7 @@ const productsSchema = new mongoose.Schema({
   reviews: [reviewsSchema],
 }, { timestamps: true });
 
+// Add text index for search functionality
+productsSchema.index({ title: 'text', details: 'text' });
+
 module.exports = mongoose.model("products", productsSchema);

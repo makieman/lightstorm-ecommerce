@@ -22,15 +22,16 @@ export class ProductsComponent implements OnInit {
   minPrice: number | undefined;
   maxPrice: number | undefined;
   searchTerm: string = '';
+
+  // --- Server-side Filtering & Pagination State ---
+  sortOption: string = '-createdAt'; // Default sort
+  currentPage: number = 1;
+  pageSize: number = 24; // Items per page
+  totalItems: number = 0;
+  totalPages: number = 0;
+  isLoading: boolean = false;
+
   isLargeView: boolean = false;
-  categoryMap: Record<string, string> = {
-    'Chair': 'Solar Panels',
-    'Table': 'Inverters',
-    'Coach': 'Batteries',
-    'Sofa': 'Charge Controllers',
-    'Lamp': 'Solar Lighting',
-    'Bed': 'Mounting Systems'
-  };
 
   constructor(
     private userService: UserService,
@@ -41,43 +42,58 @@ export class ProductsComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
+      // Read filter, sort, and page state from URL on load
       this.selectedCategory = params['category'] || 'All Categories';
+      this.searchTerm = params['search'] || '';
+      this.minPrice = params['minPrice'] ? Number(params['minPrice']) : undefined;
+      this.maxPrice = params['maxPrice'] ? Number(params['maxPrice']) : undefined;
+      this.currentPage = params['page'] ? Number(params['page']) : 1;
+      this.sortOption = params['sort'] || '-createdAt';
       this.loadProducts();
     });
   }
 
   loadProducts(): void {
-    this.productService.getAllProducts().subscribe(
+    this.isLoading = true;
+
+    const params = {
+      page: this.currentPage,
+      limit: this.pageSize,
+      sort: this.sortOption,
+      search: this.searchTerm,
+      minPrice: this.minPrice,
+      maxPrice: this.maxPrice,
+      category: this.selectedCategory !== 'All Categories' ? this.selectedCategory : undefined
+    };
+
+    this.productService.getAllProducts(params).subscribe(
       (response: any) => {
-        this.products = response.filter((product: any) => product.quantity > 0);
-        this.filterProducts();
+        this.filteredProducts = response.products || [];
+        this.products = this.filteredProducts; // Keep in sync for template compatibility
+
+        if (response.pagination) {
+          this.currentPage = response.pagination.page;
+          this.totalItems = response.pagination.totalItems;
+          this.totalPages = response.pagination.totalPages;
+        }
+
+        this.isLoading = false;
+        this.updateUrlWithFilters();
       },
       (error) => {
         console.error('Error loading products:', error);
+        this.isLoading = false;
       }
     );
   }
 
-  // Centralized Filter Logic
+  // This method now triggers a new API call with the current filters
   filterProducts(): void {
-    this.filteredProducts = this.products.filter((product) => {
-      // 1. Category Check
-      const matchesCategory = this.selectedCategory === 'All Categories' ||
-        product.category.toLowerCase() === this.selectedCategory.toLowerCase();
-
-      // 2. Price Check
-      const matchesPrice = (this.minPrice === undefined || product.price >= this.minPrice) &&
-        (this.maxPrice === undefined || product.price <= this.maxPrice);
-
-      // 3. Name/Search Check
-      const matchesSearch = this.searchTerm === '' ||
-        product.title.toLowerCase().includes(this.searchTerm.toLowerCase());
-
-      return matchesCategory && matchesPrice && matchesSearch;
-    });
+    this.currentPage = 1; // Reset to the first page when filters change
+    this.loadProducts();
   }
 
-  //Apply The Filter by Category 
+  // Apply The Filter by Category 
   applyCategoryFilter(): void {
     this.filterProducts();
   }
@@ -94,7 +110,7 @@ export class ProductsComponent implements OnInit {
     this.filterProducts();
   }
 
-  //Apply Name Filter
+  // Apply Name Filter
   applyNameFilter(event: Event): void {
     this.searchTerm = (event.target as HTMLInputElement).value;
     this.filterProducts();
@@ -102,6 +118,26 @@ export class ProductsComponent implements OnInit {
 
   navigateToProductDetails(productId: string): void {
     this.router.navigate(['product', productId]);
+  }
+
+  // Updates the browser URL to reflect the current filter state, making links shareable
+  private updateUrlWithFilters(): void {
+    const queryParams: any = {
+      // Only add params to the URL if they are not the default value
+      page: this.currentPage > 1 ? this.currentPage : null,
+      sort: this.sortOption !== '-createdAt' ? this.sortOption : null,
+      search: this.searchTerm || null,
+      category: this.selectedCategory !== 'All Categories' ? this.selectedCategory : null,
+      minPrice: this.minPrice || null,
+      maxPrice: this.maxPrice || null,
+    };
+
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: queryParams,
+      queryParamsHandling: 'merge', // Keep other existing query params
+      replaceUrl: true // Avoid adding to browser history for every filter change
+    });
   }
 
   addToCart(product: any): void {

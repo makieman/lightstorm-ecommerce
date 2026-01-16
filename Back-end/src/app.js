@@ -3,6 +3,7 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
+const fs = require('fs');
 const path = require('path');
 require('dotenv').config();
 
@@ -40,8 +41,40 @@ app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
 
 // Static files
-const angularDistPath = path.join(__dirname, '../../Front-end/dist/lightstorm-ecommerce/browser');
-const landingPagePath = path.join(__dirname, '../../landing-page');
+const resolveStaticDir = (candidates, requiredFile) => {
+  for (const candidate of candidates) {
+    const resolved = path.resolve(candidate);
+    if (requiredFile) {
+      if (fs.existsSync(path.join(resolved, requiredFile))) return resolved;
+    } else {
+      if (fs.existsSync(resolved)) return resolved;
+    }
+  }
+  return path.resolve(candidates[0]);
+};
+
+const angularDistPath = resolveStaticDir(
+  [
+    path.join(__dirname, '../../Front-end/dist/lightstorm-ecommerce/browser'),
+    path.join(__dirname, '../../../Front-end/dist/lightstorm-ecommerce/browser'),
+    path.join(process.cwd(), 'Front-end/dist/lightstorm-ecommerce/browser'),
+    path.join(process.cwd(), '../Front-end/dist/lightstorm-ecommerce/browser')
+  ],
+  'index.html'
+);
+
+const landingPagePath = resolveStaticDir(
+  [
+    path.join(__dirname, '../../landing-page'),
+    path.join(__dirname, '../../../landing-page'),
+    path.join(process.cwd(), 'landing-page'),
+    path.join(process.cwd(), '../landing-page')
+  ],
+  'index.html'
+);
+
+console.log('Resolved landingPagePath:', landingPagePath);
+console.log('Landing page index.html exists:', fs.existsSync(path.join(landingPagePath, 'index.html')));
 
 // Serve Angular app at /shop
 app.use('/shop', express.static(angularDistPath));
@@ -51,22 +84,35 @@ app.use(express.static(landingPagePath));
 
 // Catch-all for Angular routing
 app.get('/shop/*', (req, res) => {
-  res.sendFile(path.join(angularDistPath, 'index.html'));
+  res.sendFile(path.join(angularDistPath, 'index.html'), (err) => {
+    if (!err) return;
+    console.error('Failed to serve Angular index.html:', err.message);
+    res.status(500).type('text/plain').send('Internal Server Error');
+  });
 });
 
 // Catch-all for Landing page navigation
 app.get('*', (req, res, next) => {
   if (req.url.startsWith('/api')) return next();
-  res.sendFile(path.join(landingPagePath, 'index.html'));
+  res.sendFile(path.join(landingPagePath, 'index.html'), (err) => {
+    if (!err) return;
+    console.error('Failed to serve landing page index.html:', err.message);
+    res.status(500).type('text/plain').send('Internal Server Error');
+  });
 });
 
 // Error handling
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(500).json({
-    message: 'Internal Server Error',
-    error: process.env.NODE_ENV === 'development' ? err.message : undefined
-  });
+  if (req.originalUrl && req.originalUrl.startsWith('/api')) {
+    res.status(500).json({
+      message: 'Internal Server Error',
+      error: process.env.NODE_ENV === 'development' ? err.message : undefined
+    });
+    return;
+  }
+
+  res.status(500).type('text/plain').send('Internal Server Error');
 });
 
 module.exports = app;

@@ -9,25 +9,73 @@ const cloudUpload = require("../services/cloudinary.service");
  */
 const getAllProducts = async (req, res) => {
   try {
+    // --- Filtering ---
     let query = {};
-    if (req.query.minPrice) {
-      query.price = { $gte: parseInt(req.query.minPrice) };
-    }
-    if (req.query.maxPrice) {
-      query.price = { ...query.price, $lte: parseInt(req.query.maxPrice) };
-    }
-    if (req.query.category) {
-      query.category = req.query.category;
+    const { minPrice, maxPrice, category, search, sort } = req.query;
+
+    if (minPrice || maxPrice) {
+      query.price = {};
+      if (minPrice && !isNaN(Number(minPrice))) {
+        query.price.$gte = Number(minPrice);
+      }
+      if (maxPrice && !isNaN(Number(maxPrice))) {
+        query.price.$lte = Number(maxPrice);
+      }
     }
 
-    if (req.query.searchTerm) {
-      query.title = { $regex: new RegExp(req.query.searchTerm, "i") };
+    if (category && category !== 'All Categories') {
+      query.category = { $regex: new RegExp(`^${category}$`, 'i') };
     }
 
-    const products = await productModel.find(query);
+    if (search) {
+      // Using text index for performance
+      query.$text = { $search: search };
+    }
+
+    // --- Sorting ---
+    let sortOption = { createdAt: -1 }; // Default sort: newest first
+    if (sort) {
+      const parts = sort.startsWith('-') ? [sort.substring(1), -1] : [sort, 1];
+      sortOption = { [parts[0]]: parts[1] };
+    }
+
+    // --- Pagination ---
+    const page = parseInt(req.query.page, 10) || 1;
+    const limit = parseInt(req.query.limit, 10) || 24;
+    const skip = (page - 1) * limit;
+
+    // --- Database Query ---
+    const totalItems = await productModel.countDocuments(query);
+    const totalPages = Math.ceil(totalItems / limit);
+
+    const products = await productModel.find(query)
+      .sort(sortOption)
+      .skip(skip)
+      .limit(limit);
+
+    res.json({
+      products,
+      pagination: {
+        page,
+        limit,
+        totalItems,
+        totalPages
+      }
+    });
+  } catch (err) {
+    res.status(500).json({ message: "Internal Server Error", error: err.message });
+  }
+};
+
+/**
+ * Get Featured Products (Top 4)
+ */
+const getFeaturedProducts = async (req, res) => {
+  try {
+    const products = await productModel.find({}).sort({ createdAt: -1 }).limit(4);
     res.json(products);
   } catch (err) {
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ message: "Internal Server Error", error: err.message });
   }
 };
 
@@ -287,6 +335,7 @@ let addToCart = async (req, res) => {
 
 module.exports = {
   getAllProducts,
+  getFeaturedProducts,
   getProductByName,
   getProductByID,
   createNewProduct,

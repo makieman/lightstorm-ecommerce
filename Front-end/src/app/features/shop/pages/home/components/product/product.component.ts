@@ -24,14 +24,6 @@ import { CartProductsCountService } from '@app/core/services/cart-products-count
 export class ProductComponent implements OnInit {
   constructor(private productService: CoreProductService, public dialog: MatDialog) { }
   FourProducts: any[] = [];
-  categoryMap: Record<string, string> = {
-    'Chair': 'Solar Panels',
-    'Table': 'Inverters',
-    'Coach': 'Batteries',
-    'Sofa': 'Charge Controllers',
-    'Lamp': 'Solar Lighting',
-    'Bed': 'Mounting Systems'
-  };
   ngOnInit(): void {
     this.productService.getFourProducts().subscribe(
       {

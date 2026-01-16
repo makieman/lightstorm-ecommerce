@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Product } from '../../features/shop/pages/products/product.model';
 
@@ -12,13 +12,23 @@ export class CoreProductService {
     constructor(private http: HttpClient) { }
 
     // Get all products
-    getAllProducts(): Observable<Product[]> {
-        return this.http.get<Product[]>(this.apiUrl);
+    getAllProducts(params?: any): Observable<any> {
+        let httpParams = new HttpParams();
+        if (params) {
+            Object.keys(params).forEach(key => {
+                // Only add the parameter if it has a defined, non-null, non-empty-string value
+                if (params[key] !== undefined && params[key] !== null && params[key] !== '') {
+                    httpParams = httpParams.set(key, params[key]);
+                }
+            });
+        }
+        // The response is now an object { products: [], pagination: {} }, so we use <any>
+        return this.http.get<any>(this.apiUrl, { params: httpParams });
     }
 
     // Get first four products for home page
     getFourProducts(): Observable<Product[]> {
-        return this.http.get<Product[]>(this.apiUrl);
+        return this.http.get<Product[]>(`${this.apiUrl}/featured`);
     }
 
     // Get product by ID

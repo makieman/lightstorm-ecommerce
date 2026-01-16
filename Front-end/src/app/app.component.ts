@@ -14,11 +14,9 @@ import {HttpClientModule} from '@angular/common/http';
     RouterOutlet,
     HeaderComponent,
     FooterComponent,
-    LoginComponent,
-    RegisterComponent,
     FormsModule,
     ReactiveFormsModule
-  ],
+],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

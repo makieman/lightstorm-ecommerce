@@ -5,6 +5,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http'; // Import H
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Observable, map } from 'rxjs';
+import{ CartItem , cartState} from '@app/core/models/cart.models';
 
 @Component({
   selector: 'app-cart',
@@ -20,7 +21,7 @@ import { Observable, map } from 'rxjs';
 export class CartComponent implements OnInit {
 
   userid = "";
-  cart: { _id: string, title: string, image: string, quantity: number, price: number }[] = [];
+  cart: CartItem[] = [];
   total: number = 0;
   showAddressForm: boolean = false;
   showCouponForm: boolean = false;
@@ -34,8 +35,14 @@ export class CartComponent implements OnInit {
   updateTotal() {
     this.total = 0;
     this.cart.forEach(item => {
-      this.total += item.price * item.quantity;
+      this.total += item.product.price * item.quantity;
     });
+  }
+  get cartState(): cartState {
+    const items = this.cart;
+    const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
+    const totalPrice = items.reduce((sum, item) => sum + (item.product.price * item.quantity), 0);
+    return { items, total: totalItems, totalprice: totalPrice };
   }
 
   toggleAddressForm() {
@@ -57,7 +64,7 @@ export class CartComponent implements OnInit {
   increaseProductQuantity(productid: string) {
     this.userService.increaseProductQuantity(this.userid, productid).subscribe({
       next: (data: any) => {
-        const productIndex = this.cart.findIndex(item => item._id === productid);
+        const productIndex = this.cart.findIndex(item => item.product._id === productid);
         if (productIndex !== -1) {
           this.cart[productIndex].quantity++;
           this.updateTotal();
@@ -72,14 +79,14 @@ export class CartComponent implements OnInit {
   decreaseProductQuantity(productid: string) {
     this.userService.decreaseProductQuantity(this.userid, productid).subscribe({
       next: (data: any) => {
-        const productIndex = this.cart.findIndex(item => item._id === productid);
+        const productIndex = this.cart.findIndex(item => item.product._id === productid);
         if (productIndex !== -1) {
-          if (this.cart[productIndex].quantity > 1) {
-            this.cart[productIndex].quantity--;
-          } else {
-            this.deleteProduct(productid);
-            return;
-          }
+            if (this.cart[productIndex].quantity > 1) {
+              this.cart[productIndex].quantity--;
+            } else {
+              this.deleteProduct(productid);
+              return;
+            }
           this.updateTotal();
 
         }
@@ -93,9 +100,9 @@ export class CartComponent implements OnInit {
   deleteProduct(productid: string) {
     this.userService.removeProductFromCart(this.userid, productid).subscribe({
       next: (data: any) => {
-        const index = this.cart.findIndex(item => item._id === productid);
+        const index = this.cart.findIndex(item => item.product._id === productid);
         if (index !== -1) {
-          this.deletedProduct = this.cart[index];
+          this.deletedProduct = this.cart[index].product;
           this.cart.splice(index, 1);
           this.updateTotal();
         }
@@ -126,8 +133,7 @@ export class CartComponent implements OnInit {
             const quantity = item.quantity;
             this.productsService.getProductById(productid).subscribe({
               next: (productData: any) => {
-                productData["quantity"] = quantity
-                this.cart.push(productData);
+                this.cart.push({ product: productData, quantity });
                 this.updateTotal();
               },
               error: (error: any) => {

@@ -44,12 +44,12 @@
             <label for="category">Category</label>
             <select id="category" [(ngModel)]="selectedCategory" (change)="applyCategoryFilter()">
               <option>All Categories</option>
-              <option value="Chair">Solar Panels</option>
-              <option value="Table">Inverters</option>
-              <option value="Coach">Batteries</option>
-              <option value="Sofa">Charge Controllers</option>
-              <option value="Lamp">Solar Lighting</option>
-              <option value="Bed">Mounting Systems</option>
+              <option value="Solar Panel">Solar Panels</option>
+              <option value="Inverter">Inverters</option>
+              <option value="Battery">Batteries</option>
+              <option value="Charge Controller">Charge Controllers</option>
+              <option value="Solar Lighting">Solar Lighting</option>
+              <option value="Mounting Systems">Mounting Systems</option>
             </select>
           </div>
         </div>
@@ -120,7 +120,7 @@
             </div>
             <div class="LargeViewData">
               <div class="product-cell category">
-                {{ categoryMap[product.category] || product.category }}
+                {{ product.category }}
               </div>
               <div class="product-cell title">
                 {{ product.title }}

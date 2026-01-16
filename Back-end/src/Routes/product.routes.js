@@ -3,10 +3,12 @@ const route = express.Router();
 const productsController = require("../Controllers/product.controller");
 const multerConfig = require("../Middlewares/multer");
 
+route.get("/", productsController.getAllProducts);
+route.get("/featured", productsController.getFeaturedProducts);
 route.get("/:id", productsController.getProductByID);
 route.post("/", multerConfig, productsController.createNewProduct);
-route.get("/", productsController.getAllProducts);
-route.get("/:title", productsController.getProductByName);
+// Note: getProductByName is ambiguous with getProductById. Consider removing or using a different path like /by-name/:title
+// route.get("/:title", productsController.getProductByName); 
 route.put("/:id", multerConfig, productsController.updateProductByID);
 route.delete("/:id", productsController.deleteProductByID);
 route.post("/:id/reviews", productsController.addReview);
