@@ -1,4 +1,6 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { ActivatedRoute } from '@angular/router';
+import { CartService } from '@app/core/services/cart.service';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
@@ -12,8 +14,14 @@ import Swal from 'sweetalert2';
   styleUrl: './login.component.css'
 })
 export class LoginComponent implements OnInit {
-  form:FormGroup
-  constructor(private http: HttpClient, private formBuilder: FormBuilder, private router: Router){}
+  form: FormGroup
+  constructor(
+    private http: HttpClient,
+    private formBuilder: FormBuilder,
+    private router: Router,
+    private route: ActivatedRoute,
+    private cartService: CartService
+  ) { }
 
   ngOnInit() {
     // this.checkLogin();
@@ -26,7 +34,7 @@ export class LoginComponent implements OnInit {
     });
   }
 
-// ----------------------------- Login function --------------------------------  
+  // ----------------------------- Login function --------------------------------  
   login() {
     let user = this.form.getRawValue();
     const emailRegex: RegExp = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
@@ -45,11 +53,12 @@ export class LoginComponent implements OnInit {
         text: 'Password must be at least 8 characters long!',
       });
       return;
-    } 
+    }
     this.http.post<any>('/api/users/login', user, { withCredentials: true })
-      .subscribe({ next:(response) => {
+      .subscribe({
+        next: (response) => {
           let loggedInUser = response.user;
-          if(loggedInUser && loggedInUser.isAdmin == true){
+          if (loggedInUser && loggedInUser.isAdmin == true) {
             Swal.fire({
               icon: 'success',
               title: `Welcome ${loggedInUser.username}!`,
@@ -57,34 +66,47 @@ export class LoginComponent implements OnInit {
             })
             this.router.navigate(['/admin']);
           }
-          else if(loggedInUser && loggedInUser.isAdmin == false){
+          else if (loggedInUser && loggedInUser.isAdmin == false) {
             Swal.fire({
               icon: 'success',
               title: `Welcome ${loggedInUser.username}!`,
               text: 'You are logged in successfully!',
-            })
-            this.router.navigate(['/home']);
+            });
+
+            // Sync guest cart with backend
+            this.cartService.syncCartWithBackend(loggedInUser._id).subscribe({
+              next: () => {
+                const redirect = this.route.snapshot.queryParamMap.get('redirect');
+                this.router.navigateByUrl(redirect || '/home');
+              },
+              error: () => {
+                // Even if sync fails, proceed to navigation
+                const redirect = this.route.snapshot.queryParamMap.get('redirect');
+                this.router.navigateByUrl(redirect || '/home');
+              }
+            });
           }
 
         },
-        error:(error) => {
-          Swal.fire("Error", error.error.message, "error");
+        error: (error) => {
+          const message = error?.error?.message || error?.message || "Login failed. Please try again.";
+          Swal.fire("Error", message, "error");
         }
-  });
+      });
   }
-// ----------------------------- Check if user is already logged in --------------------------------
-  checkLogin(){
+  // ----------------------------- Check if user is already logged in --------------------------------
+  checkLogin() {
     this.http.get<any>('/api/users/user/user', { withCredentials: true }).subscribe({
       next: (response) => {
-        if(response.data){
+        if (response.data) {
           Swal.fire({
             icon: 'error',
             title: 'Oops...',
-            text: 'You Are Already Logged In!',  
+            text: 'You Are Already Logged In!',
           })
           this.router.navigate(['/home']);
         }
-        else{
+        else {
           this.router.navigate(['/login']);
         }
       }

@@ -63,40 +63,17 @@ const angularDistPath = resolveStaticDir(
   'index.html'
 );
 
-const landingPagePath = resolveStaticDir(
-  [
-    path.join(__dirname, '../../landing-page'),
-    path.join(__dirname, '../../../landing-page'),
-    path.join(process.cwd(), 'landing-page'),
-    path.join(process.cwd(), '../landing-page')
-  ],
-  'index.html'
-);
 
-console.log('Resolved landingPagePath:', landingPagePath);
-console.log('Landing page index.html exists:', fs.existsSync(path.join(landingPagePath, 'index.html')));
 
-// Serve Angular app at /shop
-app.use('/shop', express.static(angularDistPath));
-
-// Serve Landing page at root
-app.use(express.static(landingPagePath));
+// Serve Angular app at root
+app.use(express.static(angularDistPath));
 
 // Catch-all for Angular routing
-app.get('/shop/*', (req, res) => {
+app.get('*', (req, res, next) => {
+  if (req.url.startsWith('/api')) return next();
   res.sendFile(path.join(angularDistPath, 'index.html'), (err) => {
     if (!err) return;
     console.error('Failed to serve Angular index.html:', err.message);
-    res.status(500).type('text/plain').send('Internal Server Error');
-  });
-});
-
-// Catch-all for Landing page navigation
-app.get('*', (req, res, next) => {
-  if (req.url.startsWith('/api')) return next();
-  res.sendFile(path.join(landingPagePath, 'index.html'), (err) => {
-    if (!err) return;
-    console.error('Failed to serve landing page index.html:', err.message);
     res.status(500).type('text/plain').send('Internal Server Error');
   });
 });

@@ -4,6 +4,7 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FieldsetModule } from 'primeng/fieldset';
 import { CoreProductService } from '@app/core/services/core-product.service';
+import { CartService } from '@app/core/services/cart.service';
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
@@ -74,6 +75,7 @@ export class SingleProductDetailsComponent implements OnInit {
     private productService: CoreProductService,
     private formBuilder: FormBuilder,
     private productsCount: CartProductsCountService,
+    private cartService: CartService,
     private dialog: MatDialog
   ) {
     this.ID = route.snapshot.params["id"];
@@ -341,30 +343,47 @@ export class SingleProductDetailsComponent implements OnInit {
 
   addProductToCart() {
     if (this.product.quantity >= this.quantity) {
-      this.productService.addProductToCart(this.user_id, this.ID, this.quantity)
-        .subscribe({
-          next: (data: any) => {
-            Swal.fire({
-              icon: 'success',
-              title: 'Product added to cart successfully',
-            }).then(() => {
-              window.location.reload();
-            });
-          },
-          error: (err: any) => {
-            console.log('Cannot add product to cart:', err);
-            Swal.fire({
-              icon: 'error',
-              title: 'Oops...',
-              text: 'Cannot add product to cart, please try again later.',
-            });
-          }
+      if (this.user_id) {
+        // Authenticated user
+        this.productService.addProductToCart(this.user_id, this.ID, this.quantity)
+          .subscribe({
+            next: (data: any) => {
+              Swal.fire({
+                icon: 'success',
+                title: 'Added to cart!',
+                text: `${this.product.title} has been added to your cart.`,
+                timer: 2000,
+                showConfirmButton: false
+              }).then(() => {
+                window.location.reload();
+              });
+            },
+            error: (err: any) => {
+              Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Cannot add product to cart, please try again later.',
+              });
+            }
+          });
+      } else {
+        // Guest user
+        this.cartService.addToGuestCart(this.ID, this.quantity);
+        Swal.fire({
+          icon: 'success',
+          title: 'Added to cart!',
+          text: `${this.product.title} added to your guest cart.`,
+          timer: 2000,
+          showConfirmButton: false
+        }).then(() => {
+          window.location.reload();
         });
+      }
     } else {
       Swal.fire({
         icon: 'error',
         title: 'Oops...',
-        text: 'Thers is no enough quantity in the stock!',
+        text: 'Not enough quantity in stock!',
       });
     }
   }

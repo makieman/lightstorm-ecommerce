@@ -24,12 +24,11 @@ export const routes: Routes = [
   {
     path: 'product/:id',
     component: SingleProductDetailsComponent,
-    canActivate: [AuthGuard],
   },
   { path: 'about', component: AboutComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
-  { path: 'cart', component: CartComponent, canActivate: [AuthGuard] },
+  { path: 'cart', component: CartComponent },
   { path: 'checkout', component: CheckoutComponent, canActivate: [AuthGuard] },
   { path: 'admin/users', component: UsersComponent, canActivate: [AdminGuard] },
   {
@@ -44,7 +43,7 @@ export const routes: Routes = [
     canActivate: [AllProductsGuard],
   },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
-  { path: 'payment', component: PaymentComponent },
-  { path: 'confirm', component: ConfirmOrderComponent },
+  { path: 'payment', component: PaymentComponent, canActivate: [AuthGuard] },
+  { path: 'confirm', component: ConfirmOrderComponent, canActivate: [AuthGuard] },
   { path: '**', redirectTo: '/home' },
 ];

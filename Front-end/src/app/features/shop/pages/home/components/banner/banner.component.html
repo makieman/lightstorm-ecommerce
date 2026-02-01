@@ -1,11 +1,73 @@
-<div class="row mt-3 image-background">
-  <div class="col-sm-10 ">
-    <h1 class="heading">
-      Clean<br>
-      Reliable &<br>
-      Sustainable<br>
-    </h1>
-    <button class="btn btn-solar button"><a style=" color: white; text-decoration:none;" href="products">Explore
-        Solutions</a></button>
+<div class="row mt-4">
+  <!-- Left Side Category Menu (Visible on Desktop) -->
+  <div class="col-lg-3 d-none d-lg-block">
+    <div class="side-category-menu border shadow-sm rounded bg-white overflow-hidden">
+      <div class="category-list">
+        <div *ngFor="let cat of categories" class="side-cat-block border-bottom">
+          <a href="/products?category={{cat.slug}}"
+            class="side-cat-item d-flex align-items-center justify-content-between p-3 text-decoration-none text-dark bg-light-hover fw-bold">
+            <span>{{cat.name}}</span>
+            <i class="fas fa-chevron-right small text-muted"></i>
+          </a>
+          <ul class="list-unstyled px-3 pb-2">
+            <li *ngFor="let item of cat.items" class="small text-muted py-1">
+              <i class="fas fa-check-circle text-solar-green me-2 opacity-50"></i>{{item}}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Center Carousel -->
+  <div class="col-lg-6 col-md-12">
+    <div id="heroCarousel" class="carousel slide shadow-sm rounded overflow-hidden h-100" data-bs-ride="carousel">
+      <div class="carousel-indicators">
+        <button *ngFor="let slide of slides; let i = index" type="button" data-bs-target="#heroCarousel"
+          [attr.data-bs-slide-to]="i" [class.active]="i === 0"></button>
+      </div>
+      <div class="carousel-inner h-100">
+        <div *ngFor="let slide of slides; let i = index" class="carousel-item h-100" [class.active]="i === 0">
+          <div class="carousel-bg"
+            [style.background-image]="'linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url(' + slide.image + ')'">
+            <div class="carousel-caption text-start h-100 d-flex flex-column justify-content-center">
+              <h2 class="display-5 fw-bold mb-2">{{slide.title}}</h2>
+              <p class="lead mb-4">{{slide.subtitle}}</p>
+              <div>
+                <a href="/products" class="btn btn-danger btn-lg px-4 rounded-pill">{{slide.buttonText}}</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon"></span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon"></span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Right Side Promo Banners -->
+  <div class="col-lg-3 d-none d-lg-block">
+    <div class="d-flex flex-column gap-3 h-100">
+      <div class="promo-banner rounded shadow-sm overflow-hidden flex-fill bg-primary position-relative"
+        style="background-image: url('assets/images/solar/s1.webp'); background-size: cover;">
+        <div class="promo-content p-4 text-white">
+          <h4 class="fw-bold">Power Generators</h4>
+          <p class="small">Petrol & Silent Diesel</p>
+          <a href="/products" class="btn btn-sm btn-light rounded-pill">Shop Now →</a>
+        </div>
+      </div>
+      <div class="promo-banner rounded shadow-sm overflow-hidden flex-fill bg-success position-relative"
+        style="background-image: url('assets/images/solar/s2.webp'); background-size: cover;">
+        <div class="promo-content p-4 text-white">
+          <h4 class="fw-bold">Solar Power</h4>
+          <p class="small">Home & Business Solutions</p>
+          <a href="/products" class="btn btn-sm btn-light rounded-pill">View More →</a>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

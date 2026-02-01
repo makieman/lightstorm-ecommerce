@@ -6,7 +6,11 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatBadgeModule } from '@angular/material/badge';
 import { CoreProductService } from '@app/core/services/core-product.service';
 import { CartProductsCountService } from '@app/core/services/cart-products-count.service';
+import { CartService } from '@app/core/services/cart.service';
 
+
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-header',
@@ -16,7 +20,9 @@ import { CartProductsCountService } from '@app/core/services/cart-products-count
     MatMenuModule,
     MatIconModule,
     MatToolbarModule,
-    MatBadgeModule
+    MatBadgeModule,
+    CommonModule,
+    FormsModule
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
@@ -26,28 +32,57 @@ export class HeaderComponent implements OnInit {
   data: number = 0;
   oredersTotalPrice: number = 0;
   user_id: any;
+  searchQuery: string = '';
+  showCategories: boolean = false;
 
-  constructor(private productService: CoreProductService, private productsCount: CartProductsCountService) { }
+  categories = [
+    {
+      name: 'Solar & Renewable Energy',
+      icon: 'wb_sunny',
+      slug: 'solar',
+      description: 'Panels, Inverters, Batteries & Installation'
+    },
+    {
+      name: 'Borehole & Water Solutions',
+      icon: 'water_drop',
+      slug: 'water',
+      description: 'Drilling, Pumps, Tanks & Systems'
+    },
+    {
+      name: 'Electrical & Wiring',
+      icon: 'bolt',
+      slug: 'electrical',
+      description: 'Installations & Electric Fencing'
+    }
+  ];
+
+  constructor(
+    private productService: CoreProductService, 
+    private productsCount: CartProductsCountService,
+    private cartService: CartService
+  ) { }
 
   ngOnInit() {
     this.productService.getUserToken().subscribe({
       next: (data: any) => {
         this.data = data.data.carts.length;
+        this.user_id = data.data._id;
+        // Optionally update the count service with the real backend count
+        this.productsCount.updateData(this.data);
+        
         data.data.orders.forEach((element: { totalPrice: number; }) => {
           this.productService.getOrderById(element).subscribe({
             next: (data: any) => {
               if (data && data.totalPrice) {
                 this.oredersTotalPrice += data.totalPrice;
               }
-            },
-            error: (err) => {
-              console.log('cannot get user token !!', err);
             }
           });
         });
       },
       error: (err) => {
-        console.log('cannot get user token !!', err);
+        // Guest user: Load guest count
+        this.cartService.updateCartCount();
       }
     });
 

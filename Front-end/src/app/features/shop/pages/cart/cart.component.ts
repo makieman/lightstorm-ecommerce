@@ -1,11 +1,12 @@
 import { CoreProductService } from '@app/core/services/core-product.service';
 import { CartService } from '@app/core/services/cart.service';
 import { Component, OnInit } from '@angular/core';
+import { RouterModule } from '@angular/router';
 import { HttpClient, HttpClientModule } from '@angular/common/http'; // Import HttpClientModule
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Observable, map } from 'rxjs';
-import{ CartItem , cartState} from '@app/core/models/cart.models';
+import { CartItem, cartState } from '@app/core/models/cart.models';
 
 @Component({
   selector: 'app-cart',
@@ -13,7 +14,8 @@ import{ CartItem , cartState} from '@app/core/models/cart.models';
   imports: [
     HttpClientModule,
     CommonModule,
-    FormsModule
+    FormsModule,
+    RouterModule
   ],
   templateUrl: './cart.component.html',
   styleUrl: './cart.component.css'
@@ -62,56 +64,87 @@ export class CartComponent implements OnInit {
 
 
   increaseProductQuantity(productid: string) {
-    this.userService.increaseProductQuantity(this.userid, productid).subscribe({
-      next: (data: any) => {
-        const productIndex = this.cart.findIndex(item => item.product._id === productid);
-        if (productIndex !== -1) {
-          this.cart[productIndex].quantity++;
-          this.updateTotal();
+    if (this.userid) {
+      this.userService.increaseProductQuantity(this.userid, productid).subscribe({
+        next: (data: any) => {
+          const productIndex = this.cart.findIndex(item => item.product._id === productid);
+          if (productIndex !== -1) {
+            this.cart[productIndex].quantity++;
+            this.updateTotal();
+          }
+        },
+        error: (error: any) => {
+          console.error("Failed to increase product quantity", error);
         }
-      },
-      error: (error: any) => {
-        console.error("Failed to increase product quantity", error);
+      });
+    } else {
+      this.userService.updateGuestQuantity(productid, 'increase');
+      const productIndex = this.cart.findIndex(item => item.product._id === productid);
+      if (productIndex !== -1) {
+        this.cart[productIndex].quantity++;
+        this.updateTotal();
       }
-    });
+    }
   }
 
   decreaseProductQuantity(productid: string) {
-    this.userService.decreaseProductQuantity(this.userid, productid).subscribe({
-      next: (data: any) => {
-        const productIndex = this.cart.findIndex(item => item.product._id === productid);
-        if (productIndex !== -1) {
+    if (this.userid) {
+      this.userService.decreaseProductQuantity(this.userid, productid).subscribe({
+        next: (data: any) => {
+          const productIndex = this.cart.findIndex(item => item.product._id === productid);
+          if (productIndex !== -1) {
             if (this.cart[productIndex].quantity > 1) {
               this.cart[productIndex].quantity--;
             } else {
               this.deleteProduct(productid);
               return;
             }
-          this.updateTotal();
+            this.updateTotal();
 
+          }
+        },
+        error: (error: any) => {
+          console.error("Failed to decrease product quantity", error);
         }
-      },
-      error: (error: any) => {
-        console.error("Failed to decrease product quantity", error);
+      });
+    } else {
+      this.userService.updateGuestQuantity(productid, 'decrease');
+      const productIndex = this.cart.findIndex(item => item.product._id === productid);
+      if (productIndex !== -1) {
+        if (this.cart[productIndex].quantity > 1) {
+          this.cart[productIndex].quantity--;
+        } else {
+          this.cart.splice(productIndex, 1);
+        }
+        this.updateTotal();
       }
-    });
+    }
   }
 
   deleteProduct(productid: string) {
-    this.userService.removeProductFromCart(this.userid, productid).subscribe({
-      next: (data: any) => {
-        const index = this.cart.findIndex(item => item.product._id === productid);
-        if (index !== -1) {
-          this.deletedProduct = this.cart[index].product;
-          this.cart.splice(index, 1);
-          this.updateTotal();
+    if (this.userid) {
+      this.userService.removeProductFromCart(this.userid, productid).subscribe({
+        next: (data: any) => {
+          const index = this.cart.findIndex(item => item.product._id === productid);
+          if (index !== -1) {
+            this.deletedProduct = this.cart[index].product;
+            this.cart.splice(index, 1);
+            this.updateTotal();
+          }
+        },
+        error: (error: any) => {
+          console.error("Failed to delete product", error);
         }
-        // this.ngOnInit();
-      },
-      error: (error: any) => {
-        console.error("Failed to delete product", error);
+      });
+    } else {
+      this.userService.removeFromGuestCart(productid);
+      const index = this.cart.findIndex(item => item.product._id === productid);
+      if (index !== -1) {
+        this.deletedProduct = this.cart[index].product;
+        this.cart.splice(index, 1);
+        this.updateTotal();
       }
-    });
+    }
   }
 
   getAuthUser(): Observable<string> {
@@ -122,28 +155,44 @@ export class CartComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getAuthUser().subscribe(userid => {
-      this.userid = userid;
-      this.cart = [];
-      this.selectedCountry = localStorage.getItem('selectedCountry') || 'Egypt';
-      this.userService.getUserById(this.userid).subscribe({
-        next: (data: any) => {
-          data.carts.forEach((item: { product: string; quantity: number }) => {
-            const productid = item.product;
-            const quantity = item.quantity;
-            this.productsService.getProductById(productid).subscribe({
-              next: (productData: any) => {
-                this.cart.push({ product: productData, quantity });
-                this.updateTotal();
-              },
-              error: (error: any) => {
-                console.log(error);
-              }
-            });
+    this.getAuthUser().subscribe({
+      next: (userid) => {
+        this.userid = userid;
+        this.loadBackendCart();
+      },
+      error: () => {
+        this.userid = "";
+        this.loadGuestCart();
+      }
+    });
+  }
+
+  loadBackendCart() {
+    this.cart = [];
+    this.selectedCountry = localStorage.getItem('selectedCountry') || 'Egypt';
+    this.userService.getUserById(this.userid).subscribe({
+      next: (data: any) => {
+        data.carts.forEach((item: { product: string; quantity: number }) => {
+          this.productsService.getProductById(item.product).subscribe({
+            next: (productData: any) => {
+              this.cart.push({ product: productData, quantity: item.quantity });
+              this.updateTotal();
+            }
           });
-        },
-        error: (error: any) => {
-          console.log(error);
+        });
+      }
+    });
+  }
+
+  loadGuestCart() {
+    this.cart = [];
+    this.selectedCountry = localStorage.getItem('selectedCountry') || 'Egypt';
+    const guestItems = this.userService.getGuestCart();
+    guestItems.forEach(item => {
+      this.productsService.getProductById(item.product).subscribe({
+        next: (productData: any) => {
+          this.cart.push({ product: productData, quantity: item.quantity });
+          this.updateTotal();
         }
       });
     });

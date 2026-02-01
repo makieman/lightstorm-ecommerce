@@ -1,29 +1,45 @@
-<div class="row">
-  <div class="row">
-    <div class="col-sm-12 col-lg-12 d-flex justify-content-center align-items-center latest">
-      <div class="latest">Our Latest Solar Solutions</div>
+<div class="product-sections py-5">
+  <div *ngFor="let category of categories" class="category-block mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+      <h3 class="section-title fw-bold m-0">{{category}}</h3>
+      <a [routerLink]="['/products']" [queryParams]="{category: category}"
+        class="text-solar-green text-decoration-none fw-bold">View All →</a>
     </div>
-  </div>
-  <div class="row">
-    @for (u of FourProducts; track u.title ){
-    <div class="col-xs-12 col-sm-12 col-md-4 col-lg-3 product-item product-image-wrapper">
-      <br>
-      <a href="product/{{u._id}}"><img class="product-image" src="{{u.image}}"></a>
-      <a mat-button type="button" class="cart-icon position-absolute top-0 end-0" (click)="openDialog(u._id)">
-        <mat-icon>search</mat-icon>
-      </a>
-      <div style="margin-left: 8%; margin-top: 6%;" class="justify-content-center">
-        <a>{{u.category}}</a>
-        <br>
-        <a style="color: gray;" href="product/{{u._id}}"><b>{{u.title}}</b></a>
-        <br>
-        <span style="font-size: 0.85em; color: #555;" *ngIf="u.details">Power Rating: {{u.details}}</span>
-        <br>
-        <span class="fw-bold">From KES {{u.price}}</span>
 
+    <div class="row g-4">
+      <div *ngFor="let product of productsByCategory[category]" class="col-6 col-md-4 col-lg-3">
+        <div class="product-card h-100 shadow-sm rounded overflow-hidden bg-white border">
+          <div class="product-img-wrapper position-relative overflow-hidden">
+            <img [src]="product.image" [alt]="product.title" class="product-img w-100">
+            <div class="product-actions">
+              <button class="btn btn-light btn-sm shadow-sm me-2" (click)="openDialog(product._id)">
+                <mat-icon class="fs-6">visibility</mat-icon>
+              </button>
+              <button class="btn btn-danger btn-sm shadow-sm">
+                <mat-icon class="fs-6">shopping_cart</mat-icon>
+              </button>
+            </div>
+          </div>
+          <div class="product-info p-3">
+            <span class="category-tag small text-muted text-uppercase mb-1 d-block">{{product.category}}</span>
+            <h5 class="product-name text-truncate mb-2">
+              <a [routerLink]="['/product', product._id]"
+                class="text-decoration-none text-dark fw-bold">{{product.title}}</a>
+            </h5>
+            <div class="p-rating mb-2">
+              <i class="fas fa-star text-warning small"></i>
+              <i class="fas fa-star text-warning small"></i>
+              <i class="fas fa-star text-warning small"></i>
+              <i class="fas fa-star text-warning small"></i>
+              <i class="fas fa-star-half-alt text-warning small"></i>
+              <span class="small text-muted ms-1">(12)</span>
+            </div>
+            <div class="product-price fw-bold text-danger">
+              KES {{product.price | number}}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-    }
-
   </div>
 </div>

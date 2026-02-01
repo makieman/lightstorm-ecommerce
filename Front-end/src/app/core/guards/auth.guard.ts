@@ -10,7 +10,7 @@ import Swal from 'sweetalert2';
 })
 export class AuthGuard implements CanActivate {
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient, private router: Router) { }
 
   canActivate(
     next: ActivatedRouteSnapshot,
@@ -30,12 +30,10 @@ export class AuthGuard implements CanActivate {
           return true;
         }),
         catchError(error => {
-          Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'You Need To Login First!',
+          // Redirect to login with the current URL as a redirect parameter
+          this.router.navigate(['/login'], {
+            queryParams: { redirect: state.url }
           });
-          this.router.navigate(['/login']);
           return of(false);
         })
       );

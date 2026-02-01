@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
@@ -11,34 +12,42 @@ import { FormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { ActivatedRoute } from '@angular/router';
 import { CoreProductService } from '@app/core/services/core-product.service';
+import { CartService } from '@app/core/services/cart.service';
 import { CartProductsCountService } from '@app/core/services/cart-products-count.service';
 
 @Component({
   selector: 'app-product',
   standalone: true,
-  imports: [CommonModule, MatIconModule],
+  imports: [CommonModule, MatIconModule, RouterModule, MatButtonModule],
   templateUrl: './product.component.html',
   styleUrl: './product.component.css'
 })
 
 export class ProductComponent implements OnInit {
   constructor(private productService: CoreProductService, public dialog: MatDialog) { }
-  FourProducts: any[] = [];
+  allProducts: any[] = [];
+  categories: string[] = [];
+  productsByCategory: { [key: string]: any[] } = {};
+
   ngOnInit(): void {
-    this.productService.getFourProducts().subscribe(
-      {
-        next: (data: any) => {
-          for (let i = 0; i < 4; i++) {
-            this.FourProducts.push(data[i]);
-            console.log(data[i]);
-          }
-          // data.forEach((element: any) => {
-          //   this.FourProducts.push(element);
-          // });
-          //console.log(data);
-        }
+    this.productService.getAllProducts().subscribe({
+      next: (data: any) => {
+        this.allProducts = data.products || data;
+        this.groupProductsByCategory();
       }
-    );
+    });
+  }
+
+  groupProductsByCategory() {
+    this.allProducts.forEach(product => {
+      if (!this.productsByCategory[product.category]) {
+        this.productsByCategory[product.category] = [];
+        this.categories.push(product.category);
+      }
+      if (this.productsByCategory[product.category].length < 8) {
+        this.productsByCategory[product.category].push(product);
+      }
+    });
   }
   openDialog(productId: string) {
     this.productService.getProductById(productId).subscribe((product: any) => {
@@ -76,7 +85,8 @@ export class DialogContentExampleDialog {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private productService: CoreProductService,
     private route: ActivatedRoute,
-    private productsCount: CartProductsCountService
+    private productsCount: CartProductsCountService,
+    private userService: CartService
   ) {
 
     this.product = data.product;
@@ -120,32 +130,48 @@ export class DialogContentExampleDialog {
   /**************** Add to cart ****************/
   addProductToCart() {
     if (this.product.quantity >= this.quantity) {
-      this.productService.addProductToCart(this.user_id, this.ID, this.quantity)
-        .subscribe({
-          next: (data: any) => {
-            console.log(data);
-            Swal.fire({
-              icon: 'success',
-              title: 'Product added to cart successfully',
-            }).then(() => {
-              window.location.reload();
-              // this.productsCount.updateData(this.products_number + 1);
-            });
-          },
-          error: (err: any) => {
-            console.log('Cannot add product to cart:', err);
-            Swal.fire({
-              icon: 'error',
-              title: 'Oops...',
-              text: 'Cannot add product to cart, please try again later.',
-            });
-          }
+      if (this.user_id) {
+        // Logged in user: add to backend
+        this.productService.addProductToCart(this.user_id, this.ID, this.quantity)
+          .subscribe({
+            next: (data: any) => {
+              Swal.fire({
+                icon: 'success',
+                title: 'Added to cart!',
+                text: `${this.product.title} has been added.`,
+                timer: 2000,
+                showConfirmButton: false
+              }).then(() => {
+                window.location.reload();
+              });
+            },
+            error: (err: any) => {
+              Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Could not add to cart. Please try again.',
+              });
+            }
+          });
+      } else {
+        // Guest user: add to local storage
+        this.userService.addToGuestCart(this.ID, this.quantity);
+        Swal.fire({
+          icon: 'success',
+          title: 'Added to cart!',
+          text: `${this.product.title} added to guest cart.`,
+          timer: 2000,
+          showConfirmButton: false
+        }).then(() => {
+          // Re-update count if needed or just reload
+          window.location.reload();
         });
+      }
     } else {
       Swal.fire({
         icon: 'error',
         title: 'Oops...',
-        text: 'Thers is no enough quantity in the stock!',
+        text: 'Not enough stock available!',
       });
     }
   }

@@ -14,13 +14,14 @@
       <tbody>
         <tr *ngFor="let item of cart; let i = index">
           <td data-label=" " class="align-middle ">
-              <form action="">
-                <button (click)="deleteProduct(item.product._id)" class="btn-delete">
-                  <i class="fas fa-times"></i>
-                </button>
+            <form action="">
+              <button (click)="deleteProduct(item.product._id)" class="btn-delete">
+                <i class="fas fa-times"></i>
+              </button>
             </form>
           </td>
-          <td class="align-middle "><img [src]="item.product.image" alt="Product Image" style="height: 70px; width: 100px;">
+          <td class="align-middle "><img [src]="item.product.image" alt="Product Image"
+              style="height: 70px; width: 100px;">
           </td>
           <td data-label="Product" class="align-middle ">{{ item.product.title }}</td>
           <td data-label="Price" class="align-middle ">{{ item.product.price }}$</td>
@@ -92,8 +93,9 @@
           </div>
         </div>
         <div class="row">
-          <a href="/checkout" class="btn btn-custom col-10" [ngClass]="{'dis-btn': cart.length === 0}">
-            <b>Proceed to checkout</b>
+          <a [routerLink]="['/checkout']" class="btn btn-custom col-10" [ngClass]="{'dis-btn': cart.length === 0}">
+            <b *ngIf="userid">Proceed to checkout</b>
+            <b *ngIf="!userid">Login to complete your order</b>
           </a>
         </div>
 

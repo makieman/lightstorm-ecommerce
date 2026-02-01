@@ -1,161 +1,90 @@
-.image-background {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('assets/images/solar/hero.webp');
+.side-category-menu {
+  height: 100%;
+}
+
+.side-cat-block {
+  transition: background-color 0.2s;
+}
+
+.side-cat-block:hover {
+  background-color: #fbfbfb;
+}
+
+.side-cat-item {
+  font-size: 0.95rem;
+  font-weight: 600 !important;
+  transition: all 0.2s;
+}
+
+.side-cat-item:hover {
+  color: var(--solar-green) !important;
+}
+
+.side-cat-block ul li {
+  font-size: 0.8rem;
+  line-height: 1.3;
+}
+
+.carousel-bg {
   background-size: cover;
   background-position: center;
-  height: 100%;
+  height: 400px;
+  /* Base height */
   width: 100%;
-  color: #ffffff;
-  margin: auto;
+  color: white;
 }
 
-.heading {
-  margin-left: 100px;
-  margin-top: 150px;
-  font-size: 2em;
-  /* Default font size */
-  line-height: 1.2;
-  /* Default line height */
-}
-
-
-.button {
-  position: relative;
-  /* Position relative to nearest positioned ancestor (here .image-background) */
+.carousel-caption {
   left: 10%;
-  /* Center horizontally */
-  margin-top: 30px;
-  transform: translate(-50%, -50%);
-  /* Centering adjustment */
-  padding: 10px 20px;
-  /* Example padding */
-  font-size: 1em;
-  /* Adjust font size */
+  right: 10%;
+  bottom: 20%;
+  top: auto;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
 }
 
-/* Very small devices (small phones, less than 400px) */
-@media (max-width: 400px) {
-  .image-background {
-    height: 25vh;
-    background-position: center;
-  }
-
-  .heading {
-    font-size: 1.2em;
-    margin-left: 20px;
-    margin-top: 15px;
-  }
-
-  .button {
-    position: relative;
-    left: 25%;
-    margin-top: 15px;
-    transform: translate(-50%, -50%);
-  }
+.promo-banner {
+  min-height: 190px;
+  background-position: center;
+  transition: transform 0.3s;
 }
 
-/* Extra small devices (phones, 400px and up but less than 600px) */
-@media (min-width: 400px) and (max-width: 599px) {
-  .image-background {
-    height: 30vh;
-    background-position: center;
-  }
-
-  .heading {
-    font-size: 1.4em;
-    margin-left: 30px;
-    margin-top: 25px;
-  }
-
-  .button {
-    position: relative;
-    left: 23%;
-    margin-top: 15px;
-    transform: translate(-50%, -50%);
-  }
-
+.promo-banner:hover {
+  transform: translateY(-5px);
 }
 
-/* Small devices (portrait tablets and large phones, 600px and up) */
-@media (min-width: 600px) and (max-width: 768px) {
-  .image-background {
-    height: 45vh;
-    background-position: center;
-  }
-
-  .heading {
-    font-size: 1.6em;
-    margin-left: 40px;
-    margin-top: 35px;
-  }
-
-  .button {
-    position: relative;
-    left: 26%;
-    margin-top: 23px;
-    transform: translate(-50%, -50%);
-  }
+.promo-banner::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.2);
 }
 
-/* Medium devices (landscape tablets, 768px and up) */
-@media (min-width: 769px) and (max-width: 992px) {
-  .image-background {
-    height: 50vh;
-    background-position: center;
-  }
-
-  .heading {
-    font-size: 2em;
-    margin-left: 50px;
-    margin-top: 50px;
-  }
-
-  .button {
-    position: relative;
-    left: 22%;
-    margin-top: 23px;
-    transform: translate(-50%, -50%);
-  }
+.promo-content {
+  position: relative;
+  z-index: 1;
 }
 
-/* Large devices (laptops/desktops, 992px and up) */
-@media (min-width: 992px) and (max-width: 1199px) {
-  .image-background {
-    height: 90vh;
-    background-position: center;
-  }
-
-  .heading {
-    font-size: 3em;
-    margin-left: 60px;
-    margin-top: 130px;
-  }
-
-  .button {
-    position: relative;
-    left: 23%;
-    margin-top: 33px;
-    font-size: 1.5em;
-  }
-}
-
-/* Extra large devices (large desktops, 1200px and up) */
 @media (min-width: 1200px) {
-  .image-background {
-    height: 100vh;
-    background-position: center;
+  .carousel-bg {
+    height: 450px;
+  }
+}
+
+@media (max-width: 991px) {
+  .carousel-bg {
+    height: 350px;
+  }
+}
+
+@media (max-width: 767px) {
+  .carousel-bg {
+    height: 300px;
   }
 
-  .heading {
-    font-size: 4em;
-    margin-left: 17%;
-    margin-top: 10%;
-  }
-
-  .button {
-    position: relative;
-    left: 29%;
-    margin-top: 60px;
-    font-size: 1.7em;
-
+  .carousel-caption h2 {
+    font-size: 1.5rem;
   }
 }
