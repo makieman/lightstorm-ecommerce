@@ -1,112 +1,93 @@
-<!-- Top Bar -->
-<div class="top-bar py-2 d-none d-lg-block">
-  <div class="container d-flex justify-content-between align-items-center">
-    <div class="top-left d-flex gap-3">
-      <span><i class="fas fa-home me-1"></i> Welcome to Lightstorm - Inspired Living</span>
+<!-- Main Header -->
+<header class="main-header sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-slate-100 py-4 px-6 md:px-12">
+  <div class="max-w-7xl mx-auto flex items-center justify-between gap-8">
+
+    <!-- Logo -->
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 bg-[#1E293B] rounded-xl flex items-center justify-center shadow-lg shadow-slate-200">
+        <i class="bi bi-lightning-charge-fill text-[#84CC16] text-xl"></i>
+      </div>
+      <span class="font-black text-2xl tracking-tighter text-[#1E293B] hidden sm:block">LIGHTSTORM</span>
     </div>
-    <div class="top-right d-flex gap-4">
-      <span><i class="fas fa-location-dot me-1"></i> Nairobi, Kenya</span>
-      <a [routerLink]="['/about']" class="text-decoration-none">About Us</a>
-      <a [routerLink]="['/profile']" class="text-decoration-none">My Account</a>
+
+    <!-- Search Bar (Desktop) - Global Search Component -->
+    <div class="hidden lg:flex flex-1 max-w-2xl">
+      <app-global-search></app-global-search>
+    </div>
+
+    <!-- Actions -->
+    <div class="flex items-center gap-2 md:gap-6">
+      <div class="hidden xl:flex items-center gap-3 border-r border-slate-100 pr-6 mr-4">
+        <div class="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-[#EF4444]">
+          <i class="bi bi-telephone-fill"></i>
+        </div>
+        <div class="text-left text-xs">
+          <p class="text-slate-400 font-bold uppercase tracking-widest">Support</p>
+          <p class="font-black text-[#1E293B]">+254 718 762 530</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <a [routerLink]="['/cart']" class="relative group p-2 rounded-xl hover:bg-slate-50 transition-colors">
+          <i class="bi bi-cart text-2xl text-slate-600 group-hover:text-[#EF4444]"></i>
+          <span *ngIf="data > 0"
+            class="absolute -top-1 -right-1 bg-[#EF4444] text-white text-[10px] font-black px-1.5 py-0.5 rounded-full border-2 border-white">
+            {{data}}
+          </span>
+        </a>
+        <a [routerLink]="['/profile']" class="p-2 rounded-xl hover:bg-slate-50 transition-colors">
+          <i class="bi bi-person text-2xl text-slate-600"></i>
+        </a>
+        <button class="lg:hidden p-2 rounded-xl" [matMenuTriggerFor]="mobileMenu">
+          <i class="bi bi-list text-2xl"></i>
+        </button>
+      </div>
     </div>
   </div>
-</div>
 
-<!-- Main Header -->
-<header class="main-header py-3 bg-white shadow-sm border-bottom">
-  <div class="container">
-    <div class="row align-items-center">
-      <!-- Logo -->
-      <div class="col-6 col-lg-3 order-1">
-        <a class="navbar-brand d-flex align-items-center" href="/">
-          <img src="assets/images/solar/logo.png" alt="Lightstorm Technologies" class="header-logo">
-        </a>
-      </div>
-
-      <!-- Search Bar -->
-      <div class="col-12 col-lg-6 order-3 order-lg-2 mt-3 mt-lg-0">
-        <div class="search-container d-flex">
-          <div class="input-group">
-            <button class="btn btn-outline-secondary dropdown-toggle d-none d-md-block" type="button"
-              data-bs-toggle="dropdown">All</button>
-            <input type="text" class="form-control" placeholder="I'm shopping for..." [(ngModel)]="searchQuery">
-            <button class="btn btn-danger search-btn px-4" type="button">
-              <span>Search</span>
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Actions -->
-      <div class="col-6 col-lg-3 order-2 order-lg-3 text-end d-flex justify-content-end align-items-center gap-4">
-        <div class="contact-info d-none d-xl-flex align-items-center gap-2">
-          <i class="fas fa-phone-alt text-danger fs-4"></i>
-          <div class="text-start">
-            <div class="small text-muted">Call or Whatsapp</div>
-            <div class="fw-bold">+254 718 762 530</div>
-          </div>
-        </div>
-
-        <div class="header-actions d-flex gap-3 align-items-center">
-          <a class="text-secondary position-relative me-2" [routerLink]="['/cart']">
-            <mat-icon class="fs-2" [matBadge]="data" matBadgeColor="warn">shopping_cart</mat-icon>
-          </a>
-          <button class="btn d-lg-none" type="button" [matMenuTriggerFor]="mobileMenu">
-            <mat-icon>menu</mat-icon>
-          </button>
-        </div>
-      </div>
-    </div>
+  <!-- Mobile Search Bar - Global Search Component -->
+  <div class="lg:hidden mt-4">
+    <app-global-search></app-global-search>
   </div>
 </header>
 
-<!-- Navigation Bar -->
-<nav class="nav-bar bg-primary-dark text-white d-none d-lg-block">
-  <div class="container d-flex align-items-center">
-    <div class="category-dropdown position-relative me-4" (mouseenter)="showCategories = true"
-      (mouseleave)="showCategories = false">
-      <button class="btn btn-category py-3 px-4 d-flex align-items-center gap-2 text-white">
-        <mat-icon>menu</mat-icon>
-        <span class="fw-bold">Shop By Category</span>
-      </button>
-
-      <div class="category-menu shadow" [class.show]="showCategories">
-        <a *ngFor="let cat of categories" [routerLink]="['/products']" [queryParams]="{ category: cat.slug }"
-          class="category-item d-flex justify-content-between align-items-center">
-          <div class="d-flex align-items-center gap-3">
-            <mat-icon class="text-muted">{{cat.icon}}</mat-icon>
-            <div class="d-flex flex-column">
-              <span class="fw-bold">{{cat.name}}</span>
-              <span class="small text-muted">{{cat.description}}</span>
-            </div>
-          </div>
-          <mat-icon class="fs-6 text-muted">chevron_right</mat-icon>
-        </a>
-      </div>
+<!-- Desktop Navigation -->
+<nav class="hidden lg:block bg-white border-b border-slate-100">
+  <div class="max-w-7xl mx-auto px-12 py-3 flex items-center gap-10">
+    <div class="flex items-center gap-8">
+      <a [routerLink]="['/home']" routerLinkActive="text-[#EF4444] border-b-2 border-[#EF4444]"
+        class="text-xs font-black uppercase tracking-widest text-slate-600 hover:text-[#1E293B] pb-3 transition-colors">Shop</a>
+      <a [routerLink]="['/products']"
+        class="text-xs font-black uppercase tracking-widest text-slate-600 hover:text-[#1E293B] pb-3 transition-colors">Solutions</a>
+      <a href="#"
+        class="text-xs font-black uppercase tracking-widest text-slate-600 hover:text-[#1E293B] pb-3 transition-colors">Insights</a>
+      <a [routerLink]="['/about']"
+        class="text-xs font-black uppercase tracking-widest text-slate-600 hover:text-[#1E293B] pb-3 transition-colors">About
+        Us</a>
     </div>
 
-    <div class="main-nav-links d-flex gap-4 ms-2">
-      <a [routerLink]="['/home']" class="nav-link text-white fw-bold py-3 active">Shop</a>
-      <a [routerLink]="['/products']" class="nav-link text-white fw-bold py-3">Projects</a>
-      <a [routerLink]="['/products']" class="nav-link text-white fw-bold py-3">Insights</a>
-      <a [routerLink]="['/about']" class="nav-link text-white fw-bold py-3">About Us</a>
-      <a href="#" class="nav-link text-white fw-bold py-3">Contact us</a>
-    </div>
-
-    <div class="ms-auto quick-support">
-      <span class="small opacity-75">Quick Support:</span>
-      <span class="fw-bold ms-2">0713 520 969</span>
+    <div class="ml-auto flex items-center gap-2">
+      <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Free Consultation:</span>
+      <a href="https://wa.me/254718762530"
+        class="text-xs font-black text-[#84CC16] hover:underline underline-offset-4 flex items-center gap-1">
+        <i class="bi bi-whatsapp"></i> WhatsApp Direct
+      </a>
     </div>
   </div>
 </nav>
 
 <!-- Mobile Menu -->
-<mat-menu #mobileMenu="matMenu">
-  <a mat-menu-item *ngFor="let cat of categories" [routerLink]="['/products']" [queryParams]="{ category: cat.slug }">
-    <mat-icon>{{cat.icon}}</mat-icon>
-    <span>{{cat.name}}</span>
-  </a>
-  <hr>
-  <a mat-menu-item [routerLink]="['/about']">About Us</a>
-  <a mat-menu-item [routerLink]="['/profile']">My Account</a>
+<mat-menu #mobileMenu="matMenu" class="modern-menu">
+  <div class="p-4 bg-slate-50 mb-2">
+    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Navigation</p>
+    <a mat-menu-item [routerLink]="['/home']" class="rounded-xl">Home</a>
+    <a mat-menu-item [routerLink]="['/products']" class="rounded-xl">All Products</a>
+    <a mat-menu-item [routerLink]="['/about']" class="rounded-xl">About Us</a>
+  </div>
+  <div class="px-4 py-2">
+    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Categories</p>
+    <a mat-menu-item *ngFor="let cat of categories" [routerLink]="['/products']" [queryParams]="{ category: cat.slug }">
+      <span>{{cat.name}}</span>
+    </a>
+  </div>
 </mat-menu>

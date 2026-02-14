@@ -1,119 +1,82 @@
-<div class="text-center"><h1 class="fs-1 fw-bold">Admin Dashboard</h1></div>
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <div
-    class="collapse navbar-collapse d-flex justify-content-center"
-    id="navbarSupportedContent"
-  >
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item">
-        <a
-          class="nav-link fw-medium fs-5 ms-3 me-3"
-          [routerLinkActiveOptions]="{ exact: true }"
-          routerLinkActive="active"
-          [routerLink]="['/admin']"
-          >Orders</a
-        >
-      </li>
-      <li class="nav-item">
-        <a
-          class="nav-link fw-medium fs-5 ms-3 me-3"
-          [routerLinkActiveOptions]="{ exact: true }"
-          routerLinkActive="active"
-          [routerLink]="['/admin/product']"
-          >Products</a
-        >
-      </li>
-      <li class="nav-item">
-        <a
-          class="nav-link fw-medium fs-5 ms-3 me-3"
-          [routerLinkActiveOptions]="{ exact: true }"
-          routerLinkActive="active"
-          [routerLink]="['/admin/users']"
-          >Users</a
-        >
-      </li>
-    </ul>
-  </div>
-</nav>
-<div class="card mt-3">
-  <div class="card-body">
-    <!-- title -->
-    <div class="d-flex justify-content-between">
-      <h3 class="card-title fw-medium fs-3">Products List</h3>
-      <button class="btn btn-primary" (click)="createProduct()">
-        Create Product
-      </button>
+<div class="products-container animate-fade-in">
+  <div class="flex justify-between items-center mb-8">
+    <div>
+      <h1 class="text-3xl font-bold text-gray-800">Products Inventory</h1>
+      <p class="text-gray-500">Manage your catalog, prices, and stock levels.</p>
     </div>
-    <!-- <h5 class="card-subtitle">Overview of the Orders</h5> -->
+    <button
+      class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-xl font-semibold flex items-center gap-2 transition-all shadow-lg shadow-indigo-100"
+      (click)="createProduct()">
+      <i class="bi bi-plus-lg"></i>
+      Create New Product
+    </button>
+  </div>
 
-    <!-- title -->
-    <div class="table-responsive">
-      <table class="table align-middle">
+  <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full text-left border-collapse">
         <thead>
-          <tr class="">
-            <th class="text-dark fw-medium fs-4">Image</th>
-            <th class="text-dark fw-medium fs-4">Name</th>
-            <th class="text-dark fw-medium fs-4">Price</th>
-            <th class="text-dark fw-medium fs-4">Description</th>
-            <th class="text-dark fw-medium fs-4 text-center">Actions</th>
+          <tr class="bg-gray-50 border-b border-gray-100">
+            <th class="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-widest">Product</th>
+            <th class="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-widest">Price</th>
+            <th class="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-widest text-center">Actions</th>
           </tr>
         </thead>
-        <tbody>
-          <tr *ngFor="let product of products">
-            <td>
-              <div class="d-flex align-items-center">
-                <img
-                  [src]="product.image"
-                  alt="user"
-                  width="50"
-                  height="50"
-                  class="rounded-circle"
-                />
+        <tbody class="divide-y divide-gray-50">
+          <tr *ngFor="let product of products" class="hover:bg-gray-50 transition-colors">
+            <td class="px-6 py-4">
+              <div class="flex items-center gap-4">
+                <img [src]="product.image" alt="product"
+                  class="w-14 h-14 rounded-xl object-cover border border-gray-100 shadow-sm" />
+                <div>
+                  <h4 class="font-bold text-gray-900">{{ product.title }}</h4>
+                  <p class="text-sm text-gray-500 max-w-xs truncate">{{ product.details }}</p>
+                </div>
               </div>
             </td>
-            <td class="fs-5 fw-medium">{{ product.title }}</td>
-            <td class="fs-5">{{ product.price }}</td>
-
-            <td>
-              <h5 class="mb-0 fw-normal fs-6">{{ product.details }}</h5>
+            <td class="px-6 py-4">
+              <span
+                class="inline-flex items-center px-3 py-1 rounded-full text-sm font-bold bg-green-50 text-green-700">
+                ${{ product.price }}
+              </span>
             </td>
-            <td>
-              <div class="d-flex flex-row">
-                <button
-                  class="btn btn-success me-1"
-                  (click)="viewProduct(product._id)"
-                >
-                  View
-                </button>
-                <button
-                  class="btn btn-info me-1"
-                  (click)="editProduct(product._id)"
-                >
-                  Edit
-                </button>
-                <button
-                  class="btn btn-danger"
-                  (click)="deleteProduct(product._id)"
-                >
-                  Delete
-                </button>
+            <td class="px-6 py-4">
+              <div class="flex items-center justify-center gap-2">
+                <button class="text-indigo-600 font-bold hover:underline px-2 py-1"
+                  (click)="editProduct(product._id)">Edit</button>
+                <button class="text-red-600 font-bold hover:underline px-2 py-1"
+                  (click)="deleteProduct(product._id)">Delete</button>
               </div>
             </td>
           </tr>
         </tbody>
       </table>
     </div>
+
+    <div *ngIf="!products || products.length === 0" class="p-12 text-center">
+      <div class="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4">
+        <i class="bi bi-box-seam text-2xl text-gray-300"></i>
+      </div>
+      <h3 class="text-lg font-medium text-gray-900">No products found</h3>
+      <p class="text-gray-500">Add your first product to see it here.</p>
+    </div>
   </div>
 </div>
-<div
-  class="col-lg-1 col-md-2 col-sm-2 d-flex justify-content-center w-100 mt-3"
->
-  <form action="post" class="">
-    <button
-      class="btn btn-danger d-flex justify-content-end mb-3"
-      (click)="logout()"
-    >
-      Logout
-    </button>
-  </form>
-</div>
+
+<style>
+  .animate-fade-in {
+    animation: fadeIn 0.4s ease-out;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>

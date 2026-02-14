@@ -1,6 +1,6 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
-import { CartService } from '@app/core/services/cart.service';
+import { CartService } from 'src/app/core/services/cart.service';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
@@ -14,7 +14,9 @@ import Swal from 'sweetalert2';
   styleUrl: './login.component.css'
 })
 export class LoginComponent implements OnInit {
-  form: FormGroup
+  form!: FormGroup;
+  showPassword = false;
+
   constructor(
     private http: HttpClient,
     private formBuilder: FormBuilder,
@@ -24,7 +26,6 @@ export class LoginComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    // this.checkLogin();
     this.form = this.formBuilder.group({
       username: '',
       email: '',
@@ -34,7 +35,6 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  // ----------------------------- Login function --------------------------------  
   login() {
     let user = this.form.getRawValue();
     const emailRegex: RegExp = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
@@ -94,7 +94,7 @@ export class LoginComponent implements OnInit {
         }
       });
   }
-  // ----------------------------- Check if user is already logged in --------------------------------
+
   checkLogin() {
     this.http.get<any>('/api/users/user/user', { withCredentials: true }).subscribe({
       next: (response) => {

@@ -27,8 +27,8 @@ export class CartComponent implements OnInit {
   total: number = 0;
   showAddressForm: boolean = false;
   showCouponForm: boolean = false;
-  selectedCountry: string = 'Egypt';
-  countries: string[] = ["Algeria", "Bahrain", "Djibouti", "Egypt", "Iraq", "Jordan", "Kuwait", "Lebanon", "Libya", "Mauritania", "Morocco", "Oman", "Palestine", "Qatar", "Saudi Arabia", "Somalia", "Sudan", "Syria", "Tunisia"];
+  selectedCountry: string = 'Kenya';
+  countries: string[] = ["Kenya", "Algeria", "Bahrain", "Djibouti", "Egypt", "Iraq", "Jordan", "Kuwait", "Lebanon", "Libya", "Mauritania", "Morocco", "Oman", "Palestine", "Qatar", "Saudi Arabia", "Somalia", "Sudan", "Syria", "Tunisia"];
 
   deletedProduct: { _id: string, title: string, image: string, quantity: number, price: number } | null = null;
 
@@ -169,7 +169,7 @@ export class CartComponent implements OnInit {
 
   loadBackendCart() {
     this.cart = [];
-    this.selectedCountry = localStorage.getItem('selectedCountry') || 'Egypt';
+    this.selectedCountry = localStorage.getItem('selectedCountry') || 'Kenya';
     this.userService.getUserById(this.userid).subscribe({
       next: (data: any) => {
         data.carts.forEach((item: { product: string; quantity: number }) => {
@@ -186,7 +186,7 @@ export class CartComponent implements OnInit {
 
   loadGuestCart() {
     this.cart = [];
-    this.selectedCountry = localStorage.getItem('selectedCountry') || 'Egypt';
+    this.selectedCountry = localStorage.getItem('selectedCountry') || 'Kenya';
     const guestItems = this.userService.getGuestCart();
     guestItems.forEach(item => {
       this.productsService.getProductById(item.product).subscribe({

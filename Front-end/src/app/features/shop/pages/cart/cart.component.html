@@ -24,7 +24,7 @@
               style="height: 70px; width: 100px;">
           </td>
           <td data-label="Product" class="align-middle ">{{ item.product.title }}</td>
-          <td data-label="Price" class="align-middle ">{{ item.product.price }}$</td>
+          <td data-label="Price" class="align-middle ">KSH {{ item.product.price }}</td>
           <td data-label="Quantity" class="align-middle ">
             <div class="quantity-group">
               <button (click)="decreaseProductQuantity(item.product._id)" class="btn">
@@ -36,7 +36,7 @@
               </button>
             </div>
           </td>
-          <td data-label="Subtotal" class="align-middle">{{ (item.product.price * item.quantity).toFixed(2) }}$</td>
+          <td data-label="Subtotal" class="align-middle">KSH {{ (item.product.price * item.quantity).toFixed(2) }}</td>
         </tr>
       </tbody>
     </table>
@@ -48,13 +48,13 @@
       </div>
       <div class="card-body">
         <div class="row">
-          <diV class="col-6">Subtotal : {{cartState.totalprice.toFixed(2)}}</diV>
+          <diV class="col-6">Subtotal : KSH {{cartState.totalprice.toFixed(2)}}</diV>
           <diV class="col-6"></diV>
         </div>
         <div class="row">
           <diV class="col-6">Shipping</diV>
           <div class="col-6">
-            <diV class="col-12">Flat rate: {{cart.length===0 ? 0 :'8$'}}</diV>
+            <diV class="col-12">Flat rate: {{cart.length===0 ? 0 :'KSH 200'}}</diV>
             <diV class="col-12">Shipping to: {{this.selectedCountry}}</diV>
             <div class="col-12">
               <a href="javascript:void(0);" (click)="toggleAddressForm()" class="a-custom">Change address</a>
@@ -75,7 +75,7 @@
         </div>
         <div class="row">
           <diV class="col-6">Total</diV>
-          <diV class="col-6">{{cart.length===0 ? 0 : (cartState.totalprice + 8).toFixed(2)}}$</diV>
+          <diV class="col-6">KSH {{cart.length===0 ? 0 : (cartState.totalprice + 200).toFixed(2)}}</diV>
         </div>
         <div class="row">
           <div class="col-12">

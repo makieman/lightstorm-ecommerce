@@ -1,74 +1,36 @@
-<div class="text-center"><h1 class="fs-1 fw-bold">Admin Dashboard</h1></div>
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <div
-    class="collapse navbar-collapse d-flex justify-content-center"
-    id="navbarSupportedContent"
-  >
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item">
-        <a
-          class="nav-link fw-medium fs-5 ms-3 me-3"
-          [routerLinkActiveOptions]="{ exact: true }"
-          routerLinkActive="active"
-          [routerLink]="['/admin']"
-          >Orders</a
-        >
-      </li>
-      <li class="nav-item">
-        <a
-          class="nav-link fw-medium fs-5 ms-3 me-3"
-          [routerLinkActiveOptions]="{ exact: true }"
-          routerLinkActive="active"
-          [routerLink]="['/admin/product']"
-          >Products</a
-        >
-      </li>
-      <li class="nav-item">
-        <a
-          class="nav-link fw-medium fs-5 ms-3 me-3"
-          [routerLinkActiveOptions]="{ exact: true }"
-          routerLinkActive="active"
-          [routerLink]="['/admin/users']"
-          >Users</a
-        >
-      </li>
-    </ul>
-  </div>
-</nav>
-<div class="cont p-5">
-  <div class="top-cards"><app-top-cards></app-top-cards></div>
-  <!-- ============================================================== -->
-  <!-- Sales chart -->
-  <!-- ============================================================== -->
-  <div class="row">
-    <div class="col-lg-7">
-      <app-sales-summary></app-sales-summary>
-    </div>
-    <div class="col-lg-5">
-      <app-feeds></app-feeds>
-    </div>
-  </div>
+<div class="admin-shell flex min-h-screen bg-gray-50">
+  <app-admin-sidebar (logout)="logout()"></app-admin-sidebar>
 
-  <!-- ============================================================== -->
-  <!-- Table -->
-  <!-- ============================================================== -->
-  <div class="row">
-    <!-- column -->
-    <div class="col-12">
-      <app-orders></app-orders>
+  <main class="flex-1 flex flex-col min-w-0 overflow-hidden">
+    <header
+      class="p-4 mx-6 my-4 bg-[#1E293B] rounded-2xl flex items-center justify-between px-8 sticky top-0 z-10 shadow-lg shadow-slate-200">
+      <div class="flex items-center gap-4">
+        <h2 class="text-xs font-black tracking-[0.2em] text-white uppercase">System Overview</h2>
+      </div>
+
+      <div class="flex items-center gap-6">
+        <button class="relative p-2 rounded-xl bg-slate-700/50 text-slate-300 hover:text-white transition-colors">
+          <i class="bi bi-bell"></i>
+          <span class="absolute top-2 right-2 w-2 h-2 bg-[#EF4444] rounded-full border border-[#1E293B]"></span>
+        </button>
+        <div class="h-6 w-px bg-slate-700"></div>
+        <div class="flex items-center gap-3">
+          <div class="text-right hidden sm:block">
+            <p class="text-xs font-bold text-white">System Admin</p>
+            <p class="text-[10px] text-[#84CC16] font-bold uppercase tracking-wider">Online</p>
+          </div>
+          <div
+            class="w-9 h-9 rounded-xl bg-[#EF4444] shadow-lg shadow-red-500/20 flex items-center justify-center text-white font-black text-xs">
+            SA
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="flex-1 overflow-y-auto bg-slate-50">
+      <div class="max-w-7xl mx-auto p-8">
+        <router-outlet></router-outlet>
+      </div>
     </div>
-  </div>
-  <!-- ============================================================== -->
-  <!-- Table -->
-  <!-- ============================================================== -->
-</div>
-<div class="col-lg-1 col-md-2 col-sm-2 d-flex justify-content-center w-100">
-  <form action="post" class="">
-    <button
-      class="btn btn-danger d-flex justify-content-end mb-3"
-      (click)="logout()"
-    >
-      Logout
-    </button>
-  </form>
+  </main>
 </div>

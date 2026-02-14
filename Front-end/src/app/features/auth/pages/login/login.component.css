@@ -1,32 +1,99 @@
-.container{
-    margin-top: 50px;
+/* Page background */
+body {
+    background: linear-gradient(135deg, #eceff1, #cfd8dc);
+    font-family: "Segoe UI", Tahoma, sans-serif;
+}
+
+/* Login container */
+.container {
+    margin-top: 80px;
     width: 40%;
+    background: #ffffff;
+    padding: 40px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    border-radius: 6px;
 }
-input[type="text"], input[type="email"], input[type="password"], select{
-    border-radius: 0px;
+
+/* Headline */
+h2 {
+    text-align: center;
+    color: #455a64;
+    margin-bottom: 30px;
+    transition: all 500ms ease;
+}
+
+h2:hover {
+    letter-spacing: 4px;
+    font-weight: bold;
+}
+
+/* Labels */
+label {
+    margin-left: 5px;
+    color: #607d8b;
+    font-weight: 600;
+}
+
+/* Inputs & select */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+select {
+    border-radius: 4px;
     height: 50px;
+    border: 1px solid #cfd8dc;
+    padding: 0 15px;
+    font-size: 15px;
+    transition: all 300ms ease;
 }
-.submit{
-    border-radius: 0px;
+
+input:focus,
+select:focus {
+    border-color: #607d8b;
+    box-shadow: 0 0 0 2px rgba(96,125,139,0.2);
+    outline: none;
+}
+
+/* Submit button */
+.submit {
+    border-radius: 4px;
     height: 50px;
     width: 100%;
     font-weight: bold;
-    transition: all;
-    transition-duration: 500ms;
+    background: #607d8b;
+    color: #fff;
+    border: none;
+    margin-top: 20px;
+    cursor: pointer;
+    transition: all 300ms ease;
 }
-.register{
+
+.submit:hover {
+    background: #455a64;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+}
+
+/* Register link */
+.register {
+    display: block;
+    text-align: center;
+    margin-top: 20px;
     color: #607d8b;
     font-weight: bold;
+    text-decoration: none;
+    transition: color 300ms ease;
 }
-label{
-    margin-left: 10px;
-    color: #607d8b;
+
+.register:hover {
+    color: #455a64;
+    text-decoration: underline;
 }
-h2{
-    transition: all;
-    transition-duration: 500ms;
-}
-h2:hover{
-    letter-spacing: 5px;
-    font-weight: bold;
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    .container {
+        width: 90%;
+        margin-top: 50px;
+    }
 }

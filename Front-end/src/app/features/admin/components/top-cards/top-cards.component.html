@@ -1,81 +1,21 @@
-<div class="row mb-5">
-  <div class="col-md-6 col-lg-3">
-    <div class="card">
-      <div class="card-body d-flex align-items-center">
-        <div
-          class="rounded-circle bg-{{ topcards[0].bgcolor }} text-light
-           btn btn-lg d-flex align-items-center justify-content-center"
-          style="width: 50px; height: 50px"
-        >
-          <i class="{{ topcards[0].icon }}" style="font-size: 24px"></i>
-        </div>
-
-        <div class="ms-3 d-flex flex-column align-items-start">
-          <h3 class="font-weight-bold mb-0 fs-5">
-            {{ totalSales.toFixed(2) }} $
-          </h3>
-          <small class="text-muted fs-6">{{ topcards[0].subtitle }}</small>
-        </div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+  <div *ngFor="let card of topcards"
+    class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+    <div class="flex items-center gap-4">
+      <div [class]=" card.bgcolor + ' w-14 h-14 rounded-2xl flex items-center justify-center text-white shadow-lg'"
+        [ngClass]="{
+             'bg-emerald-500 shadow-emerald-100': card.bgcolor === 'success',
+             'bg-rose-500 shadow-rose-100': card.bgcolor === 'danger',
+             'bg-amber-500 shadow-amber-100': card.bgcolor === 'warning',
+             'bg-sky-500 shadow-sky-100': card.bgcolor === 'info'
+           }">
+        <i [class]="card.icon" class="text-2xl"></i>
       </div>
-    </div>
-  </div>
-  <div class="col-md-6 col-lg-3">
-    <div class="card">
-      <div class="card-body d-flex align-items-start">
-        <div
-          class="rounded-circle bg-{{ topcards[1].bgcolor }} text-light
-           btn btn-lg d-flex align-items-center justify-content-center"
-          style="width: 50px; height: 50px"
-        >
-          <i class="{{ topcards[1].icon }}" style="font-size: 24px"></i>
-        </div>
-
-        <div class="ms-3 d-flex flex-column align-items-start">
-          <h3 class="font-weight-bold mb-0 fs-5">
-            {{ totalDailySales.toFixed(2) }} $
-          </h3>
-          <small class="text-muted fs-6">{{ topcards[1].subtitle }}</small>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="col-md-6 col-lg-3">
-    <div class="card">
-      <div class="card-body d-flex align-items-start">
-        <div
-          class="rounded-circle bg-{{ topcards[2].bgcolor }} text-light
-           btn btn-lg d-flex align-items-center justify-content-center"
-          style="width: 50px; height: 50px"
-        >
-          <i class="{{ topcards[2].icon }}" style="font-size: 24px"></i>
-        </div>
-
-        <div class="ms-3 d-flex flex-column align-items-start">
-          <h3 class="font-weight-bold mb-0 fs-5">
-            {{ weeklyOrders }}
-          </h3>
-          <small class="text-muted fs-6">{{ topcards[2].subtitle }}</small>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="col-md-6 col-lg-3">
-    <div class="card">
-      <div class="card-body d-flex align-items-center">
-        <div
-          class="rounded-circle bg-{{ topcards[3].bgcolor }} text-light
-           btn btn-lg d-flex align-items-center justify-content-center"
-          style="width: 50px; height: 50px"
-        >
-          <i class="{{ topcards[3].icon }}" style="font-size: 24px"></i>
-        </div>
-
-        <div class="ms-3 d-flex flex-column align-items-start">
-          <h3 class="font-weight-bold mb-0 fs-5">
-            {{ dailyOrders }}
-          </h3>
-          <small class="text-muted fs-6">{{ topcards[3].subtitle }}</small>
-        </div>
+      <div>
+        <p class="text-sm font-medium text-gray-500">{{ card.subtitle }}</p>
+        <h3 class="text-2xl font-bold text-gray-900">
+          {{ card.subtitle.includes('Sales') ? '$' + card.title.toFixed(2) : card.title }}
+        </h3>
       </div>
     </div>
   </div>

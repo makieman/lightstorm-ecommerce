@@ -59,7 +59,7 @@ export class CheckoutComponent implements OnInit {
   loadProducts() {
     let totalPrice = 0;
     let totalQuantity = 0;
-    const deliveryCost = 300;
+    const deliveryCost = 200;
     const totalElement = document.querySelector('.total');
 
     if (totalElement) {
@@ -87,8 +87,8 @@ export class CheckoutComponent implements OnInit {
           </span>
           <span style='float:right; text-align:right;'>
             <div class='thin dense'>${totalQuantity}</div> <!-- Use totalQuantity instead of totalItems -->
-            <div class='thin dense'>$${deliveryCost.toFixed(2)}</div>
-            $${(totalPrice + deliveryCost).toFixed(2)}
+            <div class='thin dense'>KSH ${deliveryCost.toFixed(2)}</div>
+            KSH ${(totalPrice + deliveryCost).toFixed(2)}
           </span>
         `;
       });

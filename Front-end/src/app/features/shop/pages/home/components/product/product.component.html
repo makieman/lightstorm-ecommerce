@@ -1,42 +1,74 @@
-<div class="product-sections py-5">
-  <div *ngFor="let category of categories" class="category-block mb-5">
-    <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
-      <h3 class="section-title fw-bold m-0">{{category}}</h3>
+<div class="product-gallery space-y-16">
+  <div *ngFor="let category of categories" class="category-segment">
+    <div class="flex items-center justify-between mb-8">
+      <div class="flex items-center gap-3">
+        <div class="w-1.5 h-6 bg-[#EF4444] rounded-full"></div>
+        <h3 class="text-lg font-black text-[#1E293B] uppercase tracking-wider">{{category}}</h3>
+      </div>
       <a [routerLink]="['/products']" [queryParams]="{category: category}"
-        class="text-solar-green text-decoration-none fw-bold">View All →</a>
+        class="text-xs font-black text-slate-400 hover:text-[#EF4444] transition-colors uppercase tracking-widest">See
+        Collection →</a>
     </div>
 
-    <div class="row g-4">
-      <div *ngFor="let product of productsByCategory[category]" class="col-6 col-md-4 col-lg-3">
-        <div class="product-card h-100 shadow-sm rounded overflow-hidden bg-white border">
-          <div class="product-img-wrapper position-relative overflow-hidden">
-            <img [src]="product.image" [alt]="product.title" class="product-img w-100">
-            <div class="product-actions">
-              <button class="btn btn-light btn-sm shadow-sm me-2" (click)="openDialog(product._id)">
-                <mat-icon class="fs-6">visibility</mat-icon>
-              </button>
-              <button class="btn btn-danger btn-sm shadow-sm">
-                <mat-icon class="fs-6">shopping_cart</mat-icon>
-              </button>
+    <!-- Mobile Horizontal Scroll / Desktop Grid -->
+    <div class="flex overflow-x-auto no-scrollbar pb-6 gap-6 md:grid md:grid-cols-3 lg:grid-cols-4 md:overflow-visible">
+      <div *ngFor="let product of productsByCategory[category]"
+        class="min-w-[260px] md:min-w-0 bg-white rounded-[32px] overflow-hidden shadow-xl shadow-slate-200/40 border border-slate-50 group hover:-translate-y-2 transition-all duration-500">
+
+        <div class="relative h-64 bg-slate-50 overflow-hidden">
+          <img [src]="product.image" [alt]="product.title"
+            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+
+          <!-- Badges -->
+          <div class="absolute top-4 left-4 flex flex-col gap-2">
+            <span
+              class="bg-[#84CC16] text-white text-[10px] font-black px-3 py-1.5 rounded-full shadow-lg shadow-green-500/20 uppercase tracking-widest">Premium</span>
+          </div>
+
+          <!-- Quick Actions Overlay -->
+          <div
+            class="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-3">
+            <button (click)="openDialog(product._id)"
+              class="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-[#1E293B] hover:text-[#EF4444] transition-colors">
+              <i class="bi bi-eye-fill"></i>
+            </button>
+            <button (click)="addToCart(product, $event)"
+              class="w-12 h-12 bg-[#EF4444] rounded-2xl flex items-center justify-center text-white hover:bg-rose-600 transition-colors shadow-lg shadow-red-500/30">
+              <i class="bi bi-cart-plus-fill"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="p-6">
+          <div class="flex justify-between items-start mb-2">
+            <div>
+              <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">{{product.category}}</p>
+              <h4 class="font-black text-[#1E293B] leading-tight truncate w-full">
+                <a [routerLink]="['/product', product._id]" class="hover:text-[#EF4444] transition-colors">
+                  {{product.title}}
+                </a>
+              </h4>
             </div>
           </div>
-          <div class="product-info p-3">
-            <span class="category-tag small text-muted text-uppercase mb-1 d-block">{{product.category}}</span>
-            <h5 class="product-name text-truncate mb-2">
-              <a [routerLink]="['/product', product._id]"
-                class="text-decoration-none text-dark fw-bold">{{product.title}}</a>
-            </h5>
-            <div class="p-rating mb-2">
-              <i class="fas fa-star text-warning small"></i>
-              <i class="fas fa-star text-warning small"></i>
-              <i class="fas fa-star text-warning small"></i>
-              <i class="fas fa-star text-warning small"></i>
-              <i class="fas fa-star-half-alt text-warning small"></i>
-              <span class="small text-muted ms-1">(12)</span>
+
+          <div class="flex items-center gap-1 mb-4">
+            <i class="bi bi-star-fill text-[#84CC16] text-xs"></i>
+            <i class="bi bi-star-fill text-[#84CC16] text-xs"></i>
+            <i class="bi bi-star-fill text-[#84CC16] text-xs"></i>
+            <i class="bi bi-star-fill text-[#84CC16] text-xs"></i>
+            <i class="bi bi-star-half text-[#84CC16] text-xs"></i>
+            <span class="text-[10px] text-slate-400 font-bold ml-1">(24 Reviews)</span>
+          </div>
+
+          <div class="flex items-center justify-between pt-4 border-t border-slate-50">
+            <div class="flex flex-col">
+              <span class="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">Retail Price</span>
+              <span class="text-xl font-black text-[#EF4444]">KSh {{product.price | number}}</span>
             </div>
-            <div class="product-price fw-bold text-danger">
-              KES {{product.price | number}}
-            </div>
+            <button (click)="addToCart(product, $event)"
+              class="w-10 h-10 bg-[#1E293B] text-white rounded-xl flex items-center justify-center hover:bg-[#EF4444] transition-all">
+              <i class="bi bi-plus-lg"></i>
+            </button>
           </div>
         </div>
       </div>

@@ -7,6 +7,7 @@ import { MatBadgeModule } from '@angular/material/badge';
 import { CoreProductService } from '@app/core/services/core-product.service';
 import { CartProductsCountService } from '@app/core/services/cart-products-count.service';
 import { CartService } from '@app/core/services/cart.service';
+import { GlobalSearchComponent } from '../global-search/global-search.component';
 
 
 import { CommonModule } from '@angular/common';
@@ -22,7 +23,8 @@ import { FormsModule } from '@angular/forms';
     MatToolbarModule,
     MatBadgeModule,
     CommonModule,
-    FormsModule
+    FormsModule,
+    GlobalSearchComponent
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'

@@ -10,6 +10,7 @@ require('dotenv').config();
 const userRoutes = require('./Routes/user.routes');
 const productRoutes = require('./Routes/product.routes');
 const orderRoutes = require('./Routes/order.routes');
+const aiRoutes = require('./Routes/ai.routes');
 
 const app = express();
 
@@ -39,6 +40,7 @@ mongoose
 app.use("/api/users", userRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
+app.use('/api/ai', aiRoutes);
 
 // Static files
 const resolveStaticDir = (candidates, requiredFile) => {
@@ -63,8 +65,6 @@ const angularDistPath = resolveStaticDir(
   'index.html'
 );
 
-
-
 // Serve Angular app at root
 app.use(express.static(angularDistPath));
 
@@ -80,13 +80,14 @@ app.get('*', (req, res, next) => {
 
 // Error handling
 app.use((err, req, res, next) => {
-  console.error(err.stack);
+  console.error('API ERROR:', err);
+
   if (req.originalUrl && req.originalUrl.startsWith('/api')) {
-    res.status(500).json({
+    return res.status(500).json({
       message: 'Internal Server Error',
-      error: process.env.NODE_ENV === 'development' ? err.message : undefined
+      error: err.message,
+      stack: err.stack
     });
-    return;
   }
 
   res.status(500).type('text/plain').send('Internal Server Error');

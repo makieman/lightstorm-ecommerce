@@ -63,6 +63,7 @@ const getAllProducts = async (req, res) => {
       }
     });
   } catch (err) {
+    console.error('ERROR in getAllProducts:', err);
     res.status(500).json({ message: "Internal Server Error", error: err.message });
   }
 };
@@ -106,15 +107,6 @@ let getProductByID = async (req, res) => {
  */
 let createNewProduct = async (req, res) => {
   try {
-    // Debug: Log EVERYTHING
-    console.log('\n=== BACKEND DEBUG ===');
-    console.log('Content-Type:', req.headers['content-type']);
-    console.log('Raw req.body from multer:', req.body);
-    console.log('req.body type:', typeof req.body);
-    console.log('req.body constructor:', req.body?.constructor?.name);
-    console.log('Files:', req.files);
-    console.log('Body keys:', Object.keys(req.body || {}));
-
     // Convert string prices/quantities to numbers for validation
     if (req.body.price) req.body.price = Number(req.body.price);
 
@@ -139,10 +131,6 @@ let createNewProduct = async (req, res) => {
       }
     });
 
-    // Debug logging
-    console.log('Request body before validation:', req.body);
-    console.log('Request body keys:', Object.keys(req.body));
-
     const isValid = productValidate(req.body);
     if (!isValid) {
       console.error('Validation errors:', productValidate.errors);
@@ -151,26 +139,32 @@ let createNewProduct = async (req, res) => {
       });
     }
 
-    let uploadedImage = await cloudUpload(req.files[0].path);
-
-    let product = new productModel({
+    let productData = {
       title: req.body.title,
       details: req.body.details,
       price: req.body.price,
-      quantity: req.body.quantity,
+      quantity: req.body.quantity || 0,
       category: req.body.category,
       type: req.body.type || 'product',
-      image: uploadedImage.url,
       wattage: req.body.wattage,
       voltage: req.body.voltage,
       batteryType: req.body.batteryType
-    });
+    };
 
+    if (req.files && req.files.length > 0) {
+      let uploadedImage = await cloudUpload(req.files[0].path);
+      productData.image = uploadedImage.url;
+    }
+
+    let product = new productModel(productData);
     await product.save();
     return res.json({ message: "Product Added Successfully" });
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ message: "Internal server error" });
+    console.error('CRITICAL ERROR:', error);
+    return res.status(500).json({
+      message: "Internal server error",
+      error: error.message
+    });
   }
 };
 

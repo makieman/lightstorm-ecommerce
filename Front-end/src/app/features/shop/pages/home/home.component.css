@@ -1,0 +1,77 @@
+/* Solution Cards Enhanced Hover States */
+.solution-card {
+  position: relative;
+  padding: 1rem;
+  border-radius: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.solution-card:hover {
+  background: linear-gradient(135deg, rgba(132, 204, 22, 0.05) 0%, rgba(255, 255, 255, 0) 100%);
+}
+
+.solution-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 1.5rem;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  background: radial-gradient(circle at center, rgba(132, 204, 22, 0.1) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.solution-card:hover::before {
+  opacity: 1;
+}
+
+/* Icon container hover effect with dynamic background */
+.solution-card > div:first-child {
+  position: relative;
+  overflow: hidden;
+}
+
+.solution-card > div:first-child::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--hover-bg);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  border-radius: 1.5rem;
+}
+
+.solution-card:hover > div:first-child::before {
+  opacity: 1;
+}
+
+.solution-card:hover > div:first-child {
+  color: white !important;
+}
+
+/* Smooth icon rotation on hover */
+.solution-card:hover i.bi {
+  transform: rotate(12deg) scale(1.1);
+}
+
+/* Animation for the category name */
+.solution-card:hover span:nth-child(2) {
+  transform: translateY(-2px);
+}
+
+/* Pulse animation for click feedback */
+@keyframes pulse-click {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.95);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.solution-card:active {
+  animation: pulse-click 0.2s ease;
+}

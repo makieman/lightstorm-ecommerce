@@ -1,3 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    --primary: #EF4444;
+    --accent: #84CC16;
+    --navy: #1E293B;
+    --slate-50: #F8FAFC;
+    --slate-100: #F1F5F9;
+    --slate-200: #E2E8F0;
+    --slate-300: #CBD5E1;
+    --slate-600: #475569;
+    --slate-700: #334155;
+    --slate-800: #1E293B;
+    --white: #FFFFFF;
+}
+
 html,
 body {
     height: 100%;
@@ -5,34 +23,41 @@ body {
 
 body {
     margin: 0;
-    font-family: 'Inter', Roboto, "Helvetica Neue", sans-serif;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background-color: var(--slate-50);
+    color: var(--slate-800);
+    -webkit-tap-highlight-color: transparent;
 }
 
-:root {
-    --solar-green: #7cbb3b;
-    --solar-lime: #B9D32A;
-    --solar-dark-green: #219753;
-    --solar-gradient: linear-gradient(-180deg, #d6df22 0%, #7cbb3b 30%, #219753 100%);
-    --solar-accent: #ffc107;
-    /* Sunflower yellow/gold */
+/* Custom Scrollbar */
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
 }
 
-/* Global utility classes */
-.bg-solar-gradient {
-    background: var(--solar-gradient) !important;
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 }
 
-.text-solar-green {
-    color: var(--solar-green) !important;
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-.btn-solar {
-    background-color: var(--solar-green);
-    color: white;
-    border: none;
+.animate-fade-in {
+    animation: fadeIn 0.4s ease-out forwards;
 }
 
-.btn-solar:hover {
-    background-color: var(--solar-dark-green);
-    color: white;
+/* Ionic-style Blur */
+.ios-blur {
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
 }

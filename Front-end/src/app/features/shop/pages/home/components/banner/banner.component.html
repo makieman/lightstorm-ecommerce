@@ -1,71 +1,50 @@
-<div class="row mt-4">
-  <!-- Left Side Category Menu (Visible on Desktop) -->
-  <div class="col-lg-3 d-none d-lg-block">
-    <div class="side-category-menu border shadow-sm rounded bg-white overflow-hidden">
-      <div class="category-list">
-        <div *ngFor="let cat of categories" class="side-cat-block border-bottom">
-          <a href="/products?category={{cat.slug}}"
-            class="side-cat-item d-flex align-items-center justify-content-between p-3 text-decoration-none text-dark bg-light-hover fw-bold">
-            <span>{{cat.name}}</span>
-            <i class="fas fa-chevron-right small text-muted"></i>
-          </a>
-          <ul class="list-unstyled px-3 pb-2">
-            <li *ngFor="let item of cat.items" class="small text-muted py-1">
-              <i class="fas fa-check-circle text-solar-green me-2 opacity-50"></i>{{item}}
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </div>
+<div class="hero-container py-6">
+  <div class="max-w-7xl mx-auto">
+    <div class="relative h-[400px] md:h-[500px] rounded-[40px] overflow-hidden shadow-2xl shadow-slate-300" style="perspective: 1000px;">
+      <!-- Background Image with Parallax -->
+      <img
+        src="https://lh3.googleusercontent.com/aida-public/AB6AXuDTD_Spk_p94BL3FtLxISI3uA1vDEM2ndlGtfngq3StjOc8z2E1u7892sh5eh6fyYpybHLrsLgaVaYCUsACoVew-BVl-oTasEvnpaRSX0N71-Hd9dGos_H4qAriSYMWW1_Fw9LBZNCMuX4ST-BSJE1rSyi15-TGQZV5GATDR_0v8weI0TVnGeQSRYih8mWxpwpLw43yoYdrxXV8iLRRmRBT8BZb1ZnPpzQnoCl572X5I_PYbPQzvJW2OyBbn7_4z5rQUEfPo5eIys0"
+        alt="Solar Installation" class="absolute inset-0 w-full h-full object-cover parallax-bg">
 
-  <!-- Center Carousel -->
-  <div class="col-lg-6 col-md-12">
-    <div id="heroCarousel" class="carousel slide shadow-sm rounded overflow-hidden h-100" data-bs-ride="carousel">
-      <div class="carousel-indicators">
-        <button *ngFor="let slide of slides; let i = index" type="button" data-bs-target="#heroCarousel"
-          [attr.data-bs-slide-to]="i" [class.active]="i === 0"></button>
-      </div>
-      <div class="carousel-inner h-100">
-        <div *ngFor="let slide of slides; let i = index" class="carousel-item h-100" [class.active]="i === 0">
-          <div class="carousel-bg"
-            [style.background-image]="'linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url(' + slide.image + ')'">
-            <div class="carousel-caption text-start h-100 d-flex flex-column justify-content-center">
-              <h2 class="display-5 fw-bold mb-2">{{slide.title}}</h2>
-              <p class="lead mb-4">{{slide.subtitle}}</p>
-              <div>
-                <a href="/products" class="btn btn-danger btn-lg px-4 rounded-pill">{{slide.buttonText}}</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon"></span>
-      </button>
-      <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
-        <span class="carousel-control-next-icon"></span>
-      </button>
-    </div>
-  </div>
+      <!-- Gradient Overlay -->
+      <div class="absolute inset-0 bg-gradient-to-r from-[#1E293B]/90 via-[#1E293B]/40 to-transparent"></div>
 
-  <!-- Right Side Promo Banners -->
-  <div class="col-lg-3 d-none d-lg-block">
-    <div class="d-flex flex-column gap-3 h-100">
-      <div class="promo-banner rounded shadow-sm overflow-hidden flex-fill bg-primary position-relative"
-        style="background-image: url('assets/images/solar/s1.webp'); background-size: cover;">
-        <div class="promo-content p-4 text-white">
-          <h4 class="fw-bold">Power Generators</h4>
-          <p class="small">Petrol & Silent Diesel</p>
-          <a href="/products" class="btn btn-sm btn-light rounded-pill">Shop Now →</a>
+      <!-- Content -->
+      <div class="relative h-full flex flex-col justify-center p-8 md:p-16 space-y-6 max-w-2xl">
+        <div class="flex items-center gap-3">
+          <span
+            class="bg-[#84CC16] text-white text-[10px] font-black px-3 py-1.5 rounded-full uppercase tracking-[0.2em] shadow-lg shadow-green-500/20">Clean
+            & Reliable</span>
+          <span class="text-white opacity-40 text-xs font-bold uppercase tracking-widest hidden sm:block">Sustainable
+            Power</span>
+        </div>
+
+<h1 class="text-4xl md:text-6xl font-black text-white leading-tight">
+          Power Your Home. <br /> Protect Your Pocket.
+        </h1>
+
+        <p class="text-slate-300 text-sm md:text-lg font-medium max-w-md">
+          Premium Solar Solutions tailored for homes and businesses. Secure your future with clean, renewable power.
+        </p>
+
+<div class="flex flex-wrap gap-4 pt-4">
+          <button
+            class="bg-[#EF4444] text-white px-8 py-4 rounded-full font-black uppercase tracking-widest text-xs hover:scale-105 transition-all shadow-xl shadow-red-500/30">
+            Get Started
+          </button>
+          <button
+            class="bg-white/10 backdrop-blur-md text-white border border-white/20 px-6 py-3 rounded-full font-semibold uppercase tracking-widest text-xs hover:bg-white/20 transition-all">
+            Explore
+          </button>
         </div>
       </div>
-      <div class="promo-banner rounded shadow-sm overflow-hidden flex-fill bg-success position-relative"
-        style="background-image: url('assets/images/solar/s2.webp'); background-size: cover;">
-        <div class="promo-content p-4 text-white">
-          <h4 class="fw-bold">Solar Power</h4>
-          <p class="small">Home & Business Solutions</p>
-          <a href="/products" class="btn btn-sm btn-light rounded-pill">View More →</a>
+
+      <!-- PRO Badge -->
+      <div class="absolute top-8 right-8 hidden lg:flex flex-col items-end gap-2 text-right">
+        <div class="bg-white/10 backdrop-blur-xl border border-white/20 p-4 rounded-3xl">
+          <p class="text-[10px] font-black text-white/40 uppercase tracking-widest">Efficiency</p>
+          <p class="text-2xl font-black text-[#84CC16]">98.5%</p>
+          <p class="text-[10px] font-bold text-white uppercase mt-1">Grid Rating</p>
         </div>
       </div>
     </div>

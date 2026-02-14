@@ -22,12 +22,14 @@ export class CreateUserComponent {
   newUserId: any;
   createForm: any;
   imageFile: File | null = null;
+  showPassword = false;
+  showConfirmPassword = false;
   constructor(
     private userService: UserService,
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialog: MatDialogRef<any>,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.createForm = new FormGroup({

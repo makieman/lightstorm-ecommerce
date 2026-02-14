@@ -1,68 +1,95 @@
-<div class="container mt-5 mb-5">
-  <div class="row d-flex justify-content-center">
-    <div class="col-md-8">
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title mb-4 fs-4 fw-medium">Create New Product</h5>
-          <form [formGroup]="createForm">
-            <div class="mb-3">
-              <label for="productName" class="form-label">Product Name</label>
-              <input formControlName="title" type="text" class="form-control" id="productName"
-                placeholder="Enter product name" />
-            </div>
-            <div class="mb-3">
-              <label for="productDescription" class="form-label">Product Description</label>
-              <textarea formControlName="details" class="form-control" id="productDescription" rows="3"
-                placeholder="Enter product description"></textarea>
-            </div>
-            <div class="mb-3">
-              <label for="productPrice" class="form-label">Product Price</label>
-              <input formControlName="price" type="number" class="form-control" id="productPrice"
-                placeholder="Enter product price" />
-            </div>
-            <div class="mb-3">
-              <label for="productQuantity" class="form-label">Product Quantity</label>
-              <input formControlName="productQuantity" type="number" class="form-control" id="productQuantity"
-                placeholder="Enter Product Quantity" />
-            </div>
-            <div class="mb-3">
-              <label for="productCategory" class="form-label">Product Category</label>
-              <select formControlName="productCategory" class="form-select" id="productCategory"
-                aria-label="Select Category">
-                <option value="" selected disabled>Select Category</option>
-                <option value="Solar Panel">Solar Panel</option>
-                <option value="Battery">Battery</option>
-                <option value="Inverter">Inverter</option>
-                <option value="Charge Controller">Charge Controller</option>
-                <option value="Solar Lighting">Solar Lighting</option>
-                <option value="Mounting Systems">Mounting Systems</option>
-              </select>
-            </div>
-            <div class="mb-3">
-              <label for="wattage" class="form-label">Wattage (Optional)</label>
-              <input formControlName="wattage" type="text" class="form-control" id="wattage" placeholder="e.g. 450W" />
-            </div>
-            <div class="mb-3">
-              <label for="voltage" class="form-label">Voltage (Optional)</label>
-              <input formControlName="voltage" type="text" class="form-control" id="voltage"
-                placeholder="e.g. 12V / 24V" />
-            </div>
-            <div class="mb-3">
-              <label for="batteryType" class="form-label">Battery Type (Optional)</label>
-              <input formControlName="batteryType" type="text" class="form-control" id="batteryType"
-                placeholder="e.g. Lithium-Ion, Gel" />
-            </div>
-            <div class="mb-3">
-              <label for="productImage" class="form-label">Product Image</label>
-              <input type="file" class="form-control" id="productImage" placeholder="Enter product image"
-                (change)="onFileSelected($event)" />
-            </div>
-            <button type="submit" class="btn btn-primary" (click)="sumbitForm()">
-              Add Product
-            </button>
-          </form>
+<div class="create-product-modal p-6 max-w-2xl mx-auto">
+  <div class="flex items-center justify-between mb-8 border-b border-gray-100 pb-4">
+    <h3 class="text-2xl font-bold text-gray-800">Add New Product</h3>
+    <button mat-dialog-close class="text-gray-400 hover:text-gray-600 border-none bg-transparent cursor-pointer">
+      <i class="bi bi-x-lg text-xl"></i>
+    </button>
+  </div>
+
+  <form [formGroup]="createForm" class="space-y-6">
+    <div class="space-y-2">
+      <label for="productName" class="text-sm font-semibold text-gray-700">Product Title</label>
+      <input formControlName="title" type="text" id="productName"
+        class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none"
+        placeholder="Enter product title" />
+    </div>
+
+    <div class="space-y-2">
+      <label for="productDescription" class="text-sm font-semibold text-gray-700">Description</label>
+      <textarea formControlName="details" id="productDescription" rows="3"
+        class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none"
+        placeholder="Brief description of the product"></textarea>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="space-y-2">
+        <label for="productPrice" class="text-sm font-semibold text-gray-700">Price ($)</label>
+        <input formControlName="price" type="number" id="productPrice"
+          class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none"
+          placeholder="0.00" />
+      </div>
+
+      <div class="space-y-2">
+        <label for="productQuantity" class="text-sm font-semibold text-gray-700">Inventory Level</label>
+        <input formControlName="productQuantity" type="number" id="productQuantity"
+          class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none"
+          placeholder="In stock count" />
+      </div>
+    </div>
+
+    <div class="space-y-2">
+      <label for="productCategory" class="text-sm font-semibold text-gray-700">Category</label>
+      <select formControlName="productCategory" id="productCategory"
+        class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none appearance-none bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20viewBox%3D%220%200%2020%2020%22%3E%3Cpath%20stroke%3D%22%236b7280%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20stroke-width%3D%221.5%22%20d%3D%22m6%208%204%204%204-4%22%2F%3E%3C%2Fsvg%3E')] bg-[length:1.25rem_1.25rem] bg-[right_0.5rem_center] bg-no-repeat">
+        <option value="" disabled>Select Category</option>
+        <option value="Solar Panel">Solar Panel</option>
+        <option value="Battery">Battery</option>
+        <option value="Inverter">Inverter</option>
+        <option value="Charge Controller">Charge Controller</option>
+        <option value="Solar Lighting">Solar Lighting</option>
+        <option value="Mounting Systems">Mounting Systems</option>
+      </select>
+    </div>
+
+    <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100 space-y-4">
+      <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">Optional Specifications</p>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="space-y-1">
+          <label for="wattage" class="text-xs font-semibold text-gray-600">Wattage</label>
+          <input formControlName="wattage" type="text" id="wattage"
+            class="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm outline-none"
+            placeholder="e.g. 450W" />
+        </div>
+        <div class="space-y-1">
+          <label for="voltage" class="text-xs font-semibold text-gray-600">Voltage</label>
+          <input formControlName="voltage" type="text" id="voltage"
+            class="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm outline-none"
+            placeholder="e.g. 12V" />
+        </div>
+        <div class="space-y-1">
+          <label for="batteryType" class="text-xs font-semibold text-gray-600">Type</label>
+          <input formControlName="batteryType" type="text" id="batteryType"
+            class="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm outline-none"
+            placeholder="Lithium-Ion" />
         </div>
       </div>
     </div>
-  </div>
+
+    <div class="space-y-2">
+      <label for="productImage" class="text-sm font-semibold text-gray-700">Product Image</label>
+      <input type="file" id="productImage" (change)="onFileSelected($event)"
+        class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 transition-all" />
+    </div>
+
+    <div class="flex justify-end gap-3 mt-8 border-t border-gray-100 pt-6">
+      <button type="button" mat-dialog-close
+        class="px-6 py-2.5 border border-gray-200 rounded-xl text-gray-600 font-semibold hover:bg-gray-50 transition-colors">
+        Cancel
+      </button>
+      <button type="submit" (click)="sumbitForm()"
+        class="px-8 py-2.5 bg-indigo-600 text-white rounded-xl font-semibold hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-100">
+        Record Product
+      </button>
+    </div>
+  </form>
 </div>

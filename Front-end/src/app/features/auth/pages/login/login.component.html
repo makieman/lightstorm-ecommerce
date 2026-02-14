@@ -8,21 +8,28 @@
             </div>
         </div>
         <div class="mb-3 row">
-            <div class="col form-floating">
-                <input type="password" formControlName="password" class="form-control" placeholder="">
+            <div class="col form-floating position-relative">
+                <input [type]="showPassword ? 'text' : 'password'" formControlName="password" class="form-control"
+                    placeholder="">
                 <label for="" class="form-label">Password</label>
+                <button type="button"
+                    class="btn btn-link position-absolute end-0 top-50 translate-y-middle text-decoration-none text-muted"
+                    style="z-index: 10; padding-right: 1.5rem; margin-top: -24px;"
+                    (click)="showPassword = !showPassword">
+                    <i class="bi" [class.bi-eye]="!showPassword" [class.bi-eye-slash]="showPassword"></i>
+                </button>
             </div>
         </div>
         <div class="mb-3 row">
             <div class="col">
-                <button type="submit" class="btn btn-outline-secondary btn-block submit" (click)="login()">Login</button>
+                <button type="submit" class="btn btn-outline-secondary btn-block submit"
+                    (click)="login()">Login</button>
             </div>
         </div>
         <div class="mb-3 row">
             <div class="col">
-                <p class="text-center mt-3"><a [routerLink]="['/register']">Don't have an account?</a></p>            
+                <p class="text-center mt-3"><a [routerLink]="['/register']">Don't have an account?</a></p>
             </div>
         </div>
     </form>
 </div>
-

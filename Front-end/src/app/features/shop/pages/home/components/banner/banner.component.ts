@@ -45,6 +45,7 @@ export class BannerComponent implements OnInit, OnDestroy {
   ];
 
   private carouselInstance: any;
+  private scrollListener: any;
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
 
@@ -63,6 +64,9 @@ export class BannerComponent implements OnInit, OnDestroy {
           });
         }
       }, 100);
+
+      // Initialize parallax effect
+      this.initParallax();
     }
   }
 
@@ -70,5 +74,21 @@ export class BannerComponent implements OnInit, OnDestroy {
     if (this.carouselInstance) {
       this.carouselInstance.dispose();
     }
+    if (this.scrollListener) {
+      window.removeEventListener('scroll', this.scrollListener);
+    }
+  }
+
+  private initParallax() {
+    this.scrollListener = () => {
+      const scrolled = window.scrollY;
+      const parallaxElements = document.querySelectorAll('.parallax-bg');
+      parallaxElements.forEach((el) => {
+        const element = el as HTMLElement;
+        const speed = 0.3;
+        element.style.transform = `translateY(${scrolled * speed}px)`;
+      });
+    };
+    window.addEventListener('scroll', this.scrollListener);
   }
 }

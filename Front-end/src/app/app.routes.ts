@@ -15,8 +15,11 @@ import { ConfirmOrderComponent } from './features/shop/pages/confirm-order/confi
 import { AuthGuard } from './core/guards/auth.guard';
 import { AdminGuard } from './core/guards/admin.guard';
 import { AllProductsGuard } from './core/guards/all-products.guard';
+import { AdminDashboardComponent } from './features/admin/components/dashboard/dashboard.component';
 import { UsersComponent } from './features/admin/components/users/users.component';
 import { ProductlistComponent } from './features/admin/components/productlist/productlist.component';
+
+import { OrdersComponent } from './features/admin/components/orders/orders.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -30,13 +33,17 @@ export const routes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'cart', component: CartComponent },
   { path: 'checkout', component: CheckoutComponent, canActivate: [AuthGuard] },
-  { path: 'admin/users', component: UsersComponent, canActivate: [AdminGuard] },
   {
-    path: 'admin/product',
-    component: ProductlistComponent,
+    path: 'admin',
+    component: AdminComponent,
     canActivate: [AdminGuard],
+    children: [
+      { path: '', component: AdminDashboardComponent },
+      { path: 'users', component: UsersComponent },
+      { path: 'product', component: ProductlistComponent },
+      { path: 'orders', component: OrdersComponent },
+    ]
   },
-  { path: 'admin', component: AdminComponent, canActivate: [AdminGuard] },
   {
     path: 'products',
     component: ProductsComponent,

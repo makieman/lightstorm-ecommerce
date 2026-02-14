@@ -24,7 +24,14 @@ import { CartProductsCountService } from '@app/core/services/cart-products-count
 })
 
 export class ProductComponent implements OnInit {
-  constructor(private productService: CoreProductService, public dialog: MatDialog) { }
+  user_id: string | null = null;
+
+  constructor(
+    private productService: CoreProductService,
+    private cartService: CartService,
+    private cartCountService: CartProductsCountService,
+    public dialog: MatDialog
+  ) { }
   allProducts: any[] = [];
   categories: string[] = [];
   productsByCategory: { [key: string]: any[] } = {};
@@ -34,6 +41,17 @@ export class ProductComponent implements OnInit {
       next: (data: any) => {
         this.allProducts = data.products || data;
         this.groupProductsByCategory();
+      }
+    });
+
+    this.productService.getUserToken().subscribe({
+      next: (data: any) => {
+        if (data && data.data) {
+          this.user_id = data.data._id;
+        }
+      },
+      error: (err: any) => {
+        console.log('Guest user detected');
       }
     });
   }
@@ -59,6 +77,52 @@ export class ProductComponent implements OnInit {
         console.log(`Dialog result: ${result}`);
       });
     });
+  }
+
+  addToCart(product: any, event: Event) {
+    event.stopPropagation(); // Prevent navigation to details if parent has routerLink
+
+    const quantity = 1;
+
+    if (this.user_id) {
+      // Logged in user
+      this.productService.addProductToCart(this.user_id, product._id, quantity).subscribe({
+        next: () => {
+          Swal.fire({
+            icon: 'success',
+            title: 'Added to cart!',
+            text: `${product.title} has been added.`,
+            timer: 1500,
+            showConfirmButton: false,
+            toast: true,
+            position: 'top-end'
+          });
+          // Update global count by reloading or using a shared state
+          // For now, reload is simpler if count is in header
+          setTimeout(() => window.location.reload(), 1500);
+        },
+        error: () => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Could not add to cart.',
+          });
+        }
+      });
+    } else {
+      // Guest user
+      this.cartService.addToGuestCart(product._id, quantity);
+      Swal.fire({
+        icon: 'success',
+        title: 'Added to cart!',
+        text: `${product.title} added to guest cart.`,
+        timer: 1500,
+        showConfirmButton: false,
+        toast: true,
+        position: 'top-end'
+      });
+      setTimeout(() => window.location.reload(), 1500);
+    }
   }
 
 

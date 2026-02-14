@@ -1,27 +1,37 @@
-<div class="card">
-  <div class="card-body">
-    <h4 class="card-title fw-medium fs-3">Feeds</h4>
-    <h5 class="card-subtitle text-muted fw-medium fs-5">
-      Insights about your orders
-    </h5>
-    <div class="feed-widget mt-4">
-      <ul class="list-unstyled feed-body m-0">
-        <li
-          class="feed-item d-flex align-items-center mb-4"
-          *ngFor="let feed of feeds"
-        >
-          <div
-            class="feed-icon rounded-circle round-sm text-white d-flex align-items-center justify-content-center fs-5 {{
-              feed.class
-            }}"
-            style="width: 40px; height: 40px; padding: 10px"
-          >
-            <i class="{{ feed.icon }}"></i>
+<div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden h-full">
+  <div class="p-6 border-b border-gray-50 flex items-center justify-between">
+    <h3 class="text-lg font-bold text-gray-800">Recent Activity</h3>
+    <span class="bg-indigo-50 text-indigo-600 text-xs font-bold px-2 py-1 rounded-lg">Live</span>
+  </div>
+
+  <div class="p-6">
+    <div class="space-y-6">
+      <div *ngFor="let feed of feeds" class="flex gap-4 relative">
+        <div class="flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center text-white shadow-sm" [ngClass]="{
+               'bg-sky-500': feed.class === 'bg-info',
+               'bg-emerald-500': feed.class === 'bg-success',
+               'bg-amber-500': feed.class === 'bg-warning',
+               'bg-rose-500': feed.class === 'bg-danger',
+               'bg-indigo-500': feed.class === 'bg-primary'
+             }">
+          <i [class]="feed.icon"></i>
+        </div>
+        <div class="flex-1">
+          <div class="flex items-center justify-between mb-1">
+            <p class="text-sm text-gray-900 font-medium">{{ feed.task }}</p>
+            <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">{{ feed.time }}</span>
           </div>
-          <h5 class="mb-0 fw-normal ms-3 fs-6">{{ feed.task }}</h5>
-          <span class="text-muted ms-auto fs-5"></span>
-        </li>
-      </ul>
+          <div class="h-1.5 w-full bg-gray-50 rounded-full overflow-hidden">
+            <div class="h-full bg-indigo-500 rounded-full" [style.width]="'40%'"></div>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
+
+  <div class="p-4 bg-gray-50 border-t border-gray-100">
+    <button class="w-full py-2 text-sm font-semibold text-indigo-600 hover:text-indigo-700 transition-colors">
+      View All Notifications
+    </button>
   </div>
 </div>

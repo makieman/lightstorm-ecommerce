@@ -1,88 +1,96 @@
-<div class="container mt-5 mb-5">
-  <div class="row d-flex justify-content-center">
-    <div class="col-md-8">
-      <div class="card">
-        <div class="card-body">
-          <h3 class="card-title mb-4">Create New User</h3>
-          <form [formGroup]="createForm">
-            <div class="mb-3"></div>
-            <div class="mb-3">
-              <label for="userName" class="form-label">User Name</label>
-              <input
-                formControlName="username"
-                type="text"
-                class="form-control"
-                id="userName"
-                placeholder="Enter User Name"
-              />
-            </div>
-            <div class="mb-3">
-              <label for="email" class="form-label">Email</label>
-              <input
-                formControlName="email"
-                type="email"
-                class="form-control"
-                id="email"
-                rows="3"
-                placeholder="Enter Email"
-              />
-            </div>
-            <div class="mb-3">
-              <label for="image" class="form-label">Image</label>
-              <input
-                type="file"
-                class="form-control"
-                id="image"
-                accept="image/*"
-                placeholder="Upload Image"
-                (change)="onFileSelected($event)"
-              />
-            </div>
-            <div class="mb-3">
-              <label for="password" class="form-label">Password</label>
-              <input
-                formControlName="password"
-                type="password"
-                class="form-control"
-                id="passowrd"
-                placeholder="Enter Password"
-              />
-            </div>
-            <div class="mb-3">
-              <label for="passwordConfirmation" class="form-label"
-                >Passowrd Confirmation</label
-              >
-              <input
-                formControlName="passwordConfirmation"
-                type="password"
-                class="form-control"
-                id="PasswordConfirmation"
-                placeholder="Enter Password Confirmation"
-              />
-            </div>
-            <div class="mb-3">
-              <label for="gender" class="form-label">Gender</label>
-              <select
-                formControlName="gender"
-                class="form-select"
-                id="gender"
-                aria-label="Select Gender"
-              >
-                <option value="" selected disabled>Select Gender</option>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-              </select>
-            </div>
-            <button
-              type="submit"
-              class="btn btn-primary"
-              (click)="sumbitForm()"
-            >
-              Add User
-            </button>
-          </form>
+<div class="create-user-modal p-6">
+  <div class="flex items-center justify-between mb-8 border-b border-gray-100 pb-4">
+    <h3 class="text-2xl font-bold text-gray-800">Create New User</h3>
+    <button mat-dialog-close class="text-gray-400 hover:text-gray-600">
+      <i class="bi bi-x-lg"></i>
+    </button>
+  </div>
+
+  <form [formGroup]="createForm" class="space-y-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="space-y-2">
+        <label for="userName" class="text-sm font-semibold text-gray-700">User Name</label>
+        <div class="relative">
+          <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+            <i class="bi bi-person"></i>
+          </span>
+          <input formControlName="username" type="text" id="userName"
+            class="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none text-gray-800"
+            placeholder="Enter full name" />
         </div>
       </div>
+
+      <div class="space-y-2">
+        <label for="email" class="text-sm font-semibold text-gray-700">Email Address</label>
+        <div class="relative">
+          <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+            <i class="bi bi-envelope"></i>
+          </span>
+          <input formControlName="email" type="email" id="email"
+            class="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none text-gray-800"
+            placeholder="email@example.com" />
+        </div>
+      </div>
+
+      <div class="space-y-2">
+        <label for="password" class="text-sm font-semibold text-gray-700">Password</label>
+        <div class="relative">
+          <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+            <i class="bi bi-lock"></i>
+          </span>
+          <input formControlName="password" [type]="showPassword ? 'text' : 'password'" id="password"
+            class="w-full pl-10 pr-12 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none text-gray-800"
+            placeholder="••••••••" />
+          <button type="button" (click)="showPassword = !showPassword"
+            class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-indigo-600 transition-colors">
+            <i class="bi" [class.bi-eye]="!showPassword" [class.bi-eye-slash]="showPassword"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="space-y-2">
+        <label for="passwordConfirmation" class="text-sm font-semibold text-gray-700">Confirm Password</label>
+        <div class="relative">
+          <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+            <i class="bi bi-shield-lock"></i>
+          </span>
+          <input formControlName="passwordConfirmation" [type]="showConfirmPassword ? 'text' : 'password'"
+            id="passwordConfirmation"
+            class="w-full pl-10 pr-12 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none text-gray-800"
+            placeholder="••••••••" />
+          <button type="button" (click)="showConfirmPassword = !showConfirmPassword"
+            class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-indigo-600 transition-colors">
+            <i class="bi" [class.bi-eye]="!showConfirmPassword" [class.bi-eye-slash]="showConfirmPassword"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="space-y-2">
+        <label for="gender" class="text-sm font-semibold text-gray-700">Gender</label>
+        <select formControlName="gender" id="gender"
+          class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none text-gray-800 appearance-none">
+          <option value="" disabled>Select Gender</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+        </select>
+      </div>
+
+      <div class="space-y-2">
+        <label for="image" class="text-sm font-semibold text-gray-700">Profile Picture</label>
+        <input type="file" id="image" (change)="onFileSelected($event)" accept="image/*"
+          class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 transition-all" />
+      </div>
     </div>
-  </div>
+
+    <div class="flex justify-end gap-3 mt-8 border-t border-gray-100 pt-6">
+      <button type="button" mat-dialog-close
+        class="px-6 py-2.5 border border-gray-200 rounded-xl text-gray-600 font-semibold hover:bg-gray-50 transition-colors">
+        Cancel
+      </button>
+      <button type="submit" (click)="sumbitForm()"
+        class="px-8 py-2.5 bg-indigo-600 text-white rounded-xl font-semibold hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-100">
+        Create User
+      </button>
+    </div>
+  </form>
 </div>
