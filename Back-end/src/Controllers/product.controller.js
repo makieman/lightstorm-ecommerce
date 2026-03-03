@@ -3,7 +3,9 @@ const categoryModel = require("../Models/category.model");
 const productValidate = require("../Middlewares/product.validation");
 const userModel = require("../Models/user.model");
 const jwt = require("jsonwebtoken");
-const JWT_SECRET = process.env.JWT_SECRET || "secret";
+const fs = require("fs");
+const JWT_SECRET = process.env.JWT_SECRET;
+if (!JWT_SECRET) throw new Error("JWT_SECRET env var is required");
 const mongoose = require("mongoose");
 const cloudUpload = require("../services/cloudinary.service");
 
@@ -183,6 +185,8 @@ let createNewProduct = async (req, res) => {
     if (req.files && req.files.length > 0) {
       let uploadedImage = await cloudUpload(req.files[0].path);
       productData.image = uploadedImage.url;
+      // Clean up local file after Cloudinary upload
+      try { fs.unlinkSync(req.files[0].path); } catch (e) { /* ignore */ }
     }
 
     let product = new productModel(productData);
@@ -211,6 +215,8 @@ let updateProductByID = async (req, res) => {
     if (req.files && req.files[0]) {
       let uploadedImage = await cloudUpload(req.files[0].path);
       product.image = uploadedImage.url;
+      // Clean up local file after Cloudinary upload
+      try { fs.unlinkSync(req.files[0].path); } catch (e) { /* ignore */ }
     }
 
     // Standardize body fields

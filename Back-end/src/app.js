@@ -3,8 +3,7 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-const fs = require('fs');
-const path = require('path');
+const helmet = require('helmet');
 require('dotenv').config();
 
 const userRoutes = require('./Routes/user.routes');
@@ -22,16 +21,23 @@ app.use("/api/users/register", authLimiter);
 app.use("/api/users/resend-verification", authLimiter);
 
 // Middleware
+app.use(helmet());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+const allowedOrigins = [
+  "http://localhost:4200",
+  "http://localhost:7000",
+  process.env.FRONTEND_URL
+].filter(Boolean);
+
 app.use(cors({
   credentials: true,
-  origin: ["http://localhost:4200", "http://localhost:7000"]
+  origin: allowedOrigins
 }));
 app.use(cookieParser());
 
 // Database connection
-console.log('DB URL:', process.env.DATABASE_URL);
 
 const DATABASE_URL = process.env.DATABASE_URL;
 mongoose
@@ -50,41 +56,6 @@ app.use('/api/orders', orderRoutes);
 app.use('/api/ai', aiRoutes);
 app.use('/api/admin', adminRoutes);
 
-// Static files
-const resolveStaticDir = (candidates, requiredFile) => {
-  for (const candidate of candidates) {
-    const resolved = path.resolve(candidate);
-    if (requiredFile) {
-      if (fs.existsSync(path.join(resolved, requiredFile))) return resolved;
-    } else {
-      if (fs.existsSync(resolved)) return resolved;
-    }
-  }
-  return path.resolve(candidates[0]);
-};
-
-const angularDistPath = resolveStaticDir(
-  [
-    path.join(__dirname, '../../Front-end/dist/lightstorm-ecommerce/browser'),
-    path.join(__dirname, '../../../Front-end/dist/lightstorm-ecommerce/browser'),
-    path.join(process.cwd(), 'Front-end/dist/lightstorm-ecommerce/browser'),
-    path.join(process.cwd(), '../Front-end/dist/lightstorm-ecommerce/browser')
-  ],
-  'index.html'
-);
-
-// Serve Angular app at root
-app.use(express.static(angularDistPath));
-
-// Catch-all for Angular routing
-app.get('*', (req, res, next) => {
-  if (req.url.startsWith('/api')) return next();
-  res.sendFile(path.join(angularDistPath, 'index.html'), (err) => {
-    if (!err) return;
-    console.error('Failed to serve Angular index.html:', err.message);
-    res.status(500).type('text/plain').send('Internal Server Error');
-  });
-});
 
 // Error handling
 app.use((err, req, res, next) => {
