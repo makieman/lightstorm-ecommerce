@@ -1,32 +1,77 @@
-.container{
-    margin-top: 50px;
-    width: 40%;
-}
-input[type="text"], input[type="email"], input[type="password"], select{
-    border-radius: 0px;
-    height: 50px;
-}
-.submit{
-    border-radius: 0px;
-    height: 50px;
+:host {
+    display: block;
     width: 100%;
-    font-weight: bold;
-    transition: all;
-    transition-duration: 500ms;
+    height: 100vh;
+    --primary-bg: #1E293B;
+    /* Navy */
+    --accent-coral: #EF4444;
+    /* Primary Lightstorm */
+    --text-dark: #1F2937;
+    --text-muted: #6B7280;
 }
-.register{
-    color: #607d8b;
-    font-weight: bold;
+
+.form-card {
+    border-top-left-radius: 3rem;
+    border-bottom-left-radius: 3rem;
 }
-label{
-    margin-left: 10px;
-    color: #607d8b;
+
+@media (max-width: 1024px) {
+    .form-card {
+        border-radius: 0;
+    }
 }
-h2{
-    transition: all;
-    transition-duration: 500ms;
+
+.animate-spin-slow {
+    animation: spin 10s linear infinite;
 }
-h2:hover{
-    letter-spacing: 5px;
-    font-weight: bold;
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.custom-input {
+    outline: none !important;
+}
+
+.custom-input:focus {
+    box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.1) !important;
+    border: 1px solid rgba(239, 68, 68, 0.3) !important;
+}
+
+.material-symbols-outlined {
+    font-family: 'Material Symbols Outlined';
+    font-weight: normal;
+    font-style: normal;
+    font-size: 24px;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-block;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    -webkit-font-feature-settings: 'liga';
+    font-feature-settings: 'liga';
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Mobile improvements */
+@media (max-width: 1023px) {
+    :host {
+        background: linear-gradient(180deg, var(--primary-bg) 0%, var(--primary-bg) 15%, #f8fafc 15%);
+    }
+}
+
+@media (max-width: 640px) {
+    .custom-input {
+        min-height: 48px;
+        font-size: 16px;
+        /* Prevents iOS zoom on focus */
+    }
 }

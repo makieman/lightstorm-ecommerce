@@ -10,11 +10,11 @@ import { ProductsComponent } from './features/shop/pages/products/products.compo
 import { ProfileComponent } from './features/auth/pages/profile/profile.component';
 import { SingleProductDetailsComponent } from './features/shop/pages/single-product-details/single-product-details.component';
 import { RegisterComponent } from './features/auth/pages/register/register.component';
+import { VerifyEmailComponent } from './features/auth/pages/verify-email/verify-email.component';
 import { PaymentComponent } from './features/shop/pages/payment/payment.component';
 import { ConfirmOrderComponent } from './features/shop/pages/confirm-order/confirm-order.component';
 import { AuthGuard } from './core/guards/auth.guard';
 import { AdminGuard } from './core/guards/admin.guard';
-import { AllProductsGuard } from './core/guards/all-products.guard';
 import { AdminDashboardComponent } from './features/admin/components/dashboard/dashboard.component';
 import { UsersComponent } from './features/admin/components/users/users.component';
 import { ProductlistComponent } from './features/admin/components/productlist/productlist.component';
@@ -31,6 +31,7 @@ export const routes: Routes = [
   { path: 'about', component: AboutComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
+  { path: 'verify-email', component: VerifyEmailComponent },
   { path: 'cart', component: CartComponent },
   { path: 'checkout', component: CheckoutComponent, canActivate: [AuthGuard] },
   {
@@ -47,7 +48,6 @@ export const routes: Routes = [
   {
     path: 'products',
     component: ProductsComponent,
-    canActivate: [AllProductsGuard],
   },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
   { path: 'payment', component: PaymentComponent, canActivate: [AuthGuard] },

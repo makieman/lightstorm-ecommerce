@@ -11,6 +11,7 @@ const productsSchema = {
         details: { type: "string" },
         image: { type: "string" },
         category: { type: "string" },
+        lowStockThreshold: { type: "integer", minimum: 0 },
         wattage: { type: "string" },
         voltage: { type: "string" },
         batteryType: { type: "string" },
@@ -36,3 +37,4 @@ const productsSchema = {
 
 const validate = ajv.compile(productsSchema);
 module.exports = validate;
+

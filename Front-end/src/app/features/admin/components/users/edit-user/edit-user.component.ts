@@ -47,7 +47,6 @@ export class EditUserComponent {
       email: this.editForm.controls['email'].value,
       password: this.user.password,
       image: this.user.image,
-      gender: this.user.gender,
     };
 
     this.userService.updateUser(editedUser).subscribe((data: any) => {

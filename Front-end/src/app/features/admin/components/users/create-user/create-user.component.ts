@@ -35,7 +35,6 @@ export class CreateUserComponent {
     this.createForm = new FormGroup({
       username: new FormControl(''),
       email: new FormControl(''),
-      gender: new FormControl(''),
       password: new FormControl(''),
       passwordConfirmation: new FormControl(''),
     });
@@ -53,7 +52,6 @@ export class CreateUserComponent {
     this.user.append('username', this.createForm.value.username);
     this.user.append('email', this.createForm.value.email);
     this.user.append('image', this.imageFile);
-    this.user.append('gender', this.createForm.value.gender);
     this.user.append('password', this.createForm.value.password);
     console.log(this.user); // id is undefunded
     if (

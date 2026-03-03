@@ -25,6 +25,7 @@ const createAdmin = async () => {
             console.log('User already exists. Updating to admin...');
             user.password = hashedPassword;
             user.isAdmin = true;
+            user.isVerified = true; // Admin should be verified
             user.username = 'Admin User'; // Ensure a name is set
             await user.save();
             console.log('User updated to admin successfully.');
@@ -35,7 +36,7 @@ const createAdmin = async () => {
                 email,
                 password: hashedPassword,
                 isAdmin: true,
-                gender: 'male' // Required by schema
+                isVerified: true // Admin should be verified by default
             });
             await user.save();
             console.log('Admin user created successfully.');

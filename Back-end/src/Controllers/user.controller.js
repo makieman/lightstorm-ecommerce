@@ -7,6 +7,21 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 const cloudUpload = require("../services/cloudinary.service");
+const { sendVerificationEmail } = require("../services/email.service");
+const JWT_SECRET = process.env.JWT_SECRET;
+if (!JWT_SECRET) throw new Error("JWT_SECRET env var is required");
+const COOKIE_OPTIONS = ({
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production",
+  sameSite: "Lax",
+  maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+});
+
+function formatAjvErrors(errors) {
+  if (!errors) return "Invalid input";
+  return errors.map(e => `${e.instancePath || '/'} ${e.message}`).join(', ');
+}
+
 // ---------------------------------- Get All Users  ------------------------------------
 let GetAllUsers = async (req, res) => {
   // => for testing routes
@@ -31,25 +46,27 @@ let GetUserById = async (req, res) => {
 // ---------------------------------- Add New User  -------------------------------------
 let AddNewUser = async (req, res) => {
   try {
-    let { error } = UserValidate(req.body);
-    if (error) return res.status(400).send(error.details[0].message);
+    const valid = UserValidate(req.body);
+    if (!valid) return res.status(400).send({ message: formatAjvErrors(UserValidate.errors) });
 
-    let salt = await bcrypt.genSalt(10);
-    let password = req.body.password;
-    let hashedPassword = await bcrypt.hash(password, salt);
+    const salt = await bcrypt.genSalt(10);
+    const password = req.body.password;
+    const hashedPassword = await bcrypt.hash(password, salt);
 
+    let imageUrl = req.body.image;
+    if (req.files && req.files[0]) {
+      const uploadedImage = await cloudUpload(req.files[0].path);
+      imageUrl = uploadedImage.url;
+    }
 
-    let uploadedImage = await cloudUpload(req.files[0].path);
-
-    let user = new UserModel({
+    const user = new UserModel({
       username: req.body.username,
       email: req.body.email,
       password: hashedPassword,
-      image: uploadedImage.url,
-      gender: req.body.gender,
+      image: imageUrl,
     });
     await user.save();
-    return res.json({ message: "User Added Successfully" });
+    return res.status(201).json({ message: "User Added Successfully", user: { id: user._id, email: user.email, username: user.username } });
   } catch (err) {
     console.error(err);
     return res.status(500).json({ error: "Internal server error" });
@@ -65,7 +82,7 @@ const UpdateUser = async (req, res) => {
   if (req.body.password) {
     try {
       const saltRounds = 10;
-      const hashedPassword = await bcrypt.hash(updateData.password, saltRounds);
+      const hashedPassword = await bcrypt.hash(req.body.password, saltRounds);
       user.password = hashedPassword;
     } catch (error) {
       return res
@@ -120,55 +137,134 @@ let LoginUser = async (req, res) => {
   if (!user) {
     return res.status(400).send({ message: "Invalid Email or Password" });
   }
+  // Allow admin to login even without email verification
+  if (!user.isVerified && !user.isAdmin) {
+    return res.status(401).send({ message: "Please verify your email before logging in" });
+  }
   const validPassword = await bcrypt.compare(req.body.password, user.password);
   if (!validPassword) {
     return res.status(400).send({ message: "Invalid Email or Password" });
   }
   const { _id } = user.toJSON();
-  const token = jwt.sign({ _id: _id }, "secret");
-  res.cookie("jwt", token, {
-    httpOnly: true,
-    maxAge: 24 * 30 * 60 * 60 * 1000,
-  });
+  const token = jwt.sign({ _id: _id }, JWT_SECRET, { expiresIn: '7d' });
+  res.cookie("jwt", token, COOKIE_OPTIONS);
   return res
     .status(200)
     .json({ message: "User Logged In Successfully", user: user });
 };
 // ---------------------------------- Register User  ------------------------------------
 let RegisterUser = async (req, res) => {
-  let { error } = UserValidate(req.body);
-  if (error) return res.status(400).json({ message: error.details[0].message });
+  const valid = UserValidate(req.body);
+  if (!valid) return res.status(400).json({ message: formatAjvErrors(UserValidate.errors) });
 
   try {
-    let name = req.body.username;
-    let email = req.body.email;
-    let password = req.body.password;
-    let gender = req.body.gender;
+    const name = req.body.username;
+    const email = req.body.email;
+    const password = req.body.password;
 
-    let salt = await bcrypt.genSalt(10);
-    let hashedPassword = await bcrypt.hash(password, salt);
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
 
-    let checkUser = await UserModel.findOne({ email: email });
+    const checkUser = await UserModel.findOne({ email: email });
     if (checkUser) {
       return res.status(400).json({ message: "User Already Exists" });
-    } else {
-      let newUser = new UserModel({
-        username: name,
-        email: email,
-        password: hashedPassword,
-        gender: gender,
-      });
-      let savedUser = await newUser.save();
-      const { _id } = savedUser.toJSON();
-      const token = jwt.sign({ _id: _id }, "secret");
-      res.cookie("jwt", token, {
-        httpOnly: true,
-        maxAge: 24 * 30 * 60 * 60 * 1000,
-      });
-      return res
-        .status(201)
-        .json({ message: "User Created Successfully", user: savedUser });
     }
+
+    const verificationToken = crypto.randomBytes(32).toString("hex");
+    const expiry = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
+
+    const newUser = new UserModel({
+      username: name,
+      email: email,
+      password: hashedPassword,
+      verificationToken: verificationToken,
+      verificationTokenExpiry: expiry,
+      isVerified: false,
+    });
+    const savedUser = await newUser.save();
+
+    await sendVerificationEmail(email, verificationToken);
+
+    return res
+      .status(201)
+      .json({ message: "User Created Successfully. Check your email to activate account.", user: { id: savedUser._id, email: savedUser.email } });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+// Verify email token and activate account
+const VerifyEmail = async (req, res) => {
+  try {
+    const { token } = req.body;
+    if (!token) return res.status(400).json({ message: "Token is required" });
+
+    const user = await UserModel.findOne({ verificationToken: token });
+    if (!user || !user.verificationTokenExpiry || user.verificationTokenExpiry < Date.now()) {
+      return res.status(400).json({ message: "Invalid or expired token" });
+    }
+
+    user.isVerified = true;
+    user.verificationToken = null;
+    user.verificationTokenExpiry = null;
+    await user.save();
+
+    const { _id } = user.toJSON();
+    const jwtToken = jwt.sign({ _id: _id }, JWT_SECRET, { expiresIn: '7d' });
+    res.cookie('jwt', jwtToken, COOKIE_OPTIONS);
+    return res.status(200).json({ message: 'Email verified and user logged in', user: { id: user._id, email: user.email } });
+  } catch (error) {
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+// Verify email token via GET request
+const VerifyEmailGET = async (req, res) => {
+  try {
+    const token = req.params.token;
+    if (!token) return res.status(400).send("Token is required");
+
+    const user = await UserModel.findOne({ verificationToken: token });
+    if (!user || !user.verificationTokenExpiry || user.verificationTokenExpiry < Date.now()) {
+      return res.status(400).send("Invalid or expired token.");
+    }
+
+    user.isVerified = true;
+    user.verificationToken = null;
+    user.verificationTokenExpiry = null;
+    await user.save();
+
+    const { _id } = user.toJSON();
+    const jwtToken = jwt.sign({ _id: _id }, JWT_SECRET, { expiresIn: '7d' });
+    res.cookie('jwt', jwtToken, COOKIE_OPTIONS);
+
+    const baseUrl = process.env.APP_URL || "http://localhost:4200";
+    return res.redirect(`${baseUrl}/login?verified=true`);
+  } catch (error) {
+    return res.status(500).send('Internal Server Error');
+  }
+};
+
+const ResendVerificationEmail = async (req, res) => {
+  try {
+    const { email } = req.body;
+    if (!email) return res.status(400).json({ message: "Email is required" });
+
+    const user = await UserModel.findOne({ email });
+    if (!user) return res.status(404).json({ message: "User not found" });
+    if (user.isVerified) return res.status(400).json({ message: "User already verified" });
+
+    // Generate new token
+    const verificationToken = crypto.randomBytes(32).toString("hex");
+    const expiry = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
+
+    user.verificationToken = verificationToken;
+    user.verificationTokenExpiry = expiry;
+    await user.save();
+
+    await sendVerificationEmail(email, verificationToken);
+
+    return res.status(200).json({ message: "Verification email sent successfully" });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
@@ -427,7 +523,7 @@ const GetUserByToken = async (req, res) => {
         .status(401)
         .json({ message: "Unauthorized: JWT cookie not found" });
     }
-    const claims = jwt.verify(cookie, "secret");
+    const claims = jwt.verify(cookie, JWT_SECRET);
     if (!claims) {
       return res.status(401).json({ message: "Unauthorized: Invalid token" });
     }
@@ -475,5 +571,8 @@ module.exports = {
   AddProductToOrder,
   GetUserByToken,
   userLogout,
+  VerifyEmail,
+  VerifyEmailGET,
+  ResendVerificationEmail,
 };
 // ---------------------------------- End Of Controller ----------------------------------

@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Product } from '../../features/shop/pages/products/product.model';
+import { Product, GroupedProducts, Category } from '../../features/shop/pages/products/product.model';
 
 @Injectable({
     providedIn: 'root'
 })
 export class CoreProductService {
     private apiUrl = '/api/products';
+    private adminUrl = '/api/admin';
 
     constructor(private http: HttpClient) { }
 
@@ -71,4 +72,27 @@ export class CoreProductService {
     getOrderById(id: any): Observable<any> {
         return this.http.get(`/api/orders/${id}`);
     }
+
+    // ===================== Admin Endpoints =====================
+
+    // Get products grouped by category (admin)
+    getGroupedProducts(): Observable<GroupedProducts[]> {
+        return this.http.get<GroupedProducts[]>(`${this.adminUrl}/products/grouped`, { withCredentials: true });
+    }
+
+    // Update product stock (admin)
+    updateStock(productId: string, stockQuantity: number): Observable<any> {
+        return this.http.patch(`${this.adminUrl}/products/${productId}/stock`, { stockQuantity }, { withCredentials: true });
+    }
+
+    // Get all categories (admin)
+    getCategories(): Observable<Category[]> {
+        return this.http.get<Category[]>(`${this.adminUrl}/categories`, { withCredentials: true });
+    }
+
+    // Create a new category (admin)
+    createCategory(name: string, description?: string): Observable<Category> {
+        return this.http.post<Category>(`${this.adminUrl}/categories`, { name, description }, { withCredentials: true });
+    }
 }
+

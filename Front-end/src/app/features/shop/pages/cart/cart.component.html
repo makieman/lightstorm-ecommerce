@@ -93,10 +93,9 @@
           </div>
         </div>
         <div class="row">
-          <a [routerLink]="['/checkout']" class="btn btn-custom col-10" [ngClass]="{'dis-btn': cart.length === 0}">
-            <b *ngIf="userid">Proceed to checkout</b>
-            <b *ngIf="!userid">Login to complete your order</b>
-          </a>
+          <button (click)="goToCheckout()" class="btn btn-custom col-10" [ngClass]="{'dis-btn': cart.length === 0}" [disabled]="cart.length === 0">
+            <b>Proceed to Checkout</b>
+          </button>
         </div>
 
       </div>

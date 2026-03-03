@@ -1,7 +1,10 @@
 const productModel = require("../Models/product.model");
+const categoryModel = require("../Models/category.model");
 const productValidate = require("../Middlewares/product.validation");
 const userModel = require("../Models/user.model");
 const jwt = require("jsonwebtoken");
+const JWT_SECRET = process.env.JWT_SECRET || "secret";
+const mongoose = require("mongoose");
 const cloudUpload = require("../services/cloudinary.service");
 
 /**
@@ -24,7 +27,18 @@ const getAllProducts = async (req, res) => {
     }
 
     if (category && category !== 'All Categories') {
-      query.category = { $regex: new RegExp(`^${category}$`, 'i') };
+      // Support both ObjectId and string-based category filtering
+      if (mongoose.Types.ObjectId.isValid(category)) {
+        query.category = new mongoose.Types.ObjectId(category);
+      } else {
+        // Lookup category by name
+        const cat = await categoryModel.findOne({ name: { $regex: new RegExp(`^${category}$`, 'i') } });
+        if (cat) {
+          query.category = cat._id;
+        } else {
+          query.category = null; // No matching category, will return empty
+        }
+      }
     }
 
     if (search) {
@@ -49,6 +63,7 @@ const getAllProducts = async (req, res) => {
     const totalPages = Math.ceil(totalItems / limit);
 
     const products = await productModel.find(query)
+      .populate('category', 'name slug')
       .sort(sortOption)
       .skip(skip)
       .limit(limit);
@@ -139,13 +154,27 @@ let createNewProduct = async (req, res) => {
       });
     }
 
+    // Resolve category: accept ObjectId or name string
+    let categoryId = req.body.category;
+    if (categoryId && !mongoose.Types.ObjectId.isValid(categoryId)) {
+      const cat = await categoryModel.findOne({ name: { $regex: new RegExp(`^${categoryId}$`, 'i') } });
+      if (cat) {
+        categoryId = cat._id;
+      } else {
+        // Auto-create category if it doesn't exist
+        const newCat = await categoryModel.create({ name: categoryId });
+        categoryId = newCat._id;
+      }
+    }
+
     let productData = {
       title: req.body.title,
       details: req.body.details,
       price: req.body.price,
       quantity: req.body.quantity || 0,
-      category: req.body.category,
+      category: categoryId,
       type: req.body.type || 'product',
+      lowStockThreshold: req.body.lowStockThreshold || 5,
       wattage: req.body.wattage,
       voltage: req.body.voltage,
       batteryType: req.body.batteryType
@@ -195,8 +224,21 @@ let updateProductByID = async (req, res) => {
     if (price !== undefined) product.price = Number(price);
     if (quantity !== undefined) product.quantity = Number(quantity);
     if (productQuantity !== undefined) product.quantity = Number(productQuantity);
-    if (category !== undefined) product.category = category;
-    if (productCategory !== undefined) product.category = productCategory;
+    // Resolve category string to ObjectId if needed
+    const rawCategory = productCategory || category;
+    if (rawCategory !== undefined) {
+      if (mongoose.Types.ObjectId.isValid(rawCategory)) {
+        product.category = rawCategory;
+      } else {
+        const cat = await categoryModel.findOne({ name: { $regex: new RegExp(`^${rawCategory}$`, 'i') } });
+        if (cat) {
+          product.category = cat._id;
+        } else {
+          const newCat = await categoryModel.create({ name: rawCategory });
+          product.category = newCat._id;
+        }
+      }
+    }
     if (type !== undefined) product.type = type;
     if (wattage !== undefined) product.wattage = wattage;
     if (voltage !== undefined) product.voltage = voltage;
@@ -272,7 +314,7 @@ const getUserByToken = async (req, res) => {
         .status(401)
         .json({ message: "Unauthorized: JWT cookie not found" });
     }
-    const claims = jwt.verify(cookie, "secret");
+    const claims = jwt.verify(cookie, JWT_SECRET);
     if (!claims) {
       return res.status(401).json({ message: "Unauthorized: Invalid token" });
     }

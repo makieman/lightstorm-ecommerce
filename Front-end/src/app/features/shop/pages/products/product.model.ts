@@ -1,3 +1,11 @@
+export interface Category {
+  _id: string;
+  name: string;
+  slug?: string;
+  description?: string;
+  isActive?: boolean;
+}
+
 export interface Product {
   _id: string;
   title: string;
@@ -5,8 +13,22 @@ export interface Product {
   price: number;
   details: string;
   quantity: number;
-  category?: string;
+  category?: Category | string;
+  lowStockThreshold?: number;
+  createdBy?: string;
   wattage?: string;
   voltage?: string;
   batteryType?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface GroupedProducts {
+  _id: string;
+  category: {
+    id: string;
+    name: string;
+    slug?: string;
+  };
+  products: Product[];
 }

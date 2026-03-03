@@ -1,171 +1,375 @@
-<div class="container">
-    <div class="row parent">
-        <div class="col-md-6  align-items-sm-center align-items-lg-left align-items-md-center">
-            <div class="row mt-5 mx-md-5">
-                <div class="h-100 p-3">
-                    <p>More</p>
-                    <p class="mt-5">About Us</p>
+<div class="relative flex min-h-screen w-full flex-col overflow-x-hidden bg-slate-50 font-sans">
+    <main class="flex-grow">
+        <!-- Hero Section -->
+        <section
+            class="relative flex min-h-[500px] flex-col justify-center items-center p-8 text-center bg-cover bg-center bg-no-repeat"
+            style="background-image: linear-gradient(rgba(30, 41, 59, 0.8), rgba(30, 41, 59, 0.8)), url('assets/images/placeholder.jpg');">
+            <div class="max-w-4xl flex flex-col gap-6 animate-fade-in">
+                <h1 class="text-white text-4xl md:text-6xl font-black leading-tight tracking-tight uppercase">
+                    Empowering Kenya through Smart Technology
+                </h1>
+                <p class="text-slate-300 text-lg md:text-xl font-bold max-w-3xl mx-auto">
+                    Founded in 2020, we bridge the gap in reliable energy and security systems with cutting-edge
+                    solutions for homes and businesses.
+                </p>
+                <div class="flex gap-4 justify-center mt-6">
+                    <button [routerLink]="['/products']"
+                        class="flex h-14 items-center justify-center rounded-2xl bg-[#84CC16] px-8 text-white text-sm font-black uppercase tracking-widest shadow-xl shadow-green-500/20 hover:scale-105 transition-all">
+                        Our Solutions
+                    </button>
+                    <a href="https://wa.me/254718762530"
+                        class="flex h-14 items-center justify-center rounded-2xl bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 px-8 text-white text-sm font-black uppercase tracking-widest transition-all">
+                        Contact Us
+                    </a>
                 </div>
             </div>
-            <div class="row h-25 mt-md-5 mb-4 mx-md-5">
-                <button class="btn btn-outline-light mb-5 h-50 explore" routerLink="/home">Explore Solutions</button>
-            </div>
-        </div>
-        <div class="col-md-6 p-0 d-sm-none d-lg-block d-md-block h-100">
-            <img class="img-fluid main w-100" src="../../../assets/images/about/baner.jpg" alt="">
-        </div>
-    </div>
-    <div class="row d-flex justify-content-center mt-5 ">
-        <div class="col-2 col-md-2 col-lg-2 pic">
-            <div class="row d-flex text-center">
-                <h6>
-                    10+ Years Experience
-                </h6>
-                <p class="small text-muted">In Solar Energy Solutions</p>
-            </div>
-        </div>
-        <div class="col-2 col-md-2 col-lg-2 pic ">
-            <div class="row text-center">
-                <h6>
-                    Solar Installation
-                </h6>
-                <p class="small text-muted">Professional Setup</p>
-            </div>
-        </div>
-        <div class="col-2 col-md-2 col-lg-2 pic">
-            <div class="row text-center">
-                <h6>
-                    Energy Audits
-                </h6>
-                <p class="small text-muted">Efficiency Analysis</p>
-            </div>
-        </div>
-        <div class="col-2 col-md-2 col-lg-2 pic">
-            <div class="row text-center">
-                <h6>
-                    24/7 Support
-                </h6>
-                <p class="small text-muted">Always Available</p>
-            </div>
-        </div>
-        <div class="col-2 col-md-2 col-lg-2 pic">
-            <div class="row text-center">
-                <h6>
-                    20 Years Warranty
-                </h6>
-                <p class="small text-muted">On All Systems</p>
-            </div>
-        </div>
-    </div>
+        </section>
 
-    <div class="row mt-5">
-        <div class="col-md-6 d-flex flex-column justify-content-center second">
-            <div class="row text-center align-items-center">
-                <h4>
-                    Lightstorm Technologies - Powering Nigeria's Future!
-                </h4>
-            </div>
-            <div class="row text-center align-items-center ">
-                <p>Founded in May 2020, Lightstorm Technologies is a leading solar energy company in Nigeria, dedicated to providing sustainable and affordable energy solutions. We specialize in solar panel installation, energy audits, inverter systems, and comprehensive maintenance services. Our mission is to energize society through reliable, eco-friendly energy solutions that reduce electricity costs and environmental impact. With over a decade of combined experience, our team delivers cutting-edge solar technology tailored to residential, commercial, and industrial needs.</p>
-                <p class="mt-3"><strong>Profile Updated:</strong> January 2026</p>
-            </div>
-        </div>
-        <div class="col-md-6 p-0">
-            <img class="img-fluid" src="../../../../../../Middlewares/uploads/WhatsApp Image 2026-01-12 at 4.09.50 PM.jpeg" alt="Solar Installation">
-        </div>
-    </div>
-    <div class="row mt-5 mb-5">
-        <div class="col-md-12">
-            <h3 class="text-center mb-4">Our Solar Solutions</h3>
-            <div class="row justify-content-center">
-                <div class="col-md-4 mb-4">
-                    <div class="card">
-                        <img class="card-img-top" src="../../../../../../Middlewares/uploads/download.jpg" alt="Solar Product">
-                        <div class="card-body">
-                            <h5 class="card-title">Solar Panel Systems</h5>
-                            <p class="card-text">High-efficiency solar panels for residential and commercial use.</p>
+        <!-- Mission & Story -->
+        <section class="py-20 px-6 md:px-12 lg:px-20 bg-white">
+            <div class="max-w-7xl mx-auto">
+                <div class="flex flex-col lg:flex-row items-center gap-16">
+                    <div class="flex-1 space-y-8">
+                        <div
+                            class="inline-flex items-center gap-2 rounded-full bg-[#84CC16]/10 px-4 py-2 text-[#84CC16] text-xs font-black uppercase tracking-widest">
+                            <i class="bi bi-clock-history text-sm"></i>
+                            Our Story
+                        </div>
+                        <h2 class="text-[#1E293B] text-4xl md:text-5xl font-black leading-tight uppercase">
+                            Building a Brighter <br /> Future Since 2020
+                        </h2>
+                        <div class="space-y-4 text-slate-500 font-medium text-lg leading-relaxed">
+                            <p>
+                                Lightstorm Technologies was born from a vision to address the critical need for
+                                reliable,
+                                sustainable energy and robust security infrastructure in Kenya.
+                            </p>
+                            <p>
+                                What started as a small team of passionate engineers has grown into a nationwide leader
+                                in smart technology integration. We don't just install systems; we design comprehensive
+                                solutions that empower businesses to grow and families to feel safe. From Nyamakima to
+                                the furthest counties, our footprint is one of trust and innovation.
+                            </p>
+                        </div>
+
+                        <div class="pt-6 flex gap-12 border-t border-slate-100">
+                            <div>
+                                <p class="text-4xl font-black text-[#84CC16] mb-1">500+</p>
+                                <p class="text-xs font-black text-slate-400 uppercase tracking-widest">Projects
+                                    Completed</p>
+                            </div>
+                            <div>
+                                <p class="text-4xl font-black text-[#84CC16] mb-1">47</p>
+                                <p class="text-xs font-black text-slate-400 uppercase tracking-widest">Counties Served
+                                </p>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-4 mb-4">
-                    <div class="card">
-                        <img class="card-img-top" src="../../../../../../Middlewares/uploads/Screenshot (260).png" alt="Inverter System">
-                        <div class="card-body">
-                            <h5 class="card-title">Inverter Solutions</h5>
-                            <p class="card-text">Advanced inverter systems for optimal energy conversion.</p>
+
+                    <div class="flex-1 w-full relative">
+                        <!-- Decorative element -->
+                        <div
+                            class="absolute -inset-4 bg-[#84CC16]/10 rounded-[3rem] -z-10 rotate-3 transition-transform hover:rotate-6 duration-500">
+                        </div>
+                        <div
+                            class="relative aspect-[4/3] rounded-[2.5rem] overflow-hidden shadow-2xl shadow-slate-200 group">
+                            <div
+                                class="absolute inset-0 bg-[#1E293B]/20 group-hover:bg-transparent transition-colors duration-500 z-10">
+                            </div>
+                            <img alt="Our Engineering Team"
+                                class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
+                                src="assets/images/placeholder.jpg" />
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
+        </section>
 
-    <div class="container mt-5 team">
-        <div class="row ">
-            <div class="col-md-12 p-4">
-                <div class="row justify-content-center py-2">
-                    <h2 class="col-md-4 text-center w-100">Meet Our Team &hearts;</h2>
+        <!-- Core Services Grid -->
+        <section class="py-24 px-6 md:px-12 lg:px-20 bg-slate-50 border-y border-slate-100">
+            <div class="max-w-7xl mx-auto">
+                <div class="text-center mb-16">
+                    <span class="text-[#84CC16] font-black tracking-widest uppercase text-xs mb-3 block">What We
+                        Do</span>
+                    <h2 class="text-[#1E293B] text-4xl font-black mb-6 uppercase">Our Core Expertise</h2>
+                    <p class="text-slate-500 font-medium max-w-2xl mx-auto text-lg pt-2">
+                        Delivering integrated solutions across energy, security, and digital infrastructure.
+                    </p>
                 </div>
-                <div class="row justify-content-between">
-                    <div class="col-md-4 mb-5 mt-3">
-                        <figure class="text-center">
-                            <img class="img-fluid us" src="../../../assets/images/about/ahmed.jpg"
-                                alt="Testimonial Image 1">
-                        </figure>
-                        <a href="https://www.linkedin.com/in/ahmed-kamal-4867aa240/" target="_blank" class="nav-link">
-                            <h4>Ahmed Kamal</h4>
-                        </a>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Service 1 -->
+                    <div
+                        class="bg-white p-8 rounded-[2rem] hover:shadow-xl hover:shadow-slate-200/50 transition-all duration-300 border border-slate-100 group">
+                        <div
+                            class="w-16 h-16 bg-[#84CC16]/10 rounded-2xl flex items-center justify-center text-[#84CC16] mb-8 group-hover:bg-[#84CC16] group-hover:text-white transition-colors duration-300">
+                            <i class="bi bi-sun-fill text-3xl"></i>
+                        </div>
+                        <h3 class="text-xl font-black text-[#1E293B] mb-3 uppercase tracking-tighter">Solar Energy</h3>
+                        <p class="text-slate-500 text-sm font-medium leading-relaxed">
+                            Custom solar installations for residential and commercial use. We specialize in backup
+                            systems, solar heating, and off-grid power solutions.
+                        </p>
                     </div>
-                    <div class="col-md-4 mt-3">
-                        <figure class="text-center">
-                            <img class="img-fluid us" src="../../../assets/images/about/8arabawy.png"
-                                alt="Testimonial Image 2">
-                        </figure>
-                        <a href="https://www.linkedin.com/in/mohamed-algharabawy-ab010a205/" target="_blank"
-                            class="nav-link">
-                            <h4>Mohamed AlGharabawy</h4>
-                        </a>
+                    <!-- Service 2 -->
+                    <div
+                        class="bg-white p-8 rounded-[2rem] hover:shadow-xl hover:shadow-slate-200/50 transition-all duration-300 border border-slate-100 group">
+                        <div
+                            class="w-16 h-16 bg-[#84CC16]/10 rounded-2xl flex items-center justify-center text-[#84CC16] mb-8 group-hover:bg-[#84CC16] group-hover:text-white transition-colors duration-300">
+                            <i class="bi bi-shield-fill-check text-3xl"></i>
+                        </div>
+                        <h3 class="text-xl font-black text-[#1E293B] mb-3 uppercase tracking-tighter">Security Systems
+                        </h3>
+                        <p class="text-slate-500 text-sm font-medium leading-relaxed">
+                            Advanced CCTV surveillance, biometric access control, electric fences, and intruder alarm
+                            systems designed to keep you safe.
+                        </p>
                     </div>
-                    <div class="col-md-4 mt-3">
-                        <figure class="text-center">
-                            <img class="img-fluid us" src="../../../assets/images/about/mansour.png"
-                                alt="Testimonial Image 3">
-                        </figure>
-                        <a href="https://www.linkedin.com/in/ahmed-mansour-10257/" target="_blank" class="nav-link">
-                            <h4>Ahmed Mansour</h4>
-                        </a>
+                    <!-- Service 3 -->
+                    <div
+                        class="bg-white p-8 rounded-[2rem] hover:shadow-xl hover:shadow-slate-200/50 transition-all duration-300 border border-slate-100 group">
+                        <div
+                            class="w-16 h-16 bg-[#84CC16]/10 rounded-2xl flex items-center justify-center text-[#84CC16] mb-8 group-hover:bg-[#84CC16] group-hover:text-white transition-colors duration-300">
+                            <i class="bi bi-router-fill text-3xl"></i>
+                        </div>
+                        <h3 class="text-xl font-black text-[#1E293B] mb-3 uppercase tracking-tighter">Networking</h3>
+                        <p class="text-slate-500 text-sm font-medium leading-relaxed">
+                            Structured cabling, fiber optics, and enterprise-grade Wi-Fi solutions ensuring seamless
+                            connectivity for your operations.
+                        </p>
                     </div>
-                    <div class="col-md-4 mt-3">
-                        <figure class="text-center">
-                            <img class="img-fluid us" src="../../../assets/images/about/nourhan.png"
-                                alt="Testimonial Image 1">
-                        </figure>
-                        <a href="https://www.linkedin.com/in/nourhan-radwan-083516287/?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"
-                            target="_blank" class="nav-link">
-                            <h4>Nourhan Radwan</h4>
-                        </a>
+                </div>
+                <!-- Action Button below services -->
+                <div class="mt-12 text-center">
+                    <button [routerLink]="['/products']"
+                        class="text-xs font-black text-[#84CC16] uppercase tracking-widest hover:underline underline-offset-4">
+                        Explore All Services <i class="bi bi-arrow-right ml-1"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Value Prop / Why Choose Us -->
+        <section class="py-24 px-6 md:px-12 lg:px-20 bg-white">
+            <div class="max-w-7xl mx-auto">
+                <div class="flex flex-col md:flex-row items-center justify-between gap-12 lg:gap-20">
+                    <div class="md:w-1/3">
+                        <h2 class="text-[#1E293B] text-4xl font-black mb-6 uppercase leading-tight">Why Choose <br />
+                            Lightstorm?</h2>
+                        <p class="text-slate-500 font-medium text-lg mb-8">
+                            We prioritize integrity and quality in every project. Our commitment to excellence sets us
+                            apart in the Kenyan market.
+                        </p>
+                        <ul class="space-y-4">
+                            <li class="flex items-center gap-3">
+                                <i class="bi bi-check2-circle text-xl text-[#84CC16]"></i>
+                                <span class="text-sm font-black text-[#1E293B] uppercase tracking-wider">No Deposit
+                                    Required</span>
+                            </li>
+                            <li class="flex items-center gap-3">
+                                <i class="bi bi-check2-circle text-xl text-[#84CC16]"></i>
+                                <span class="text-sm font-black text-[#1E293B] uppercase tracking-wider">Premium
+                                    Components</span>
+                            </li>
+                            <li class="flex items-center gap-3">
+                                <i class="bi bi-check2-circle text-xl text-[#84CC16]"></i>
+                                <span class="text-sm font-black text-[#1E293B] uppercase tracking-wider">Nationwide
+                                    Reach</span>
+                            </li>
+                        </ul>
                     </div>
-                    <div class="col-md-4 mt-3">
-                        <figure class="text-center">
-                            <img class="img-fluid us" src="../../../assets/images/about/nada.png"
-                                alt="Testimonial Image 2">
-                        </figure>
-                        <a href="https://www.linkedin.com/in/nada-rabea-03048b1b3/" target="_blank" class="nav-link">
-                            <h4>Nada Rabea</h4>
-                        </a>
-                    </div>
-                    <div class="col-md-4 mt-3">
-                        <figure class="text-center">
-                            <img class="img-fluid us" src="../../../assets/images/about/zinab.png"
-                                alt="Testimonial Image 3">
-                        </figure>
-                        <a href="https://www.linkedin.com/in/zeinab-abdelghaffar/?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"
-                            target="_blank" class="nav-link">
-                            <h4>Zeinab Abd Alghafar</h4>
-                        </a>
+                    <div class="md:w-2/3 w-full">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <div class="bg-slate-50 p-6 rounded-[2rem] border border-slate-100">
+                                <i class="bi bi-hand-thumbs-up-fill text-[#84CC16] text-4xl mb-4 block"></i>
+                                <h4 class="font-black text-[#1E293B] text-lg uppercase mb-2">Trust-based</h4>
+                                <p class="text-sm text-slate-500 font-medium">Partnerships built on transparency and
+                                    zero upfront deposits for standard projects.</p>
+                            </div>
+                            <div class="bg-slate-50 p-6 rounded-[2rem] border border-slate-100">
+                                <i class="bi bi-patch-check-fill text-[#84CC16] text-4xl mb-4 block"></i>
+                                <h4 class="font-black text-[#1E293B] text-lg uppercase mb-2">Quality Guaranteed</h4>
+                                <p class="text-sm text-slate-500 font-medium">We work only with tier-1 manufacturers to
+                                    provide warranties up to 20 years.</p>
+                            </div>
+                            <div class="bg-slate-50 p-6 rounded-[2rem] border border-slate-100">
+                                <i class="bi bi-people-fill text-[#84CC16] text-4xl mb-4 block"></i>
+                                <h4 class="font-black text-[#1E293B] text-lg uppercase mb-2">Expert Team</h4>
+                                <p class="text-sm text-slate-500 font-medium">Our certified engineers undergo continuous
+                                    training to master upcoming tech.</p>
+                            </div>
+                            <div class="bg-slate-50 p-6 rounded-[2rem] border border-slate-100">
+                                <i class="bi bi-headset text-[#84CC16] text-4xl mb-4 block"></i>
+                                <h4 class="font-black text-[#1E293B] text-lg uppercase mb-2">24/7 Support</h4>
+                                <p class="text-sm text-slate-500 font-medium">A dedicated helpdesk ready to assist you
+                                    post-installation, anytime.</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
+        </section>
+
+        <!-- Featured Projects (MADE TO STAND OUT) -->
+        <section class="py-32 px-6 md:px-12 lg:px-20 bg-[#1E293B] relative overflow-hidden">
+            <!-- Background decorative elements -->
+            <div
+                class="absolute top-0 right-0 -mr-32 -mt-32 w-[500px] h-[500px] rounded-full bg-[#84CC16]/20 blur-[100px] opacity-60">
+            </div>
+            <div
+                class="absolute bottom-0 left-0 -ml-32 -mb-32 w-[400px] h-[400px] rounded-full bg-blue-500/10 blur-[100px] opacity-40">
+            </div>
+
+            <div class="max-w-7xl mx-auto relative z-10">
+                <div class="text-center mb-20">
+                    <span class="text-[#84CC16] font-black tracking-[0.2em] uppercase text-xs mb-3 block">Our
+                        Portfolio</span>
+                    <h2 class="text-white text-5xl md:text-6xl font-black mb-6 uppercase tracking-tighter">Featured
+                        Projects</h2>
+                    <div class="h-1.5 w-24 bg-[#84CC16] mx-auto rounded-full"></div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Project 1 -->
+                    <div
+                        class="group relative overflow-hidden rounded-[2.5rem] aspect-[4/5] cursor-pointer shadow-2xl shadow-black/60 border border-slate-700/50 bg-[#0F172A] transform hover:-translate-y-4 transition-all duration-500">
+                        <img alt="Project Placeholder"
+                            class="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-60 group-hover:opacity-80"
+                            src="assets/images/placeholder.jpg" />
+                        <div
+                            class="absolute inset-0 bg-gradient-to-t from-[#0F172A] via-[#0F172A]/80 to-transparent flex flex-col justify-end p-8">
+                            <span
+                                class="text-[#84CC16] bg-[#84CC16]/10 w-fit px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest mb-4 backdrop-blur-sm border border-[#84CC16]/20">Commercial</span>
+                            <h3 class="text-white font-black text-3xl mb-3 leading-tight uppercase">Solar Carport <br />
+                                Project</h3>
+                            <div
+                                class="h-0 group-hover:h-auto overflow-hidden opacity-0 group-hover:opacity-100 transition-all duration-500">
+                                <p class="text-slate-300 text-sm font-medium mt-2 pb-2">
+                                    Converted an expansive parking space into a functional energy generation hub,
+                                    supplying 40% of the facility's power.
+                                </p>
+                            </div>
+                            <!-- Fancy arrow -->
+                            <div
+                                class="absolute bottom-8 right-8 w-12 h-12 bg-white/10 rounded-full flex items-center justify-center backdrop-blur-md opacity-0 group-hover:opacity-100 transform translate-x-4 group-hover:translate-x-0 transition-all duration-300">
+                                <i class="bi bi-arrow-up-right text-white text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Project 2 -->
+                    <div
+                        class="group relative overflow-hidden rounded-[2.5rem] aspect-[4/5] cursor-pointer shadow-2xl shadow-black/60 border border-slate-700/50 bg-[#0F172A] transform hover:-translate-y-4 transition-all duration-500 md:mt-12">
+                        <img alt="Project Placeholder"
+                            class="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-60 group-hover:opacity-80"
+                            src="assets/images/placeholder.jpg" />
+                        <div
+                            class="absolute inset-0 bg-gradient-to-t from-[#0F172A] via-[#0F172A]/80 to-transparent flex flex-col justify-end p-8">
+                            <span
+                                class="text-[#84CC16] bg-[#84CC16]/10 w-fit px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest mb-4 backdrop-blur-sm border border-[#84CC16]/20">Residential</span>
+                            <h3 class="text-white font-black text-3xl mb-3 leading-tight uppercase">6kVA Hybrid <br />
+                                System</h3>
+                            <div
+                                class="h-0 group-hover:h-auto overflow-hidden opacity-0 group-hover:opacity-100 transition-all duration-500">
+                                <p class="text-slate-300 text-sm font-medium mt-2 pb-2">
+                                    Providing 24/7 power autonomy for a large residence in Kisumu with premium lithium
+                                    storage.
+                                </p>
+                            </div>
+                            <div
+                                class="absolute bottom-8 right-8 w-12 h-12 bg-white/10 rounded-full flex items-center justify-center backdrop-blur-md opacity-0 group-hover:opacity-100 transform translate-x-4 group-hover:translate-x-0 transition-all duration-300">
+                                <i class="bi bi-arrow-up-right text-white text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Project 3 -->
+                    <div
+                        class="group relative overflow-hidden rounded-[2.5rem] aspect-[4/5] cursor-pointer shadow-2xl shadow-black/60 border border-slate-700/50 bg-[#0F172A] transform hover:-translate-y-4 transition-all duration-500">
+                        <img alt="Project Placeholder"
+                            class="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-60 group-hover:opacity-80"
+                            src="assets/images/placeholder.jpg" />
+                        <div
+                            class="absolute inset-0 bg-gradient-to-t from-[#0F172A] via-[#0F172A]/80 to-transparent flex flex-col justify-end p-8">
+                            <span
+                                class="text-[#84CC16] bg-[#84CC16]/10 w-fit px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest mb-4 backdrop-blur-sm border border-[#84CC16]/20">Agricultural</span>
+                            <h3 class="text-white font-black text-3xl mb-3 leading-tight uppercase">Borehole <br />
+                                Solarization</h3>
+                            <div
+                                class="h-0 group-hover:h-auto overflow-hidden opacity-0 group-hover:opacity-100 transition-all duration-500">
+                                <p class="text-slate-300 text-sm font-medium mt-2 pb-2">
+                                    Replaced a diesel pump with a clean solar equivalent, saving the farm 100% in
+                                    monthly fuel costs.
+                                </p>
+                            </div>
+                            <div
+                                class="absolute bottom-8 right-8 w-12 h-12 bg-white/10 rounded-full flex items-center justify-center backdrop-blur-md opacity-0 group-hover:opacity-100 transform translate-x-4 group-hover:translate-x-0 transition-all duration-300">
+                                <i class="bi bi-arrow-up-right text-white text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials & Social Proof -->
+        <section class="py-24 px-6 md:px-12 lg:px-20 bg-white relative">
+            <div
+                class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#84CC16] to-transparent opacity-20">
+            </div>
+
+            <div class="max-w-4xl mx-auto text-center relative z-10">
+                <i
+                    class="bi bi-quote text-[#84CC16]/10 text-[8rem] absolute -top-16 left-1/2 transform -translate-x-1/2 -z-10 leading-none"></i>
+                <!-- Grid of Testimonials replacing the static one -->
+                <div
+                    class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16 px-4 md:px-0 text-left transition-all duration-500 ease-in-out transform {{animationClass}}">
+                    <!-- Dynamic Loop -->
+                    <div *ngFor="let t of displayedTestimonials"
+                        [ngClass]="t.dark ? 'bg-[#1E293B] shadow-slate-900/20 border-slate-800' : 'bg-white shadow-slate-200/50 border-slate-100'"
+                        class="p-8 rounded-[2rem] shadow-xl border flex flex-col h-full hover:-translate-y-2 transition-transform duration-300">
+                        <div class="flex items-center gap-1 mb-4">
+                            <i class="bi bi-star-fill text-[#84CC16] text-xs"></i>
+                            <i class="bi bi-star-fill text-[#84CC16] text-xs"></i>
+                            <i class="bi bi-star-fill text-[#84CC16] text-xs"></i>
+                            <i class="bi bi-star-fill text-[#84CC16] text-xs"></i>
+                            <i class="bi bi-star-fill text-[#84CC16] text-xs"></i>
+                        </div>
+                        <p [ngClass]="t.dark ? 'text-slate-300' : 'text-slate-600'"
+                            class="font-medium text-sm leading-relaxed mb-6 flex-grow transition-colors duration-300">
+                            {{t.text}}
+                        </p>
+                        <div [ngClass]="t.dark ? 'border-slate-700/50' : 'border-slate-50'"
+                            class="flex items-center gap-3 pt-4 border-t transition-colors duration-300">
+                            <div [ngClass]="t.dark ? 'bg-white text-[#1E293B]' : 'bg-[#1E293B] text-white'"
+                                class="h-10 w-10 flex-shrink-0 rounded-full flex items-center justify-center font-black transition-colors duration-300">
+                                {{t.initials}}
+                            </div>
+                            <div>
+                                <div [ngClass]="t.dark ? 'text-white' : 'text-[#1E293B]'"
+                                    class="font-black uppercase text-sm transition-colors duration-300">
+                                    {{t.name}}
+                                </div>
+                                <div class="text-[10px] font-black text-[#84CC16] uppercase tracking-widest">
+                                    {{t.role}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Call to action for socials -->
+                <p class="text-xs font-black text-slate-400 uppercase tracking-[0.2em] mb-6">Read more reviews on our
+                    socials</p>
+                <div class="flex flex-col sm:flex-row justify-center gap-6">
+                    <a class="flex items-center justify-center gap-3 px-8 py-5 bg-[#1877F2] text-white rounded-2xl shadow-xl shadow-blue-500/20 hover:-translate-y-1 transition-all font-black uppercase tracking-widest text-xs group"
+                        href="https://web.facebook.com/lightstormtech" target="_blank">
+                        <i class="bi bi-facebook text-xl group-hover:scale-110 transition-transform"></i> Facebook
+                    </a>
+                    <a class="flex items-center justify-center gap-3 px-8 py-5 bg-gradient-to-r from-[#833AB4] via-[#FD1D1D] to-[#FCB045] text-white rounded-2xl shadow-xl shadow-red-500/20 hover:-translate-y-1 transition-all font-black uppercase tracking-widest text-xs group"
+                        href="https://www.instagram.com/lightstorm_technologies/" target="_blank">
+                        <i class="bi bi-instagram text-xl group-hover:scale-110 transition-transform"></i> Instagram
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
 </div>

@@ -1,21 +1,27 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
-import { CartService } from 'src/app/core/services/cart.service';
+import { CartService } from '@app/core/services/cart.service';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import Swal from 'sweetalert2';
+
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule, HttpClientModule, RouterModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, HttpClientModule, RouterModule, ReactiveFormsModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
 export class LoginComponent implements OnInit {
   form!: FormGroup;
   showPassword = false;
+  showVerificationBanner = false;
+  resendEmail = '';
+  resendLoading = false;
+  resendSent = false;
 
   constructor(
     private http: HttpClient,
@@ -27,12 +33,22 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     this.form = this.formBuilder.group({
-      username: '',
-      email: '',
-      password: '',
-      confirmPassword: '',
-      gender: ''
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required]]
     });
+
+    // Check for ?verified=true query param
+    const verified = this.route.snapshot.queryParamMap.get('verified');
+    if (verified === 'true') {
+      Swal.fire({
+        icon: 'success',
+        title: 'Email Verified!',
+        text: 'Your account has been activated. You can now log in.',
+        confirmButtonColor: '#EF4444',
+        timer: 4000,
+        timerProgressBar: true,
+      });
+    }
   }
 
   login() {
@@ -54,6 +70,11 @@ export class LoginComponent implements OnInit {
       });
       return;
     }
+
+    // Reset verification banner state
+    this.showVerificationBanner = false;
+    this.resendSent = false;
+
     this.http.post<any>('/api/users/login', user, { withCredentials: true })
       .subscribe({
         next: (response) => {
@@ -90,8 +111,32 @@ export class LoginComponent implements OnInit {
         },
         error: (error) => {
           const message = error?.error?.message || error?.message || "Login failed. Please try again.";
-          Swal.fire("Error", message, "error");
+
+          // Check if it's an unverified email error
+          if (error?.status === 401 && message.toLowerCase().includes('verify')) {
+            this.showVerificationBanner = true;
+            this.resendEmail = user.email;
+          } else {
+            Swal.fire("Error", message, "error");
+          }
         }
+      });
+  }
+
+  resendVerification(): void {
+    if (!this.resendEmail) return;
+    this.resendLoading = true;
+    this.http
+      .post<any>('/api/users/resend-verification', { email: this.resendEmail }, { withCredentials: true })
+      .subscribe({
+        next: () => {
+          this.resendLoading = false;
+          this.resendSent = true;
+        },
+        error: (err) => {
+          this.resendLoading = false;
+          Swal.fire('Error', err?.error?.message || 'Could not resend verification email.', 'error');
+        },
       });
   }
 

@@ -5,29 +5,40 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Router, RouterModule } from '@angular/router';
 import { Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
+import { CommonModule } from '@angular/common';
+
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [FormsModule, HttpClientModule, RouterModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, HttpClientModule, RouterModule, ReactiveFormsModule],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css',
 })
 export class RegisterComponent implements OnInit {
-  form: FormGroup;
+  form!: FormGroup;
+  showPassword = false;
+  showConPassword = false;
+
   constructor(
     private http: HttpClient,
     private router: Router,
     private formBuilder: FormBuilder
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.form = this.formBuilder.group({
-      username: '',
-      email: '',
-      password: '',
-      confirmPassword: '',
-      gender: ''
+      username: ['', [Validators.required, Validators.minLength(3)]],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(8)]],
+      confirmPassword: ['', [Validators.required]],
     });
+  }
+
+  get passwordMismatch(): boolean {
+    if (!this.form) return false;
+    const password = this.form.get('password')?.value;
+    const confirmPassword = this.form.get('confirmPassword')?.value;
+    return password && confirmPassword && password !== confirmPassword;
   }
 
   submit() {
@@ -62,24 +73,26 @@ export class RegisterComponent implements OnInit {
         text: 'Password must be at least 8 characters long!',
       });
       return;
-    } else if (
-      !user.gender ||
-      !['male', 'female'].includes(user.gender.toLowerCase())
-    ) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: "Gender must be 'male' or 'female'!",
-      });
-      return;
     }
-    this.http.post('/api/users/register', user, 
-    {
+    this.http.post<any>('/api/users/register', user,
+      {
         withCredentials: true,
       })
-      .subscribe({complete: () => this.router.navigate(['/login']), error: (err) => {
-        Swal.fire("Error", err.error.message, "error")}
-
+      .subscribe({
+        next: (response) => {
+          Swal.fire({
+            icon: 'success',
+            title: 'Account Created!',
+            html: `We've sent a verification link to <b>${user.email}</b>.<br>Please check your inbox to activate your account.`,
+            confirmButtonColor: '#EF4444',
+            confirmButtonText: 'Go to Login',
+          }).then(() => {
+            this.router.navigate(['/login']);
+          });
+        },
+        error: (err) => {
+          Swal.fire("Error", err.error.message, "error");
+        }
       });
   }
 }

@@ -11,8 +11,15 @@ const userRoutes = require('./Routes/user.routes');
 const productRoutes = require('./Routes/product.routes');
 const orderRoutes = require('./Routes/order.routes');
 const aiRoutes = require('./Routes/ai.routes');
+const adminRoutes = require('./Routes/admin.routes');
 
 const app = express();
+
+const rateLimit = require("express-rate-limit");
+const authLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 10 });
+app.use("/api/users/login", authLimiter);
+app.use("/api/users/register", authLimiter);
+app.use("/api/users/resend-verification", authLimiter);
 
 // Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -41,6 +48,7 @@ app.use("/api/users", userRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/ai', aiRoutes);
+app.use('/api/admin', adminRoutes);
 
 // Static files
 const resolveStaticDir = (candidates, requiredFile) => {
@@ -86,7 +94,7 @@ app.use((err, req, res, next) => {
     return res.status(500).json({
       message: 'Internal Server Error',
       error: err.message,
-      stack: err.stack
+      stack: process.env.NODE_ENV === 'production' ? undefined : err.stack
     });
   }
 

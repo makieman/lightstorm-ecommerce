@@ -15,7 +15,9 @@ const productsSchema = new mongoose.Schema({
   type: { type: String, enum: ['product', 'service'], default: 'product' },
   details: String,
   image: String,
-  category: String,
+  category: { type: mongoose.Schema.Types.ObjectId, ref: "categories" },
+  lowStockThreshold: { type: Number, default: 5, min: 0 },
+  createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "users" },
   wattage: String,
   voltage: String,
   batteryType: String,
@@ -24,5 +26,7 @@ const productsSchema = new mongoose.Schema({
 
 // Add text index for search functionality
 productsSchema.index({ title: 'text', details: 'text' });
+// Index for efficient category-based grouping
+productsSchema.index({ category: 1 });
 
 module.exports = mongoose.model("products", productsSchema);

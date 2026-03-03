@@ -1,9 +1,10 @@
-import { Component, Inject, signal } from '@angular/core';
+import { Component, Inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { CoreProductService } from '@app/core/services/core-product.service';
 import { AIService } from '@app/core/services/ai.service';
+import { Category } from '@app/features/shop/pages/products/product.model';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 
@@ -72,12 +73,9 @@ import Swal from 'sweetalert2';
                     class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-gray-800 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none appearance-none cursor-pointer"
                   >
                     <option value="" disabled selected>Select Category</option>
-                    <option value="Solar Panel">Solar Panel</option>
-                    <option value="Battery">Battery</option>
-                    <option value="Inverter">Inverter</option>
-                    <option value="Charge Controller">Charge Controller</option>
-                    <option value="Solar Lighting">Solar Lighting</option>
-                    <option value="Mounting Systems">Mounting Systems</option>
+                    @for (cat of categories; track cat._id) {
+                      <option [value]="cat.name">{{ cat.name }}</option>
+                    }
                   </select>
                   <div class="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-gray-500">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
@@ -273,10 +271,11 @@ import Swal from 'sweetalert2';
     }
   `]
 })
-export class CreateProductDialogComponent {
+export class CreateProductDialogComponent implements OnInit {
   createForm: any;
   imageFile: File | null = null;
   isGenerating = signal(false);
+  categories: Category[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -292,9 +291,17 @@ export class CreateProductDialogComponent {
       details: ['', Validators.required],
       productQuantity: ['', [Validators.required, Validators.min(0)]],
       productCategory: ['', Validators.required],
+      lowStockThreshold: [5],
       wattage: [''],
       voltage: [''],
       batteryType: [''],
+    });
+  }
+
+  ngOnInit() {
+    this.productService.getCategories().subscribe({
+      next: (cats) => this.categories = cats,
+      error: (err) => console.error('Failed to load categories:', err)
     });
   }
 
@@ -313,7 +320,7 @@ export class CreateProductDialogComponent {
     }
 
     this.isGenerating.set(true);
-    
+
     this.aiService.generateDescription(title, category || '').subscribe({
       next: (response) => {
         if (response.success && response.description) {

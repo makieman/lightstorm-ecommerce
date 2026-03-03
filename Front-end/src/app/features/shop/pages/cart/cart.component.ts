@@ -1,7 +1,7 @@
 import { CoreProductService } from '@app/core/services/core-product.service';
 import { CartService } from '@app/core/services/cart.service';
 import { Component, OnInit } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { HttpClient, HttpClientModule } from '@angular/common/http'; // Import HttpClientModule
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -32,7 +32,7 @@ export class CartComponent implements OnInit {
 
   deletedProduct: { _id: string, title: string, image: string, quantity: number, price: number } | null = null;
 
-  constructor(private userService: CartService, private productsService: CoreProductService, private http: HttpClient) { }
+  constructor(private userService: CartService, private productsService: CoreProductService, private http: HttpClient, private router: Router) { }
 
   updateTotal() {
     this.total = 0;
@@ -152,6 +152,15 @@ export class CartComponent implements OnInit {
       .pipe(
         map(response => response.data._id)
       );
+  }
+
+  goToCheckout() {
+    if (this.cart.length === 0) return;
+    if (this.userid) {
+      this.router.navigate(['/checkout']);
+    } else {
+      this.router.navigate(['/login'], { queryParams: { redirect: '/checkout' } });
+    }
   }
 
   ngOnInit() {
