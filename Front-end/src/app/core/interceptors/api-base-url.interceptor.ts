@@ -8,9 +8,10 @@ import { environment } from '../../../environments/environment';
  * Render backend domain (e.g. https://lightstorm-api.onrender.com).
  */
 export const apiBaseUrlInterceptor: HttpInterceptorFn = (req, next) => {
-    if (environment.apiBaseUrl && req.url.startsWith('/api/')) {
+    if (environment.apiBaseUrl && req.url.startsWith('/api')) {
         const apiReq = req.clone({
-            url: `${environment.apiBaseUrl}${req.url}`
+            url: `${environment.apiBaseUrl}${req.url}`,
+            withCredentials: true
         });
         return next(apiReq);
     }
