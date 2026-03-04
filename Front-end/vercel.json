@@ -3,6 +3,10 @@
     "outputDirectory": "dist/lightstorm-ecommerce/browser",
     "rewrites": [
         {
+            "source": "/api/(.*)",
+            "destination": "https://lightstorm-ecommerce.onrender.com/api/$1"
+        },
+        {
             "source": "/(.*)",
             "destination": "/index.html"
         }
