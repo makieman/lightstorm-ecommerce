@@ -8,6 +8,7 @@ import { environment } from '../../../environments/environment';
  * Render backend domain (e.g. https://lightstorm-api.onrender.com).
  */
 export const apiBaseUrlInterceptor: HttpInterceptorFn = (req, next) => {
+    // If we have a base URL and the request starts with /api (relative path)
     if (environment.apiBaseUrl && req.url.startsWith('/api')) {
         const apiReq = req.clone({
             url: `${environment.apiBaseUrl}${req.url}`,

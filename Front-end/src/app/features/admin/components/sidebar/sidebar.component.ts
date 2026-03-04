@@ -8,12 +8,9 @@ import { CommonModule } from '@angular/common';
   imports: [RouterModule, CommonModule],
   template: `
     <aside class="sidebar h-screen sticky top-0 bg-white border-r border-slate-200 flex flex-col transition-all duration-300 w-64 shadow-sm">
-      <div class="p-6 flex items-center gap-3">
-        <div class="w-10 h-10 bg-[#1E293B] rounded-xl flex items-center justify-center shadow-lg shadow-slate-200">
-           <i class="bi bi-lightning-charge-fill text-[#84CC16] text-xl"></i>
-        </div>
-        <span class="font-bold text-xl tracking-tight text-[#1E293B]">LIGHTSTORM</span>
-      </div>
+      <a [routerLink]="['/']" class="p-6 flex items-center gap-3">
+        <img src="assets/lightstorm logo.png" alt="Lightstorm Logo" class="app-logo h-[40px]">
+      </a>
 
       <nav class="flex-1 px-4 mt-6 space-y-2">
         <a routerLink="/admin" [routerLinkActiveOptions]="{exact: true}" routerLinkActive="active-link" class="nav-item">

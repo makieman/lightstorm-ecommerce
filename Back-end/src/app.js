@@ -1,4 +1,6 @@
 const express = require('express');
+const path = require('path');
+
 const cors = require('cors');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
@@ -55,6 +57,16 @@ app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/ai', aiRoutes);
 app.use('/api/admin', adminRoutes);
+
+// Serve static files from the Angular app
+const frontendPath = path.join(__dirname, '../../Front-end/dist/lightstorm-ecommerce/browser');
+app.use(express.static(frontendPath));
+
+// Catch-all route to serve the Angular app's index.html
+app.get('*', (req, res) => {
+  res.sendFile(path.join(frontendPath, 'index.html'));
+});
+
 
 
 // Error handling

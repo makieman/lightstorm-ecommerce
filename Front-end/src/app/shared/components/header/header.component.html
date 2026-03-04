@@ -3,18 +3,15 @@
   <div class="max-w-7xl mx-auto flex items-center justify-between gap-8">
 
     <!-- Logo -->
-    <div class="flex items-center gap-3">
-      <div class="w-10 h-10 bg-[#1E293B] rounded-xl flex items-center justify-center shadow-lg shadow-slate-200">
-        <i class="bi bi-lightning-charge-fill text-[#84CC16] text-xl"></i>
-      </div>
-      <span class="font-black text-2xl tracking-tighter text-[#1E293B] hidden sm:block">LIGHTSTORM</span>
-    </div>
+    <a [routerLink]="['/']" class="flex items-center gap-3">
+      <img src="assets/lightstorm logo.png" alt="Lightstorm Logo" class="app-logo h-[40px] md:h-[50px]">
+    </a>
+
 
     <!-- Search Bar (Desktop) - Global Search Component -->
     <div class="hidden lg:flex flex-1 max-w-2xl">
       <app-global-search></app-global-search>
     </div>
-
     <!-- Actions -->
     <div class="flex items-center gap-2 md:gap-6">
       <div class="hidden xl:flex items-center gap-3 border-r border-slate-100 pr-6 mr-4">
