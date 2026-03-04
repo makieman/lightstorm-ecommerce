@@ -9,7 +9,7 @@
   </div>
 
   <div class="overflow-x-auto">
-    <table class="w-full text-left border-collapse">
+    <table class="w-full text-left border-collapse hidden md:table">
       <thead>
         <tr class="bg-gray-50 border-b border-gray-100">
           <th class="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-widest ps-8">Customer</th>
@@ -71,6 +71,57 @@
         </tr>
       </tbody>
     </table>
+
+    <!-- Mobile Stacked Layout (Card Style) -->
+    <div class="md:hidden flex flex-col divide-y divide-gray-100">
+      <div *ngFor="let order of orders" class="p-4 hover:bg-gray-50 transition-colors">
+        <div class="flex items-center justify-between mb-3">
+          <div class="flex items-center gap-3">
+            <div
+              class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 font-bold border border-gray-200 overflow-hidden">
+              <img *ngIf="order.image" [src]="order.image" alt="user" class="w-full h-full object-cover" />
+              <span *ngIf="!order.image">{{ order.username.charAt(0) }}</span>
+            </div>
+            <div>
+              <p class="font-bold text-gray-900 text-sm">{{ order.username }}</p>
+              <p class="text-xs text-gray-500 font-medium">{{ order.daysDifference }} days ago</p>
+            </div>
+          </div>
+          <span class="font-black text-gray-900">${{ order.totalPrice?.toFixed(2) }}</span>
+        </div>
+
+        <div class="flex items-center justify-between mt-4">
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold transition-all"
+            [ngClass]="{
+                    'bg-emerald-50 text-emerald-700 border border-emerald-100': order.status === 'Accepted',
+                    'bg-amber-50 text-amber-700 border border-amber-100': order.status === 'Pending',
+                    'bg-rose-50 text-rose-700 border border-rose-100': order.status === 'Rejected'
+                  }">
+            <span class="w-1.5 h-1.5 rounded-full" [ngClass]="{
+                      'bg-emerald-500': order.status === 'Accepted',
+                      'bg-amber-500': order.status === 'Pending',
+                      'bg-rose-500': order.status === 'Rejected'
+                    }"></span>
+            {{ order.status }}
+          </span>
+
+          <div class="flex items-center gap-1.5">
+            <button class="icon-btn w-8 h-8 text-emerald-600 bg-emerald-50 hover:bg-emerald-100"
+              [disabled]="order.status === 'Accepted'" (click)="accepted(order._id)" title="Accept Order">
+              <i class="bi bi-check-lg text-sm"></i>
+            </button>
+            <button class="icon-btn w-8 h-8 text-rose-600 bg-rose-50 hover:bg-rose-100"
+              [disabled]="order.status === 'Rejected'" (click)="rejected(order._id)" title="Reject Order">
+              <i class="bi bi-x-large text-sm"></i>
+            </button>
+            <button class="icon-btn w-8 h-8 text-amber-600 bg-amber-50 hover:bg-amber-100"
+              [disabled]="order.status === 'Pending'" (click)="pending(order._id)" title="Set to Pending">
+              <i class="bi bi-arrow-clockwise text-sm"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div *ngIf="!orders || orders.length === 0" class="p-12 text-center">

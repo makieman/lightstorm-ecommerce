@@ -65,7 +65,7 @@
       <!-- Products Table -->
       <div *ngIf="isCategoryExpanded(group._id || 'uncategorized')" class="category-content">
         <div class="overflow-x-auto">
-          <table class="w-full text-left border-collapse">
+          <table class="w-full text-left border-collapse hidden md:table">
             <thead>
               <tr class="bg-gray-50/50">
                 <th class="px-6 py-3 text-xs font-bold text-gray-400 uppercase tracking-widest">Product</th>
@@ -157,6 +157,72 @@
               </tr>
             </tbody>
           </table>
+
+          <!-- Mobile Stacked Layout (Card Style) -->
+          <div class="md:hidden flex flex-col divide-y divide-gray-100">
+            <div *ngFor="let product of group.products" class="p-4 hover:bg-gray-50/50 transition-colors group">
+              <!-- Product Info -->
+              <div class="flex gap-4 mb-3">
+                <img [src]="product.image" alt="product"
+                  class="w-16 h-16 rounded-xl object-cover border border-gray-100 shadow-sm shrink-0" />
+                <div class="flex-1 min-w-0">
+                  <h4 class="font-bold text-gray-900 text-sm whitespace-normal">{{ product.title }}</h4>
+                  <p class="text-[10px] text-gray-400 mt-1 line-clamp-2">{{ product.details }}</p>
+                  <div class="mt-2 font-bold text-green-700 text-xs">
+                    ${{ product.price }}
+                  </div>
+                </div>
+              </div>
+
+              <!-- Stock & Actions Row -->
+              <div class="flex items-center justify-between border-t border-gray-100 pt-3">
+                <!-- Stock Controller -->
+                <div class="flex items-center gap-2">
+                  <div *ngIf="!editingStock[product._id]" class="flex items-center gap-1.5">
+                    <span class="stock-badge py-0.5 px-2 text-[10px]" [class.stock-badge-ok]="!isLowStock(product)"
+                      [class.stock-badge-low]="isLowStock(product) && !isOutOfStock(product)"
+                      [class.stock-badge-out]="isOutOfStock(product)">
+                      <i *ngIf="isOutOfStock(product)" class="bi bi-x-circle-fill text-[8px]"></i>
+                      <i *ngIf="isLowStock(product) && !isOutOfStock(product)"
+                        class="bi bi-exclamation-triangle-fill text-[8px]"></i>
+                      Stock: {{ product.quantity }}
+                    </span>
+                    <button class="p-1 rounded-lg bg-gray-100 text-gray-600 active:bg-gray-200 transition-all"
+                      (click)="startEditStock(product._id)">
+                      <i class="bi bi-pencil text-[10px]"></i>
+                    </button>
+                  </div>
+
+                  <div *ngIf="editingStock[product._id]" class="flex items-center gap-1">
+                    <input type="number" [(ngModel)]="stockValues[product._id]" min="0"
+                      class="stock-input w-16 text-xs p-1 h-7" [disabled]="savingStock[product._id]" />
+                    <button class="p-1.5 rounded-lg bg-green-50 text-green-600 h-7 w-7 flex items-center justify-center"
+                      (click)="saveStock(product._id)">
+                      <i *ngIf="!savingStock[product._id]" class="bi bi-check-lg text-[10px]"></i>
+                      <div *ngIf="savingStock[product._id]" class="saving-spinner w-3 h-3 border-[1.5px]"></div>
+                    </button>
+                    <button class="p-1.5 rounded-lg bg-gray-50 text-gray-400 h-7 w-7 flex items-center justify-center"
+                      (click)="cancelEditStock(product._id, product.quantity)">
+                      <i class="bi bi-x-lg text-[10px]"></i>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="flex items-center gap-1">
+                  <button class="p-1.5 rounded-lg text-blue-600 bg-blue-50" (click)="viewProduct(product._id)">
+                    <i class="bi bi-eye text-[12px]"></i>
+                  </button>
+                  <button class="p-1.5 rounded-lg text-indigo-600 bg-indigo-50" (click)="editProduct(product._id)">
+                    <i class="bi bi-pencil-square text-[12px]"></i>
+                  </button>
+                  <button class="p-1.5 rounded-lg text-red-600 bg-red-50" (click)="deleteProduct(product._id)">
+                    <i class="bi bi-trash3 text-[12px]"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

@@ -21,7 +21,14 @@ import { SidebarComponent } from '../components/sidebar/sidebar.component';
   styleUrl: './admin.component.css',
 })
 export class AdminComponent {
+  sidebarOpen = false;
+
   constructor(private router: Router, private http: HttpClient) { }
+
+  toggleSidebar() {
+    this.sidebarOpen = !this.sidebarOpen;
+  }
+
   logout(): void {
     this.http
       .post(
