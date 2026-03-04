@@ -13,8 +13,8 @@ const solarTemplates = {
         wattage: '450W',
         voltage: '41.5V',
         images: [
-            'https://res.cloudinary.com/dh7osyxvl/image/upload/v1736683833/solar_panel_1_qxtw9x.jpg',
-            'https://res.cloudinary.com/dh7osyxvl/image/upload/v1736683833/solar_panel_2_v3m1f6.jpg'
+            'https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?q=80&w=800&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1613665813446-82a78c468a1d?q=80&w=800&auto=format&fit=crop'
         ]
     },
     'Chair': {
@@ -25,8 +25,8 @@ const solarTemplates = {
         voltage: '12V',
         batteryType: 'Lithium-Ion / LiFePO4',
         images: [
-            'https://res.cloudinary.com/dh7osyxvl/image/upload/v1736683833/battery_1_m5z1w6.jpg',
-            'https://res.cloudinary.com/dh7osyxvl/image/upload/v1736683833/battery_2_j9z1f2.jpg'
+            'https://images.unsplash.com/photo-1611333523212-6e3da8491f2e?q=80&w=800&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1593941707882-a5bba14938c7?q=80&w=800&auto=format&fit=crop'
         ]
     },
     'Sofa': {
@@ -37,8 +37,8 @@ const solarTemplates = {
         voltage: '24V/48V',
         wattage: '3000W',
         images: [
-            'https://res.cloudinary.com/dh7osyxvl/image/upload/v1736683833/inverter_1_k9z1f4.jpg',
-            'https://res.cloudinary.com/dh7osyxvl/image/upload/v1736683833/inverter_2_l9z1f5.jpg'
+            'https://images.unsplash.com/photo-1620288627223-53302f4e8c74?q=80&w=800&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1592833159155-c62df1b35624?q=80&w=800&auto=format&fit=crop'
         ]
     }
 };

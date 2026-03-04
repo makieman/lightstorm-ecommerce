@@ -9,7 +9,8 @@
 
         <div class="relative h-36 sm:h-48 md:h-64 bg-slate-50 overflow-hidden shrink-0">
           <img [src]="product.image" [alt]="product.title"
-            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+            (error)="$event.target.src='assets/images/placeholder-product.png'">
 
           <!-- Badges -->
           <div class="absolute top-2 left-2 md:top-4 md:left-4 flex flex-col gap-2">

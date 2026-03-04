@@ -16,7 +16,7 @@ const initialData = [
                 quantity: 50,
                 wattage: '450W',
                 voltage: '41.5V',
-                image: 'https://res.cloudinary.com/dh7osyxvl/image/upload/v1736683833/solar_panel_1_qxtw9x.jpg'
+                image: 'https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?q=80&w=800&auto=format&fit=crop'
             },
             {
                 title: 'High-Efficiency 550W Module',
@@ -25,7 +25,7 @@ const initialData = [
                 quantity: 30,
                 wattage: '550W',
                 voltage: '42.0V',
-                image: 'https://res.cloudinary.com/dh7osyxvl/image/upload/v1736683833/solar_panel_2_v3m1f6.jpg'
+                image: 'https://images.unsplash.com/photo-1613665813446-82a78c468a1d?q=80&w=800&auto=format&fit=crop'
             }
         ]
     },
@@ -40,7 +40,7 @@ const initialData = [
                 quantity: 20,
                 voltage: '12V',
                 batteryType: 'Lithium-Ion',
-                image: 'https://res.cloudinary.com/dh7osyxvl/image/upload/v1736683833/battery_1_m5z1w6.jpg'
+                image: 'https://images.unsplash.com/photo-1611333523212-6e3da8491f2e?q=80&w=800&auto=format&fit=crop'
             },
             {
                 title: 'LiFePO4 Power Storage 5kWh',
@@ -49,7 +49,7 @@ const initialData = [
                 quantity: 10,
                 voltage: '48V',
                 batteryType: 'LiFePO4',
-                image: 'https://res.cloudinary.com/dh7osyxvl/image/upload/v1736683833/battery_2_j9z1f2.jpg'
+                image: 'https://images.unsplash.com/photo-1593941707882-a5bba14938c7?q=80&w=800&auto=format&fit=crop'
             }
         ]
     },
@@ -64,7 +64,7 @@ const initialData = [
                 quantity: 15,
                 voltage: '24V',
                 wattage: '3000W',
-                image: 'https://res.cloudinary.com/dh7osyxvl/image/upload/v1736683833/inverter_1_k9z1f4.jpg'
+                image: 'https://images.unsplash.com/photo-1620288627223-53302f4e8c74?q=80&w=800&auto=format&fit=crop'
             }
         ]
     }

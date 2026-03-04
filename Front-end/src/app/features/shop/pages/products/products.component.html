@@ -116,7 +116,8 @@
               </svg>
             </button>
             <div class="product-cell image" (click)="navigateToProductDetails(product._id)">
-              <img [src]="product.image" alt="product">
+              <img [src]="product.image" alt="product"
+                (error)="$event.target.src='assets/images/placeholder-product.png'">
             </div>
             <div class="LargeViewData">
               <div class="product-cell category">
