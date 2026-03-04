@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const fs = require('fs');
 
 const cors = require('cors');
 const mongoose = require('mongoose');
@@ -58,14 +59,17 @@ app.use('/api/orders', orderRoutes);
 app.use('/api/ai', aiRoutes);
 app.use('/api/admin', adminRoutes);
 
-// Serve static files from the Angular app
-const frontendPath = path.join(__dirname, '../../Front-end/dist/lightstorm-ecommerce/browser');
-app.use(express.static(frontendPath));
+// Health check endpoint for deployment verification
+app.get('/health', (req, res) => res.json({ status: 'ok', timestamp: new Date().toISOString() }));
 
-// Catch-all route to serve the Angular app's index.html
-app.get('*', (req, res) => {
-  res.sendFile(path.join(frontendPath, 'index.html'));
-});
+// Serve static files ONLY if the dist folder exists (not needed when frontend is on Vercel)
+const frontendPath = path.join(__dirname, '../../Front-end/dist/lightstorm-ecommerce/browser');
+if (fs.existsSync(frontendPath)) {
+  app.use(express.static(frontendPath));
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(frontendPath, 'index.html'));
+  });
+}
 
 
 
