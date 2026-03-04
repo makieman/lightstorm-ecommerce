@@ -7,7 +7,7 @@ import {
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { MatDialog } from '@angular/material/dialog';
 import { UserServiceService } from '../../../../../../core/services/user-service.service';
 import { OrderServiceService } from '../../../../../../core/services/order-service.service';
@@ -17,7 +17,7 @@ import { OrderServiceService } from '../../../../../../core/services/order-servi
   templateUrl: './info-dialog.component.html',
   styleUrls: ['./info-dialog.component.css'],
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, HttpClientModule],
+  imports: [CommonModule, ReactiveFormsModule],
 })
 export class InfoDialogComponent implements OnInit {
   personalInfoForm!: FormGroup;
@@ -38,7 +38,7 @@ export class InfoDialogComponent implements OnInit {
     private dialog: MatDialog,
     private http: HttpClient,
     private orderService: OrderServiceService
-  ) {}
+  ) { }
 
   passwordMatchValidator(frm: FormGroup) {
     return frm.controls['password'].value ===
@@ -84,7 +84,7 @@ export class InfoDialogComponent implements OnInit {
             //password: data.password
           });
         },
-        error: (error) => {},
+        error: (error) => { },
       });
   }
 

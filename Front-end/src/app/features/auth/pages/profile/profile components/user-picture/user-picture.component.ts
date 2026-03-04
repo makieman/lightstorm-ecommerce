@@ -1,19 +1,19 @@
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { UserServiceService } from '../../../../../../core/services/user-service.service';
 
 @Component({
   selector: 'app-user-picture',
   standalone: true,
-  imports: [HttpClientModule],
+  imports: [],
   templateUrl: './user-picture.component.html',
   styleUrl: './user-picture.component.css'
 })
-export class UserPictureComponent implements OnInit{
+export class UserPictureComponent implements OnInit {
   userInfo: any;
-  id:any;
-  image:any;
-  constructor(private userService: UserServiceService,private http: HttpClient){} // Corrected the naming of matDialog
+  id: any;
+  image: any;
+  constructor(private userService: UserServiceService, private http: HttpClient) { } // Corrected the naming of matDialog
 
 
   ngOnInit() {
@@ -34,19 +34,19 @@ export class UserPictureComponent implements OnInit{
   //   });
   // }
 
-  authSingleProducts(){
+  authSingleProducts() {
     this.http.get<any>("/api/users/user/user", { withCredentials: true })
-    .subscribe({
-      next: (response) => {
+      .subscribe({
+        next: (response) => {
           this.id = response.data._id;
-          this.image=response.data.image;
-          this.userInfo=response.data;
+          this.image = response.data.image;
+          this.userInfo = response.data;
           console.log('User Info:', this.userInfo);
-      },
-      error: (error) => {
+        },
+        error: (error) => {
           console.error('Error fetching user data', error);
-      }
-    });
+        }
+      });
   }
 
 

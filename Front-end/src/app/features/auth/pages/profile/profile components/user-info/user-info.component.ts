@@ -6,7 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog'; // Import MatDialog here
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { UserServiceService } from '../../../../../../core/services/user-service.service';
 
 
@@ -20,16 +20,16 @@ import { UserServiceService } from '../../../../../../core/services/user-service
     MatInputModule,
     FormsModule,
     MatDialogModule,
-    HttpClientModule,
+
 
   ],
   templateUrl: './user-info.component.html',
   styleUrls: ['./user-info.component.css'] // Correct styleUrl to styleUrls
 })
-export class UserInfoComponent implements OnInit{
+export class UserInfoComponent implements OnInit {
   userInfo: any;
-  id:any;
-  constructor(private matDialog: MatDialog,private userService: UserServiceService,private http: HttpClient){} // Corrected the naming of matDialog
+  id: any;
+  constructor(private matDialog: MatDialog, private userService: UserServiceService, private http: HttpClient) { } // Corrected the naming of matDialog
 
 
   ngOnInit() {
@@ -48,23 +48,23 @@ export class UserInfoComponent implements OnInit{
   // }
 
 
-  openDialog(){
+  openDialog() {
     this.matDialog.open(InfoDialogComponent, { // Use the open method of MatDialog
       width: '1200px', height: '650px'
     });
   }
 
-  authSingleProducts(){
+  authSingleProducts() {
     this.http.get<any>("/api/users/user/user", { withCredentials: true })
-    .subscribe({
-      next: (response) => {
+      .subscribe({
+        next: (response) => {
           this.id = response.data._id;
-          this.userInfo=response.data;
-      },
-      error: (error) => {
+          this.userInfo = response.data;
+        },
+        error: (error) => {
 
 
-      }
-    });
+        }
+      });
   }
 }

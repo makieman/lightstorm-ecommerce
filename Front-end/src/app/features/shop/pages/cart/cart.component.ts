@@ -2,7 +2,7 @@ import { CoreProductService } from '@app/core/services/core-product.service';
 import { CartService } from '@app/core/services/cart.service';
 import { Component, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
-import { HttpClient, HttpClientModule } from '@angular/common/http'; // Import HttpClientModule
+import { HttpClient } from '@angular/common/http'; // Import HttpClientModule
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Observable, map } from 'rxjs';
@@ -12,7 +12,6 @@ import { CartItem, cartState } from '@app/core/models/cart.models';
   selector: 'app-cart',
   standalone: true,
   imports: [
-    HttpClientModule,
     CommonModule,
     FormsModule,
     RouterModule

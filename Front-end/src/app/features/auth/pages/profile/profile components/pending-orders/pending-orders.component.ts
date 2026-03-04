@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialogModule } from '@angular/material/dialog';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { OrderDialogComponent } from '../order-dialog/order-dialog.component';
 import { CommonModule } from '@angular/common';
 import { UserServiceService } from '@app/core/services/user-service.service';
@@ -16,7 +16,7 @@ import { OrderServiceService } from '@app/core/services/order-service.service';
     MatButtonModule,
     MatIconModule,
     MatDialogModule,
-    HttpClientModule,
+
     CommonModule
   ],
   templateUrl: './pending-orders.component.html',

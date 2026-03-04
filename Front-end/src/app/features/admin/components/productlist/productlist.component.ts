@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { CoreProductService } from '@app/core/services/core-product.service';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
@@ -14,7 +14,7 @@ import { GroupedProducts } from '@app/features/shop/pages/products/product.model
 @Component({
   selector: 'app-productlist',
   standalone: true,
-  imports: [RouterModule, HttpClientModule, CommonModule, FormsModule],
+  imports: [RouterModule, CommonModule, FormsModule],
   templateUrl: './productlist.component.html',
   styleUrl: './productlist.component.css',
 })

@@ -1,14 +1,14 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Observable, forkJoin } from 'rxjs';
-import { HttpClientModule } from '@angular/common/http';
+
 import { CommonModule } from '@angular/common';
 import { CoreProductService } from '@app/core/services/core-product.service';
 
 @Component({
   selector: 'app-order-dialog',
   standalone: true,
-  imports: [HttpClientModule, CommonModule],
+  imports: [CommonModule],
   templateUrl: './order-dialog.component.html',
   styleUrls: ['./order-dialog.component.css']
 })

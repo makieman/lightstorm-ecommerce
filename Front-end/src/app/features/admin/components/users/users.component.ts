@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { UserService } from '../../admin/Services/user.service';
 import { CommonModule } from '@angular/common';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { MatDialog } from '@angular/material/dialog';
 import { ViewUserComponent } from './view-user/view-user.component';
 import { EditUserComponent } from './edit-user/edit-user.component';
@@ -12,7 +12,7 @@ import Swal from 'sweetalert2';
 @Component({
   selector: 'app-users',
   standalone: true,
-  imports: [RouterModule, HttpClientModule, CommonModule],
+  imports: [RouterModule, CommonModule],
   templateUrl: './users.component.html',
   styleUrl: './users.component.css',
   providers: [UserService],
@@ -23,7 +23,7 @@ export class UsersComponent {
     private dialog: MatDialog,
     private router: Router,
     private http: HttpClient
-  ) {}
+  ) { }
 
   users: any;
   userId: any;

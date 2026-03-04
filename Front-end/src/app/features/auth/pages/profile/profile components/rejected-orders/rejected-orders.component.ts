@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialogModule } from '@angular/material/dialog';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { OrderDialogComponent } from '../order-dialog/order-dialog.component';
 import { CommonModule } from '@angular/common';
 import { UserServiceService } from '../../../../../../core/services/user-service.service';
@@ -16,7 +16,7 @@ import { OrderServiceService } from '../../../../../../core/services/order-servi
     MatButtonModule,
     MatIconModule,
     MatDialogModule,
-    HttpClientModule,
+
     CommonModule
   ],
   templateUrl: './rejected-orders.component.html',
@@ -24,14 +24,14 @@ import { OrderServiceService } from '../../../../../../core/services/order-servi
 })
 export class RejectedOrdersComponent implements OnInit {
   rejectedOrders: any[] = [];
-  id:any;
+  id: any;
 
   constructor(
-    private user:UserServiceService,
+    private user: UserServiceService,
     private orderService: OrderServiceService,
     private matDialog: MatDialog,
     private http: HttpClient
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.authSingleProducts();
@@ -61,18 +61,18 @@ export class RejectedOrdersComponent implements OnInit {
     });
   }
 
-  authSingleProducts(){
+  authSingleProducts() {
     this.http.get<any>("/api/users/user/user", { withCredentials: true })
-    .subscribe({
-      next: (response: any) => {
+      .subscribe({
+        next: (response: any) => {
           this.id = response.data._id;
           console.log(this.id);
           console.log(response.data._id);
           this.loadRejectedOrders();
-      },
-      error: (error) => {
-      }
-    });
+        },
+        error: (error) => {
+        }
+      });
   }
 
 }

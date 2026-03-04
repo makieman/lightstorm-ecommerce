@@ -5,7 +5,7 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { FieldsetModule } from 'primeng/fieldset';
 import { CoreProductService } from '@app/core/services/core-product.service';
 import { CartService } from '@app/core/services/cart.service';
-import { HttpClientModule } from '@angular/common/http';
+
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { OneProductComponent } from './one-product/one-product.component';
@@ -38,7 +38,7 @@ export interface Product {
     MatButtonToggleModule,
     FormsModule,
     FieldsetModule,
-    HttpClientModule,
+
     CommonModule,
     MatIconModule,
     RouterModule,

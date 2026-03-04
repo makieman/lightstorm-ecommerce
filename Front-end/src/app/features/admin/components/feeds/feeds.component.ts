@@ -8,13 +8,13 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { OrderService } from '../../admin/Services/order.service';
-import { HttpClientModule } from '@angular/common/http';
+
 import { UserService } from '../../admin/Services/user.service';
 
 @Component({
   selector: 'app-feeds',
   standalone: true,
-  imports: [CommonModule, HttpClientModule],
+  imports: [CommonModule],
   templateUrl: './feeds.component.html',
   styleUrl: './feeds.component.css',
   providers: [OrderService, UserService],
@@ -31,7 +31,7 @@ export class FeedsComponent implements OnInit {
   constructor(
     private myorderService: OrderService,
     private userService: UserService
-  ) {}
+  ) { }
   ngOnInit() {
     this.userService.getUsers().subscribe(
       (data: any) => {

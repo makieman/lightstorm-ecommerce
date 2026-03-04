@@ -2,14 +2,14 @@ import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { CoreProductService } from '@app/core/services/core-product.service';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-edit-product-dialog',
   standalone: true,
-  imports: [ReactiveFormsModule, HttpClientModule],
+  imports: [ReactiveFormsModule],
   templateUrl: './edit-product-dialog.component.html',
   styleUrl: './edit-product-dialog.component.css',
 })

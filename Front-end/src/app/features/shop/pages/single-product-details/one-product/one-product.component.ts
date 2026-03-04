@@ -9,7 +9,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { CoreProductService } from '@app/core/services/core-product.service';
 import { CartProductsCountService } from '../../../../../../app/core/services/cart-products-count.service';
 import Swal from 'sweetalert2';
-import { HttpClientModule } from '@angular/common/http';
+
 
 
 
@@ -18,7 +18,7 @@ import { HttpClientModule } from '@angular/common/http';
   standalone: true,
   imports: [
     MatIconModule,
-    HttpClientModule,
+
   ],
   templateUrl: './one-product.component.html',
   styleUrl: './one-product.component.css'
@@ -48,7 +48,7 @@ export class OneProductComponent {
   selector: 'app-product-alert',
   templateUrl: 'product-alert.component.html',
   standalone: true,
-  imports: [MatDialogModule, MatButtonModule, MatIconModule, FormsModule, HttpClientModule],
+  imports: [MatDialogModule, MatButtonModule, MatIconModule, FormsModule],
   styleUrl: './product-alert.component.css'
 })
 export class DialogContentExampleDialog {

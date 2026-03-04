@@ -1,12 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { OrderService } from '../../admin/Services/order.service';
-import { HttpClientModule } from '@angular/common/http';
+
 
 @Component({
   selector: 'app-top-cards',
   standalone: true,
-  imports: [CommonModule, HttpClientModule],
+  imports: [CommonModule],
   providers: [OrderService],
   templateUrl: './top-cards.component.html',
   styleUrl: './top-cards.component.css',
@@ -24,7 +24,7 @@ export class TopCardsComponent implements OnInit {
   topcards: any;
   dailySales: any;
   totalDailySales = 0;
-  constructor(private myorderService: OrderService) {}
+  constructor(private myorderService: OrderService) { }
 
   ngOnInit() {
     this.myorderService.weeklyOrders().subscribe(

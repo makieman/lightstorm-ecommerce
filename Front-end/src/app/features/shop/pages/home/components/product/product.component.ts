@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { HttpClientModule } from '@angular/common/http';
+
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
@@ -134,7 +134,7 @@ export class ProductComponent implements OnInit {
   selector: 'app-product-alert',
   templateUrl: '../../../single-product-details/one-product/product-alert.component.html',
   standalone: true,
-  imports: [MatDialogModule, MatButtonModule, MatIconModule, FormsModule, HttpClientModule],
+  imports: [MatDialogModule, MatButtonModule, MatIconModule, FormsModule],
   styleUrl: '../../../single-product-details/one-product/product-alert.component.css'
 })
 export class DialogContentExampleDialog {

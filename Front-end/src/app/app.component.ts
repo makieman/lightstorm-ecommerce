@@ -4,8 +4,8 @@ import { HeaderComponent } from './shared/components/header/header.component';
 import { FooterComponent } from './shared/components/footer/footer.component';
 import { LoginComponent } from './features/auth/pages/login/login.component';
 import { RegisterComponent } from './features/auth/pages/register/register.component';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {HttpClientModule} from '@angular/common/http';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
 
 @Component({
   selector: 'app-root',
@@ -16,7 +16,7 @@ import {HttpClientModule} from '@angular/common/http';
     FooterComponent,
     FormsModule,
     ReactiveFormsModule
-],
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

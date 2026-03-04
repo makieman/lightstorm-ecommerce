@@ -4,13 +4,13 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
+
 import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-create-user',
   standalone: true,
-  imports: [ReactiveFormsModule, HttpClientModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './create-user.component.html',
   styleUrl: './create-user.component.css',
   providers: [UserService],

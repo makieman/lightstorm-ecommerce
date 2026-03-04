@@ -1,13 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { OrderService } from '../../admin/Services/order.service';
-import { HttpClientModule } from '@angular/common/http';
+
 import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-orders',
   standalone: true,
-  imports: [CommonModule, HttpClientModule, MatIconModule],
+  imports: [CommonModule, MatIconModule],
   templateUrl: './orders.component.html',
   styleUrl: './orders.component.css',
   providers: [OrderService],
@@ -17,7 +17,7 @@ export class OrdersComponent implements OnInit {
   image =
     'https://res.cloudinary.com/dh7osyxvl/image/upload/v1714652925/ssokevooyjmtitnpcctn.png';
   dateFormat: any;
-  constructor(private myorderService: OrderService) {}
+  constructor(private myorderService: OrderService) { }
 
   getOrderDateDifference(date: any): number {
     const orderDate: number = new Date(date).getTime();

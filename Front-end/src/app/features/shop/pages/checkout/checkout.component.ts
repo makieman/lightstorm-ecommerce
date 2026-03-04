@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UserService } from './user.service';
 import { User } from './user.model';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
+
 import { CoreProductService } from '@app/core/services/core-product.service';
 import { Product } from '../products//product.model';
 import { Router } from '@angular/router';
@@ -12,7 +12,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 @Component({
   selector: 'app-checkout',
   standalone: true,
-  imports: [CommonModule, HttpClientModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './checkout.component.html',
   styleUrls: ['./checkout.component.css']
 })

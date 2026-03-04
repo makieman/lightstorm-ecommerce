@@ -2,14 +2,14 @@ import { Component, AfterViewInit, OnInit } from '@angular/core';
 import { UserService } from '../checkout/user.service';
 import { CoreProductService } from '@app/core/services/core-product.service';
 import { Router } from '@angular/router';
-import { HttpClientModule } from '@angular/common/http';
+
 import { CommonModule } from '@angular/common';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-payment',
   standalone: true,
-  imports: [CommonModule, HttpClientModule],
+  imports: [CommonModule],
   templateUrl: './payment.component.html',
   styleUrls: ['./payment.component.css'],
 })

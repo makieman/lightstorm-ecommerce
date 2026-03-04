@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
@@ -8,7 +8,7 @@ import Swal from 'sweetalert2';
 @Component({
     selector: 'app-verify-email',
     standalone: true,
-    imports: [CommonModule, HttpClientModule, RouterModule, FormsModule],
+    imports: [CommonModule, RouterModule, FormsModule],
     templateUrl: './verify-email.component.html',
     styleUrl: './verify-email.component.css',
 })
