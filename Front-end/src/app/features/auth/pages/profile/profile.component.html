@@ -1,39 +1,62 @@
-<body>
-  <div class="container">
-    <div class="main-body">
-      <div class="row mb-3">
-        <div class="col-lg-11 col-md-10 col-sm-10 mt-3">
-          <h1 style="font-size:xx-large; font-weight:500;" class="d-flex">My Account</h1>
+<section class="profile-page min-h-screen px-4 py-6 sm:px-6 lg:px-8 lg:py-10">
+  <div class="mx-auto max-w-7xl space-y-6">
+    <div class="profile-hero overflow-hidden rounded-[32px] border border-white/60 p-6 shadow-[0_20px_60px_rgba(15,23,42,0.1)] sm:p-8 lg:p-10">
+      <div class="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+        <div class="max-w-2xl">
+          <p class="text-xs font-black uppercase tracking-[0.32em] text-[var(--brand-lime)]">Account Center</p>
+          <h1 class="mt-3 text-3xl font-black tracking-tight text-[var(--brand-navy)] sm:text-4xl">Manage your Lightstorm profile</h1>
+          <p class="mt-3 text-sm leading-6 text-slate-600 sm:text-base">Review your account details, monitor pending work, and keep track of accepted or rejected orders from one responsive dashboard.</p>
         </div>
-        <div class="col-lg-1 col-md-2 col-sm-2" style="margin-right: 10px;">
-            <form action="post">
-                <button class="btn btn-danger d-flex justify-content-end mb-3" (click)="logout()">Logout</button>
-            </form>
-        </div>
+
+        <button
+          type="button"
+          class="inline-flex items-center justify-center gap-3 self-start rounded-full bg-[var(--brand-coral)] px-5 py-3 text-sm font-black uppercase tracking-[0.18em] text-white shadow-[0_14px_32px_rgba(239,68,68,0.22)] transition-transform hover:-translate-y-0.5"
+          (click)="logout()">
+          <i class="bi bi-box-arrow-right text-base"></i>
+          <span>Logout</span>
+        </button>
       </div>
-      <!-- <hr style="height: 5px; background-color: black; border: black;"> -->
-          <div class="row gutters-sm">
-            <div class="col-md-4 mb-3">
-              <app-user-picture></app-user-picture>
-              <div class="mt-5">
-                <app-pending-orders></app-pending-orders>
-              </div>
-            </div>
-
-            <div class="col-md-8">
-              <div class="mb-3">
-                <app-user-info></app-user-info>
-              </div>
-              <div class="mb-3">
-                <app-accepted-orders></app-accepted-orders>
-              </div>
-              <div class="mb-3">
-                <app-rejected-orders></app-rejected-orders>
-              </div>
-
-            </div>
-          </div>
-        </div>
     </div>
 
-</body>
+    <div class="grid gap-6 lg:grid-cols-[minmax(0,340px)_minmax(0,1fr)] xl:gap-8">
+      <div class="space-y-6">
+        <div class="profile-slot rounded-[28px] p-4 shadow-[0_18px_45px_rgba(15,23,42,0.08)] sm:p-5">
+          <app-user-picture></app-user-picture>
+        </div>
+        <div class="profile-slot rounded-[28px] p-4 shadow-[0_18px_45px_rgba(15,23,42,0.08)] sm:p-5">
+          <div class="mb-4 px-1">
+            <p class="text-xs font-black uppercase tracking-[0.26em] text-slate-400">Order Queue</p>
+            <h2 class="mt-2 text-xl font-black text-[var(--brand-navy)]">Pending activity</h2>
+          </div>
+          <app-pending-orders></app-pending-orders>
+        </div>
+      </div>
+
+      <div class="space-y-6">
+        <div class="profile-slot rounded-[28px] p-4 shadow-[0_18px_45px_rgba(15,23,42,0.08)] sm:p-5">
+          <div class="mb-4 px-1">
+            <p class="text-xs font-black uppercase tracking-[0.26em] text-slate-400">Profile</p>
+            <h2 class="mt-2 text-xl font-black text-[var(--brand-navy)]">Your information</h2>
+          </div>
+          <app-user-info></app-user-info>
+        </div>
+
+        <div class="profile-slot rounded-[28px] p-4 shadow-[0_18px_45px_rgba(15,23,42,0.08)] sm:p-5">
+          <div class="mb-4 px-1">
+            <p class="text-xs font-black uppercase tracking-[0.26em] text-slate-400">History</p>
+            <h2 class="mt-2 text-xl font-black text-[var(--brand-navy)]">Accepted orders</h2>
+          </div>
+          <app-accepted-orders></app-accepted-orders>
+        </div>
+
+        <div class="profile-slot rounded-[28px] p-4 shadow-[0_18px_45px_rgba(15,23,42,0.08)] sm:p-5">
+          <div class="mb-4 px-1">
+            <p class="text-xs font-black uppercase tracking-[0.26em] text-slate-400">Exceptions</p>
+            <h2 class="mt-2 text-xl font-black text-[var(--brand-navy)]">Rejected orders</h2>
+          </div>
+          <app-rejected-orders></app-rejected-orders>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

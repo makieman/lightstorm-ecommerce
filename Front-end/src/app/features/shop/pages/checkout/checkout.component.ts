@@ -29,7 +29,6 @@ export class CheckoutComponent implements OnInit {
 
   ngOnInit(): void {
     this.userForm = this.formBuilder.group({
-      fullName: ['', Validators.required],
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       email: ['', Validators.required],
@@ -44,7 +43,6 @@ export class CheckoutComponent implements OnInit {
       this.userService.getUserById(userId).subscribe(user => {
         this.user = user;
         this.userForm.patchValue({
-          fullName: user.username,
           email: user.email
         });
       });
@@ -58,43 +56,30 @@ export class CheckoutComponent implements OnInit {
   }
 
   loadProducts() {
+    this.products = [];
     let totalPrice = 0;
-    let totalQuantity = 0;
-    const deliveryCost = 200;
-    const totalElement = document.querySelector('.total');
-
-    if (totalElement) {
+    if (this.cart?.cart?.length) {
       this.cart.cart.forEach((item: { product: string, quantity: number }) => {
         this.productService.getProductById(item.product).subscribe({
           next: (product: Product) => {
             this.products.push(product);
             totalPrice += product.price * item.quantity;
             this.cartState.totalprice = totalPrice;
-            totalQuantity += item.quantity;
           },
           error: (error) => {
             console.log(error);
           }
         });
       });
-
-      // Update total price and total quantity in the DOM after all products are loaded
-      this.productService.getProductById(this.cart.cart[0].product).subscribe(() => {
-        const totalItems = this.products.length;
-        totalElement.innerHTML = `
-          <span style='float:left;'>
-            <div class='thin dense'>Total Items</div>
-            <div class='thin dense'>Delivery</div>
-            TOTAL
-          </span>
-          <span style='float:right; text-align:right;'>
-            <div class='thin dense'>${totalQuantity}</div> <!-- Use totalQuantity instead of totalItems -->
-            <div class='thin dense'>KSH ${deliveryCost.toFixed(2)}</div>
-            KSH ${(totalPrice + deliveryCost).toFixed(2)}
-          </span>
-        `;
-      });
     }
+  }
+
+  get shippingFee(): number {
+    return this.cart?.cart?.length ? 200 : 0;
+  }
+
+  get grandTotal(): number {
+    return (this.cartState.totalprice || 0) + this.shippingFee;
   }
 
 

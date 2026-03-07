@@ -53,10 +53,16 @@ export class CartComponent implements OnInit {
     this.showCouponForm = !this.showCouponForm;
   }
 
+  get shippingFee(): number {
+    return this.cart.length === 0 ? 0 : 200;
+  }
+
+  get grandTotal(): number {
+    return this.cartState.totalprice + this.shippingFee;
+  }
+
 
   onUpdateCountry() {
-    const selectedElement = document.getElementById('country') as HTMLSelectElement;
-    this.selectedCountry = selectedElement.value;
     localStorage.setItem('selectedCountry', this.selectedCountry);
   }
 

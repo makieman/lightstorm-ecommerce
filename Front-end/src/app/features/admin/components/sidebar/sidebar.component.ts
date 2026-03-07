@@ -20,16 +20,13 @@ import { CommonModule } from '@angular/common';
       [class.-translate-x-full]="!isOpen"
       [class.translate-x-0]="isOpen">
       
-      <div class="p-6 flex items-center justify-between">
-        <a [routerLink]="['/']" class="flex items-center gap-3">
-          <img src="assets/lightstorm logo.png" alt="Lightstorm Logo" class="app-logo h-[40px]">
-        </a>
+      <div class="sidebar-topbar p-4 md:p-5 flex items-center justify-end">
         <button class="md:hidden text-slate-500 hover:text-slate-800 p-2" (click)="closeSidebar()">
           <i class="bi bi-x-lg text-xl"></i>
         </button>
       </div>
 
-      <nav class="flex-1 px-4 mt-6 space-y-2 overflow-y-auto">
+      <nav class="flex-1 px-4 mt-2 md:mt-4 space-y-2 overflow-y-auto">
         <a routerLink="/admin" [routerLinkActiveOptions]="{exact: true}" routerLinkActive="active-link" class="nav-item" (click)="closeSidebar()">
           <i class="bi bi-grid-1x2-fill"></i>
           <span>Dashboard</span>
@@ -84,6 +81,9 @@ import { CommonModule } from '@angular/common';
       border: none;
       background: transparent;
       cursor: pointer;
+    }
+    .sidebar-topbar {
+      min-height: 4.5rem;
     }
   `]
 })

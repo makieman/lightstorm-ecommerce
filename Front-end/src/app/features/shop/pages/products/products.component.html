@@ -1,144 +1,209 @@
-<div class="app-container">
-  <div class="sidebar">
-    <ul class="sidebar-list">
-      <li class="sidebar-list-item active">
-        <a routerLink="/products">
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-            class="feather feather-shopping-bag">
-            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
-            <line x1="3" y1="6" x2="21" y2="6" />
-            <path d="M16 10a4 4 0 0 1-8 0" />
-          </svg>
-          <span>Solar Solutions</span>
-        </a>
-      </li>
-      <li>
-        <div class="filter-button-wrapper">
-          <div class="filter-by-price">
-            <br>
-            <div class="filter-menu-buttons">
-              <input class="search-bar" placeholder="Search Solutions.." type="text" (input)="applyNameFilter($event)">
+<div class="products-shell min-h-screen bg-[var(--surface-page)] py-6 sm:py-8 lg:py-12">
+  <div class="mx-auto flex w-full max-w-7xl gap-6 px-4 md:px-12">
+    <div class="products-backdrop lg:hidden" *ngIf="isFilterDrawerOpen" (click)="closeFilterDrawer()"></div>
+
+    <aside class="products-sidebar hidden lg:flex lg:w-[300px] lg:flex-col lg:shrink-0">
+      <div class="products-panel sticky top-28 space-y-6 rounded-[28px] p-6 shadow-[0_18px_50px_rgba(15,23,42,0.08)]">
+        <div>
+          <p class="text-xs font-black uppercase tracking-[0.3em] text-[var(--brand-lime)]">Browse</p>
+          <h2 class="mt-3 text-2xl font-black text-[var(--brand-navy)]">Solar Solutions</h2>
+          <p class="mt-2 text-sm leading-6 text-slate-500">Filter by category, budget, and search phrase to narrow the catalogue quickly.</p>
+        </div>
+
+        <div class="space-y-4">
+          <label class="products-label" for="products-search-desktop">Search solutions</label>
+          <input id="products-search-desktop" [(ngModel)]="searchTerm" class="products-search-input" type="search" placeholder="   Panels, inverters, batteries" />
+        </div>
+
+        <div class="space-y-3">
+          <label class="products-label" for="products-category-desktop">Category</label>
+          <select id="products-category-desktop" [(ngModel)]="selectedCategory" class="products-select">
+            <option value="All Categories">All Categories</option>
+            <option *ngFor="let category of categories" [value]="category.value">{{ category.label }}</option>
+          </select>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div class="space-y-2">
+            <label class="products-label" for="min-price-desktop">Min price</label>
+            <input id="min-price-desktop" [(ngModel)]="minPrice" class="products-price-input" type="number" placeholder="0" />
+          </div>
+          <div class="space-y-2">
+            <label class="products-label" for="max-price-desktop">Max price</label>
+            <input id="max-price-desktop" [(ngModel)]="maxPrice" class="products-price-input" type="number" placeholder="500000" />
+          </div>
+        </div>
+
+        <div class="space-y-3">
+          <label class="products-label" for="sort-desktop">Sort by</label>
+          <select id="sort-desktop" [(ngModel)]="sortOption" class="products-select">
+            <option value="-createdAt">Newest first</option>
+            <option value="price">Price: low to high</option>
+            <option value="-price">Price: high to low</option>
+            <option value="title">Name: A to Z</option>
+          </select>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3 pt-2">
+          <button class="products-secondary-button" type="button" (click)="clearAllFilters()">Reset</button>
+          <button class="products-primary-button" type="button" (click)="applyFilters()">Apply</button>
+        </div>
+      </div>
+    </aside>
+
+    <aside class="products-drawer lg:hidden" [class.open]="isFilterDrawerOpen" aria-label="Product filters">
+      <div class="products-panel h-full overflow-y-auto rounded-t-[28px] p-5 shadow-[0_-18px_45px_rgba(15,23,42,0.16)]">
+        <div class="mb-6 flex items-center justify-between gap-4">
+          <div>
+            <p class="text-xs font-black uppercase tracking-[0.28em] text-[var(--brand-lime)]">Filters</p>
+            <h2 class="mt-2 text-xl font-black text-[var(--brand-navy)]">Find your fit</h2>
+          </div>
+          <button class="products-icon-button" type="button" (click)="closeFilterDrawer()" aria-label="Close filters">
+            <i class="bi bi-x-lg"></i>
+          </button>
+        </div>
+
+        <div class="space-y-5">
+          <div class="space-y-3">
+            <label class="products-label" for="products-search-mobile">Search solutions</label>
+            <input id="products-search-mobile" [(ngModel)]="searchTerm" class="products-search-input" type="search" placeholder="   Panels, inverters, batteries" />
+          </div>
+
+          <div class="space-y-3">
+            <label class="products-label" for="products-category-mobile">Category</label>
+            <select id="products-category-mobile" [(ngModel)]="selectedCategory" class="products-select">
+              <option value="All Categories">All Categories</option>
+              <option *ngFor="let category of categories" [value]="category.value">{{ category.label }}</option>
+            </select>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div class="space-y-2">
+              <label class="products-label" for="min-price-mobile">Min price</label>
+              <input id="min-price-mobile" [(ngModel)]="minPrice" class="products-price-input" type="number" placeholder="0" />
             </div>
-            <br>
-            <label style="margin-left: 6px; margin-bottom: 2px;">Price Range</label>
-            <div class="price-filter">
-              <input type="number" placeholder="Min Price" [(ngModel)]="minPrice" (keyup)="applyPriceFilter()">
-              <input type="number" placeholder="Max Price" [(ngModel)]="maxPrice" (keyup)="applyPriceFilter()">
-            </div>
-            <div class="filter-menu-buttons">
-              <button style="margin-left: 6px; margin-top: 5px;" class="filter-button reset"
-                (click)="resetPriceFilter()">Reset</button>
+            <div class="space-y-2">
+              <label class="products-label" for="max-price-mobile">Max price</label>
+              <input id="max-price-mobile" [(ngModel)]="maxPrice" class="products-price-input" type="number" placeholder="500000" />
             </div>
           </div>
-          <br>
-          <button class="action-button filter jsFilter" style="margin: 10px; border: 1px solid #f3f3f3;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-              class="feather feather-filter" style="margin-right: 8px;">
-              <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
-            </svg>
-            <span style="margin-right: 20px;">Filter by Category</span>
-          </button>
-          <div class="filter-menu">
-            <label for="category">Category</label>
-            <select id="category" [(ngModel)]="selectedCategory" (change)="applyCategoryFilter()">
-              <option>All Categories</option>
-              <option value="Solar Panel">Solar Panels</option>
-              <option value="Inverter">Inverters</option>
-              <option value="Battery">Batteries</option>
-              <option value="Charge Controller">Charge Controllers</option>
-              <option value="Solar Lighting">Solar Lighting</option>
-              <option value="Mounting Systems">Mounting Systems</option>
+
+          <div class="space-y-3">
+            <label class="products-label" for="sort-mobile">Sort by</label>
+            <select id="sort-mobile" [(ngModel)]="sortOption" class="products-select">
+              <option value="-createdAt">Newest first</option>
+              <option value="price">Price: low to high</option>
+              <option value="-price">Price: high to low</option>
+              <option value="title">Name: A to Z</option>
             </select>
           </div>
         </div>
-      </li>
-    </ul>
-  </div>
-  <div class="app-content">
-    <div class="app-content-actions">
-      <button class="action-button togglebutton" id="toggleSidebar">
-        <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="24" height="24" viewBox="0 0 50 50">
-          <path
-            d="M 3 9 A 1.0001 1.0001 0 1 0 3 11 L 47 11 A 1.0001 1.0001 0 1 0 47 9 L 3 9 z M 3 24 A 1.0001 1.0001 0 1 0 3 26 L 47 26 A 1.0001 1.0001 0 1 0 47 24 L 3 24 z M 3 39 A 1.0001 1.0001 0 1 0 3 41 L 47 41 A 1.0001 1.0001 0 1 0 47 39 L 3 39 z">
-          </path>
-        </svg>
-      </button>
-      <div class="app-content-actions-wrapper">
-        <button class="action-button grid" title="Grid View">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-            class="feather feather-grid">
-            <rect x="3" y="3" width="7" height="7" />
-            <rect x="14" y="3" width="7" height="7" />
-            <rect x="14" y="14" width="7" height="7" />
-            <rect x="3" y="14" width="7" height="7" />
-          </svg>
-        </button>
-        <button class="action-button large" title="Large View">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-            class="feather feather-maximize-2">
-            <polyline points="15 3 21 3 21 9" />
-            <polyline points="9 21 3 21 3 15" />
-            <line x1="21" y1="3" x2="14" y2="10" />
-            <line x1="3" y1="21" x2="10" y2="14" />
-          </svg>
-        </button>
+
+        <div class="mt-8 grid grid-cols-2 gap-3">
+          <button class="products-secondary-button" type="button" (click)="clearAllFilters()">Reset</button>
+          <button class="products-primary-button" type="button" (click)="applyFilters()">Apply</button>
+        </div>
       </div>
-    </div>
-    <div class="products-area-wrapper tableView">
-      <div class="products-area-wrapper" id="productsView">
-        <ng-container *ngIf="filteredProducts.length >0; else noData">
-          <div class="products-row" *ngFor="let product of filteredProducts">
-            <button class="cell-more-button" style="background: transparent; border: none;"
-              (click)="addToCart(product)">
-              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                <g id="SVGRepo_iconCarrier">
-                  <path
-                    d="M6.29977 5H21L19 12H7.37671M20 16H8L6 3H3M9 20C9 20.5523 8.55228 21 8 21C7.44772 21 7 20.5523 7 20C7 19.4477 7.44772 19 8 19C8.55228 19 9 19.4477 9 20ZM20 20C20 20.5523 19.5523 21 19 21C18.4477 21 18 20.5523 18 20C18 19.4477 18.4477 19 19 19C19.5523 19 20 19.4477 20 20Z"
-                    stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                </g>
-              </svg>
-            </button>
-            <button class="cell-more-button" style="background: transparent; border: none; margin-top: 30px;"
-              (click)="navigateToProductDetails(product._id)">
-              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                <g id="SVGRepo_iconCarrier">
-                  <circle cx="12" cy="12" r="4" fill="#33363F"></circle>
-                  <path d="M21 12C21 12 20 4 12 4C4 4 3 12 3 12" stroke="#33363F" stroke-width="2"></path>
-                </g>
-              </svg>
-            </button>
-            <div class="product-cell image" (click)="navigateToProductDetails(product._id)">
-              <img [src]="product.image" alt="product" (error)="onImageError($event)">
+    </aside>
+
+    <section class="min-w-0 flex-1">
+      <div class="products-panel rounded-[28px] p-5 shadow-[0_18px_50px_rgba(15,23,42,0.08)] sm:p-6 lg:p-8">
+        <div class="flex flex-col gap-5 border-b border-slate-200/80 pb-6">
+          <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <p class="text-xs font-black uppercase tracking-[0.3em] text-[var(--brand-coral)]">Marketplace</p>
+              <h1 class="mt-3 text-3xl font-black tracking-tight text-[var(--brand-navy)] sm:text-4xl">Clean energy inventory</h1>
+              <p class="mt-3 max-w-2xl text-sm leading-6 text-slate-500 sm:text-base">Shop curated solar equipment with fast filtering, stronger mobile browsing, and clearer product comparison.</p>
             </div>
-            <div class="LargeViewData">
-              <div class="product-cell category">
-                {{ product.category?.name || product.category }}
+
+            <div class="flex flex-wrap items-center gap-3">
+              <button class="products-chip-button lg:hidden" type="button" (click)="toggleFilterDrawer()">
+                <i class="bi bi-sliders"></i>
+                <span>Filters</span>
+              </button>
+
+              <div class="flex items-center gap-2 rounded-full bg-slate-100 p-1">
+                <button class="products-view-button" type="button" [class.active]="viewMode === 'grid'" (click)="setViewMode('grid')" aria-label="Grid view">
+                  <i class="bi bi-grid-3x3-gap-fill"></i>
+                </button>
+                <button class="products-view-button" type="button" [class.active]="viewMode === 'large'" (click)="setViewMode('large')" aria-label="Expanded view">
+                  <i class="bi bi-list-ul"></i>
+                </button>
               </div>
-              <div class="product-cell title">
-                {{ product.title }}
-              </div>
-              <div class="product-cell price">
-                From KES {{ product.price }}
-              </div>
-              <div class="product-cell details" *ngIf="isLargeView" style="color: #666; font-size: 0.9em;">
-                Power Rating: {{ product.details }}
+            </div>
+          </div>
+
+          <div class="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="rounded-full bg-[var(--brand-navy)] px-4 py-2 text-xs font-black uppercase tracking-[0.22em] text-white">
+                {{ totalItems || filteredProducts.length }} results
+              </span>
+              <span *ngIf="selectedCategory !== 'All Categories'" class="products-filter-pill">{{ selectedCategory }}</span>
+              <span *ngIf="searchTerm" class="products-filter-pill">"{{ searchTerm }}"</span>
+              <span *ngIf="minPrice || maxPrice" class="products-filter-pill">KES {{ minPrice || 0 }} - {{ maxPrice || 'Any' }}</span>
+            </div>
+
+            <div class="text-sm font-medium text-slate-500">Page {{ currentPage }}<span *ngIf="totalPages > 0"> of {{ totalPages }}</span></div>
+          </div>
+        </div>
+
+        <div *ngIf="isLoading" class="grid gap-4 pt-6 sm:grid-cols-2 xl:grid-cols-3">
+          <div *ngFor="let item of skeletonCards" class="overflow-hidden rounded-[24px] border border-slate-200 bg-white p-4">
+            <div class="mb-4 h-48 animate-pulse rounded-[18px] bg-slate-200"></div>
+            <div class="mb-3 h-4 w-24 animate-pulse rounded bg-slate-200"></div>
+            <div class="mb-2 h-6 w-3/4 animate-pulse rounded bg-slate-200"></div>
+            <div class="h-5 w-1/3 animate-pulse rounded bg-slate-200"></div>
+          </div>
+        </div>
+
+        <ng-container *ngIf="!isLoading">
+          <div *ngIf="filteredProducts.length > 0; else noData" class="pt-6">
+            <div [ngClass]="viewMode === 'grid' ? 'products-grid' : 'products-list'">
+              <article *ngFor="let product of filteredProducts; trackBy: trackByProduct" class="product-card" [class.product-card-large]="viewMode === 'large'" (click)="navigateToProductDetails(product._id)">
+                <div class="product-card-media">
+                  <img [src]="product.image" [alt]="product.title" loading="lazy" decoding="async" width="480" height="320" (error)="onImageError($event)" />
+                  <div class="product-card-actions">
+                    <button class="product-action-button" type="button" (click)="addToCart(product); $event.stopPropagation()" aria-label="Add to cart">
+                      <i class="bi bi-cart-plus"></i>
+                    </button>
+                    <button class="product-action-button" type="button" (click)="navigateToProductDetails(product._id); $event.stopPropagation()" aria-label="View details">
+                      <i class="bi bi-eye"></i>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="product-card-body">
+                  <p class="product-category">{{ product.category?.name || product.category }}</p>
+                  <h3 class="product-title">{{ product.title }}</h3>
+                  <p class="product-price">From KES {{ product.price | number }}</p>
+                  <p *ngIf="viewMode === 'large'" class="product-details">Power Rating: {{ product.details || 'Contact for specification details' }}</p>
+                </div>
+              </article>
+            </div>
+
+            <div *ngIf="totalPages > 1" class="mt-8 flex flex-col gap-4 border-t border-slate-200 pt-6 sm:flex-row sm:items-center sm:justify-between">
+              <p class="text-sm text-slate-500">Showing page {{ currentPage }} of {{ totalPages }}</p>
+              <div class="flex items-center gap-3">
+                <button class="products-secondary-button px-4 py-3" type="button" [disabled]="currentPage === 1" (click)="goToPreviousPage()">Previous</button>
+                <button class="products-primary-button px-4 py-3" type="button" [disabled]="currentPage === totalPages" (click)="goToNextPage()">Next</button>
               </div>
             </div>
           </div>
         </ng-container>
+
         <ng-template #noData>
-          <div class="w-100 text-center">
-            <h1>No Solar Solutions found in this range.</h1>
+          <div class="flex min-h-[320px] flex-col items-center justify-center gap-4 pt-6 text-center">
+            <div class="flex h-16 w-16 items-center justify-center rounded-full bg-slate-100 text-2xl text-[var(--brand-coral)]">
+              <i class="bi bi-search"></i>
+            </div>
+            <div>
+              <h2 class="text-2xl font-black text-[var(--brand-navy)]">No solutions found</h2>
+              <p class="mt-2 text-sm text-slate-500">Try broadening the price range, clearing your search, or switching categories.</p>
+            </div>
+            <button class="products-primary-button px-5 py-3" type="button" (click)="clearAllFilters()">Reset filters</button>
           </div>
         </ng-template>
       </div>
-    </div>
+    </section>
   </div>
+</div>

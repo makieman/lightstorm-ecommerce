@@ -99,6 +99,7 @@ export class SingleProductDetailsComponent implements OnInit {
           this.router.navigate(['/']);
         }
         this.product = data;
+        this.syncRelatedProducts();
 
       },
       error: (err: any) => {
@@ -110,23 +111,7 @@ export class SingleProductDetailsComponent implements OnInit {
     this.productService.getAllProducts().subscribe({
       next: (data: any[]) => {
         this.allProducts = data;
-        if (this.product && this.product.category) {
-          let relatedProducts = data.filter((product: any) => product.category === this.product.category && product._id !== this.product._id);
-          for (let i = 0; i < 8; i++) {
-            this.relatedProducts.push(relatedProducts[i]);
-          }
-        }
-        if (this.relatedProducts.length == 0) {
-          for (let i = 0; i < 8; i++) {
-            this.relatedProducts.push(data[i]);
-          }
-        }
-
-        /************ for updating current index for product pagination ************/
-        let storedIndex = localStorage.getItem('currentProductIndex');
-        this.currentProductIndex = storedIndex ? parseInt(storedIndex, 10) : 0;
-        this.currentProductIndex = Math.min(Math.max(this.currentProductIndex, 0), this.allProducts.length - 1);
-        /**************************************************************************/
+        this.syncRelatedProducts();
       },
       error: (err: any) => {
         console.log('cannot get related products !!', err);
@@ -279,6 +264,27 @@ export class SingleProductDetailsComponent implements OnInit {
 
   navigateToRelatedProduct(productId: string) {
     this.router.navigate(['/product', productId]);
+  }
+
+  syncRelatedProducts() {
+    if (!this.product || !this.allProducts.length) {
+      return;
+    }
+
+    const relatedProducts = this.allProducts.filter(
+      (product: any) => product.category === this.product.category && product._id !== this.product._id
+    );
+
+    const fallbackProducts = this.allProducts.filter((product: any) => product._id !== this.product._id);
+
+    this.relatedProducts = (relatedProducts.length ? relatedProducts : fallbackProducts)
+      .filter(Boolean)
+      .slice(0, 8);
+
+    const matchedIndex = this.allProducts.findIndex((product: any) => product._id === this.product._id);
+    this.currentProductIndex = matchedIndex >= 0 ? matchedIndex : 0;
+    this.checkFirstAndLastProducts();
+    this.updateCurrentProductIndexInStorage();
   }
 
 

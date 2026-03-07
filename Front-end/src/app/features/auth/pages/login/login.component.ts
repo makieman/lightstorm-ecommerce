@@ -7,11 +7,12 @@ import { Router, RouterModule } from '@angular/router';
 import Swal from 'sweetalert2';
 
 import { CommonModule } from '@angular/common';
+import { AuthShellComponent } from '../../components/auth-shell/auth-shell.component';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, RouterModule, ReactiveFormsModule, AuthShellComponent],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })

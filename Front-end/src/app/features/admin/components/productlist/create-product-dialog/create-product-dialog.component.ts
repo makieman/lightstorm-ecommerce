@@ -86,7 +86,7 @@ import Swal from 'sweetalert2';
               <!-- Price -->
               <div>
                 <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
-                  Price ($) <span class="text-red-500">*</span>
+                  Price (KSH) <span class="text-red-500">*</span>
                 </label>
                 <input 
                   type="number" 

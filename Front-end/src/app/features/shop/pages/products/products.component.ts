@@ -1,9 +1,10 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { CoreProductService } from '@app/core/services/core-product.service';
 import { CommonModule } from '@angular/common';
-
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+
+import { CoreProductService } from '@app/core/services/core-product.service';
+
 import { UserService } from '../checkout/user.service';
 
 @Component({
@@ -22,16 +23,25 @@ export class ProductsComponent implements OnInit {
   minPrice: number | undefined;
   maxPrice: number | undefined;
   searchTerm: string = '';
-
-  // --- Server-side Filtering & Pagination State ---
-  sortOption: string = '-createdAt'; // Default sort
+  sortOption: string = '-createdAt';
   currentPage: number = 1;
-  pageSize: number = 24; // Items per page
+  pageSize: number = 24;
   totalItems: number = 0;
   totalPages: number = 0;
   isLoading: boolean = false;
-
   isLargeView: boolean = false;
+  isFilterDrawerOpen: boolean = false;
+  viewMode: 'grid' | 'large' = 'grid';
+
+  readonly skeletonCards = Array.from({ length: 6 });
+  readonly categories = [
+    { label: 'Solar Panels', value: 'Solar Panel' },
+    { label: 'Inverters', value: 'Inverter' },
+    { label: 'Batteries', value: 'Battery' },
+    { label: 'Charge Controllers', value: 'Charge Controller' },
+    { label: 'Solar Lighting', value: 'Solar Lighting' },
+    { label: 'Mounting Systems', value: 'Mounting Systems' }
+  ];
 
   constructor(
     private userService: UserService,
@@ -42,7 +52,6 @@ export class ProductsComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
-      // Read filter, sort, and page state from URL on load
       this.selectedCategory = params['category'] || 'All Categories';
       this.searchTerm = params['search'] || '';
       this.minPrice = params['minPrice'] ? Number(params['minPrice']) : undefined;
@@ -87,43 +96,60 @@ export class ProductsComponent implements OnInit {
     );
   }
 
-  // This method now triggers a new API call with the current filters
-  filterProducts(): void {
-    this.currentPage = 1; // Reset to the first page when filters change
+  applyFilters(): void {
+    this.currentPage = 1;
+    this.loadProducts();
+    this.closeFilterDrawer();
+  }
+
+  clearAllFilters(): void {
+    this.selectedCategory = 'All Categories';
+    this.searchTerm = '';
+    this.minPrice = undefined;
+    this.maxPrice = undefined;
+    this.sortOption = '-createdAt';
+    this.currentPage = 1;
+    this.loadProducts();
+    this.closeFilterDrawer();
+  }
+
+  toggleFilterDrawer(): void {
+    this.isFilterDrawerOpen = !this.isFilterDrawerOpen;
+  }
+
+  closeFilterDrawer(): void {
+    this.isFilterDrawerOpen = false;
+  }
+
+  setViewMode(mode: 'grid' | 'large'): void {
+    this.viewMode = mode;
+    this.isLargeView = mode === 'large';
+  }
+
+  goToPreviousPage(): void {
+    if (this.currentPage <= 1) {
+      return;
+    }
+
+    this.currentPage -= 1;
     this.loadProducts();
   }
 
-  // Apply The Filter by Category 
-  applyCategoryFilter(): void {
-    this.filterProducts();
-  }
+  goToNextPage(): void {
+    if (this.currentPage >= this.totalPages) {
+      return;
+    }
 
-  // Apply price filter
-  applyPriceFilter(): void {
-    this.filterProducts();
-  }
-
-  // Reset price filter
-  resetPriceFilter(): void {
-    this.minPrice = undefined;
-    this.maxPrice = undefined;
-    this.filterProducts();
-  }
-
-  // Apply Name Filter
-  applyNameFilter(event: Event): void {
-    this.searchTerm = (event.target as HTMLInputElement).value;
-    this.filterProducts();
+    this.currentPage += 1;
+    this.loadProducts();
   }
 
   navigateToProductDetails(productId: string): void {
     this.router.navigate(['product', productId]);
   }
 
-  // Updates the browser URL to reflect the current filter state, making links shareable
   private updateUrlWithFilters(): void {
     const queryParams: any = {
-      // Only add params to the URL if they are not the default value
       page: this.currentPage > 1 ? this.currentPage : null,
       sort: this.sortOption !== '-createdAt' ? this.sortOption : null,
       search: this.searchTerm || null,
@@ -135,12 +161,12 @@ export class ProductsComponent implements OnInit {
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: queryParams,
-      queryParamsHandling: 'merge', // Keep other existing query params
-      replaceUrl: true // Avoid adding to browser history for every filter change
+      queryParamsHandling: 'merge',
+      replaceUrl: true
     });
   }
 
-  onImageError(event: Event) {
+  onImageError(event: Event): void {
     const target = event.target as HTMLImageElement;
     if (target) {
       target.src = 'assets/images/placeholder-product.png';
@@ -153,8 +179,8 @@ export class ProductsComponent implements OnInit {
         const userId = response.data._id;
         const quantity = 1;
         this.userService.addProductToCart(userId, product._id, quantity).subscribe(
-          (response: any) => {
-            console.log('Item added to cart successfully:', response);
+          (addResponse: any) => {
+            console.log('Item added to cart successfully:', addResponse);
           },
           (error: any) => {
             if (error.error && error.error.message) {
@@ -175,49 +201,7 @@ export class ProductsComponent implements OnInit {
     );
   }
 
-  ngAfterViewInit(): void {
-
-    // Set default view mode to grid
-    const setDefaultGridView = () => {
-      document.querySelector('.grid')?.classList.add('active');
-      document.querySelector('.large')?.classList.remove('active');
-      document.querySelectorAll('.products-area-wrapper').forEach((view) => {
-        view.classList.remove('tableView', 'largeView');
-        view.classList.add('gridView');
-      });
-      this.isLargeView = false;
-    };
-
-    // Event listener for grid view
-    document.querySelector('.grid')?.addEventListener('click', () => {
-      setDefaultGridView();
-    });
-
-    // Event listener for large view
-    document.querySelector('.large')?.addEventListener('click', () => {
-      document.querySelector('.grid')?.classList.remove('active');
-      document.querySelector('.large')?.classList.add('active');
-      document.querySelectorAll('.products-area-wrapper').forEach((view) => {
-        view.classList.remove('tableView', 'gridView');
-        view.classList.add('largeView');
-      });
-      this.isLargeView = true;
-    });
-
-    // Set default view mode to grid
-    setDefaultGridView();
-
-    // Event listener for filter menu
-    document.querySelector('.jsFilter')?.addEventListener('click', () => {
-      document.querySelector('.filter-menu')?.classList.toggle('active');
-    });
-
-    // Event listener for toggle sidebar visibility
-    const toggleButton = document.getElementById('toggleSidebar');
-    const sidebar = document.querySelector('.sidebar');
-    toggleButton?.addEventListener('click', () => {
-      sidebar?.classList.toggle('open');
-      toggleButton?.classList.toggle('active');
-    });
+  trackByProduct(_index: number, product: any): string {
+    return product._id;
   }
 }

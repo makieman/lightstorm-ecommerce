@@ -1,0 +1,128 @@
+:root {
+  --primary-bg: #1e293b;
+  --accent-coral: #ef4444;
+  --text-dark: #1f2937;
+  --text-muted: #6b7280;
+}
+
+app-auth-shell {
+  display: block;
+  width: 100%;
+}
+
+.form-card {
+  border-top-left-radius: 3rem;
+  border-bottom-left-radius: 3rem;
+}
+
+.auth-shell,
+.auth-layout,
+.auth-panel {
+  min-height: 100dvh;
+}
+
+.animate-spin-slow {
+  animation: spin 10s linear infinite;
+}
+
+.custom-input {
+  outline: none !important;
+}
+
+.custom-input:focus {
+  box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.1) !important;
+  border: 1px solid rgba(239, 68, 68, 0.3) !important;
+}
+
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-feature-settings: 'liga';
+  font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
+}
+
+.verification-banner {
+  animation: slide-down 0.3s ease-out;
+}
+
+@keyframes slide-down {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 1024px) {
+  .form-card {
+    border-radius: 0;
+  }
+}
+
+@media (max-width: 1023px) {
+  .auth-shell {
+    align-items: stretch;
+    background: linear-gradient(180deg, var(--primary-bg) 0%, var(--primary-bg) 15%, #f8fafc 15%);
+  }
+
+  .auth-layout {
+    display: block;
+  }
+
+  .auth-panel {
+    justify-content: flex-start;
+    min-height: calc(100dvh - 3rem);
+    margin-top: clamp(3rem, 10vh, 5.5rem);
+    border-top-left-radius: 2rem;
+    border-top-right-radius: 2rem;
+    box-shadow: 0 -18px 45px rgba(15, 23, 42, 0.18);
+  }
+}
+
+@media (max-width: 640px) {
+  .auth-panel {
+    min-height: calc(100dvh - 1.5rem);
+    margin-top: 1.5rem;
+    padding-top: max(1.5rem, env(safe-area-inset-top));
+    padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
+  }
+
+  .auth-topbar {
+    align-items: stretch;
+  }
+
+  .custom-input {
+    min-height: 48px;
+    font-size: 16px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .auth-layout {
+    min-height: 100dvh;
+  }
+}

@@ -1,9 +1,24 @@
 /* Solution Cards Enhanced Hover States */
+.solutions-row {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+  scroll-snap-type: x proximity;
+}
+
+.solutions-row::-webkit-scrollbar {
+  display: none;
+}
+
 .solution-card {
   position: relative;
   padding: 1rem;
   border-radius: 1.5rem;
   transition: all 0.3s ease;
+  flex: 0 0 7rem;
+  min-width: 7rem;
+  scroll-snap-align: start;
 }
 
 .solution-card:hover {
@@ -74,4 +89,18 @@
 
 .solution-card:active {
   animation: pulse-click 0.2s ease;
+}
+
+@media (min-width: 768px) {
+  .solutions-row {
+    display: grid;
+    overflow: visible;
+    padding-bottom: 0;
+    gap: 1.5rem;
+  }
+
+  .solution-card {
+    flex: initial;
+    min-width: 0;
+  }
 }

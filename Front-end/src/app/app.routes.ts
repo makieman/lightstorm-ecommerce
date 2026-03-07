@@ -1,56 +1,83 @@
 import { Routes } from '@angular/router';
-import { HomeComponent } from './features/shop/pages/home/home.component';
-import { ItemComponent } from './features/shop/pages/item/item.component';
-import { AboutComponent } from './shared/components/about/about.component';
-import { LoginComponent } from './features/auth/pages/login/login.component';
-import { CartComponent } from './features/shop/pages/cart/cart.component';
-import { CheckoutComponent } from './features/shop/pages/checkout/checkout.component';
-import { AdminComponent } from './features/admin/admin/admin.component';
-import { ProductsComponent } from './features/shop/pages/products/products.component';
-import { ProfileComponent } from './features/auth/pages/profile/profile.component';
-import { SingleProductDetailsComponent } from './features/shop/pages/single-product-details/single-product-details.component';
-import { RegisterComponent } from './features/auth/pages/register/register.component';
-import { VerifyEmailComponent } from './features/auth/pages/verify-email/verify-email.component';
-import { PaymentComponent } from './features/shop/pages/payment/payment.component';
-import { ConfirmOrderComponent } from './features/shop/pages/confirm-order/confirm-order.component';
 import { AuthGuard } from './core/guards/auth.guard';
 import { AdminGuard } from './core/guards/admin.guard';
-import { AdminDashboardComponent } from './features/admin/components/dashboard/dashboard.component';
-import { UsersComponent } from './features/admin/components/users/users.component';
-import { ProductlistComponent } from './features/admin/components/productlist/productlist.component';
-
-import { OrdersComponent } from './features/admin/components/orders/orders.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
-  { path: 'home', component: HomeComponent },
+  {
+    path: 'home',
+    loadComponent: () => import('./features/shop/pages/home/home.component').then((m) => m.HomeComponent)
+  },
   {
     path: 'product/:id',
-    component: SingleProductDetailsComponent,
+    loadComponent: () => import('./features/shop/pages/single-product-details/single-product-details.component').then((m) => m.SingleProductDetailsComponent),
   },
-  { path: 'about', component: AboutComponent },
-  { path: 'login', component: LoginComponent },
-  { path: 'register', component: RegisterComponent },
-  { path: 'verify-email', component: VerifyEmailComponent },
-  { path: 'cart', component: CartComponent },
-  { path: 'checkout', component: CheckoutComponent, canActivate: [AuthGuard] },
+  {
+    path: 'about',
+    loadComponent: () => import('./shared/components/about/about.component').then((m) => m.AboutComponent)
+  },
+  {
+    path: 'login',
+    loadComponent: () => import('./features/auth/pages/login/login.component').then((m) => m.LoginComponent)
+  },
+  {
+    path: 'register',
+    loadComponent: () => import('./features/auth/pages/register/register.component').then((m) => m.RegisterComponent)
+  },
+  {
+    path: 'verify-email',
+    loadComponent: () => import('./features/auth/pages/verify-email/verify-email.component').then((m) => m.VerifyEmailComponent)
+  },
+  {
+    path: 'cart',
+    loadComponent: () => import('./features/shop/pages/cart/cart.component').then((m) => m.CartComponent)
+  },
+  {
+    path: 'checkout',
+    canActivate: [AuthGuard],
+    loadComponent: () => import('./features/shop/pages/checkout/checkout.component').then((m) => m.CheckoutComponent)
+  },
   {
     path: 'admin',
-    component: AdminComponent,
+    loadComponent: () => import('./features/admin/admin/admin.component').then((m) => m.AdminComponent),
     canActivate: [AdminGuard],
     children: [
-      { path: '', component: AdminDashboardComponent },
-      { path: 'users', component: UsersComponent },
-      { path: 'product', component: ProductlistComponent },
-      { path: 'orders', component: OrdersComponent },
+      {
+        path: '',
+        loadComponent: () => import('./features/admin/components/dashboard/dashboard.component').then((m) => m.AdminDashboardComponent)
+      },
+      {
+        path: 'users',
+        loadComponent: () => import('./features/admin/components/users/users.component').then((m) => m.UsersComponent)
+      },
+      {
+        path: 'product',
+        loadComponent: () => import('./features/admin/components/productlist/productlist.component').then((m) => m.ProductlistComponent)
+      },
+      {
+        path: 'orders',
+        loadComponent: () => import('./features/admin/components/orders/orders.component').then((m) => m.OrdersComponent)
+      },
     ]
   },
   {
     path: 'products',
-    component: ProductsComponent,
+    loadComponent: () => import('./features/shop/pages/products/products.component').then((m) => m.ProductsComponent),
   },
-  { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
-  { path: 'payment', component: PaymentComponent, canActivate: [AuthGuard] },
-  { path: 'confirm', component: ConfirmOrderComponent, canActivate: [AuthGuard] },
+  {
+    path: 'profile',
+    canActivate: [AuthGuard],
+    loadComponent: () => import('./features/auth/pages/profile/profile.component').then((m) => m.ProfileComponent)
+  },
+  {
+    path: 'payment',
+    canActivate: [AuthGuard],
+    loadComponent: () => import('./features/shop/pages/payment/payment.component').then((m) => m.PaymentComponent)
+  },
+  {
+    path: 'confirm',
+    canActivate: [AuthGuard],
+    loadComponent: () => import('./features/shop/pages/confirm-order/confirm-order.component').then((m) => m.ConfirmOrderComponent)
+  },
   { path: '**', redirectTo: '/home' },
 ];

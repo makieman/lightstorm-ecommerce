@@ -1,26 +1,32 @@
-<div class="card border-0 related-product-card mb-3">
-    <div class="card-title">
-        <a href="/product/{{ product._id }}" class="w-100 product-anchor position-relative">
-            <img src="{{ product.image }}" alt="Card image cap" class="img-fluid product-image"
-                (error)="onImageError($event)">
-            <!-- i will put alert details btn here -->
-        </a>
-    </div>
-    <div class="card-body p-0">
-        <div class="d-flex align-items-center justify-content-between">
-            <p class="m-0 mt-2 mx-3 p-0 text-secondary">{{ product.category }}</p>
-            <a mat-button type="button" class="cart-icon" (click)="openDialog()">
-                <mat-icon>search</mat-icon>
-            </a>
+<article class="related-product-card group h-full overflow-hidden rounded-[28px] border border-slate-100 bg-white shadow-[0_18px_45px_rgba(15,23,42,0.06)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_22px_55px_rgba(15,23,42,0.12)]">
+    <a [routerLink]="['/product', product._id]" class="block">
+        <div class="relative h-56 overflow-hidden bg-slate-50">
+            <img [src]="product.image" [alt]="product.title" class="product-image" loading="lazy" decoding="async" width="320" height="320" (error)="onImageError($event)">
+            <div class="absolute left-4 top-4 rounded-full bg-white/90 px-3 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-[var(--brand-navy)] shadow-sm">
+                {{ product.category }}
+            </div>
         </div>
-        <h5 class="m-0 mt-1 mx-3">
-            <a href="/product/{{ product._id }}" class="w-100 h-100 text-decoration-none product-title-anchor">
+    </a>
+
+    <div class="flex h-[calc(100%-14rem)] flex-col p-5">
+        <div class="flex items-start justify-between gap-3">
+            <a [routerLink]="['/product', product._id]" class="product-title-anchor text-lg font-black leading-6">
                 {{ product.title }}
             </a>
-        </h5>
-        <p class="m-0 mx-3">
-            <b>KSH {{ product.price }}</b>
-        </p>
+            <button mat-button type="button" class="cart-icon" (click)="openDialog()" aria-label="Quick preview">
+                <mat-icon>search</mat-icon>
+            </button>
+        </div>
 
+        <div class="mt-4 flex items-center justify-between gap-3 border-t border-slate-100 pt-4">
+            <div>
+                <p class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Retail Price</p>
+                <p class="mt-2 text-xl font-black text-[var(--brand-coral)]">KSH {{ product.price | number }}</p>
+            </div>
+            <a [routerLink]="['/product', product._id]"
+                class="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-[var(--brand-navy)] text-white transition hover:bg-[var(--brand-coral)]">
+                <mat-icon>arrow_forward</mat-icon>
+            </a>
+        </div>
     </div>
-</div>
+</article>

@@ -1,20 +1,31 @@
-<div class="bg-[#F9FAFB] dark:bg-gray-950 text-[#1F2937] dark:text-gray-100 min-h-screen font-sans">
-  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full overflow-hidden">
+<div class="bg-[var(--surface-page)] text-[var(--brand-navy)] min-h-screen font-sans">
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 pb-28 w-full overflow-hidden lg:pb-10">
     <div class="flex flex-col lg:flex-row gap-8">
 
       <!-- Checkout Form Column (Left) -->
       <div class="flex-1 space-y-6 order-2 lg:order-1">
-        <h1 class="text-2xl font-bold flex items-center gap-2 mb-6 text-[#1F2937] dark:text-white">
+        <div class="rounded-[28px] border border-slate-100 bg-white/80 p-5 shadow-[0_10px_30px_rgba(15,23,42,0.06)] sm:p-6 lg:hidden">
+          <div class="flex items-start justify-between gap-4">
+            <div>
+              <p class="text-[10px] font-black uppercase tracking-[0.24em] text-slate-400">Checkout Flow</p>
+              <h1 class="mt-2 text-2xl font-black text-[var(--brand-navy)]">Secure Checkout</h1>
+              <p class="mt-2 text-sm font-medium text-slate-500">Review delivery details and confirm your order without leaving mobile view.</p>
+            </div>
+            <span class="material-icons rounded-2xl bg-[var(--brand-teal)]/10 p-3 text-[var(--brand-teal)]">lock</span>
+          </div>
+        </div>
+
+        <h1 class="hidden text-2xl font-bold items-center gap-2 mb-6 text-[var(--brand-navy)] lg:flex">
           Secure Checkout
-          <span class="material-icons text-[#0D9488]">lock</span>
+          <span class="material-icons text-[var(--brand-teal)]">lock</span>
         </h1>
 
         <div
-          class="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 overflow-hidden"
+          class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden"
           *ngIf="user">
           <div class="p-6 sm:p-8">
             <h3
-              class="font-semibold text-lg text-[#1F2937] dark:text-gray-100 mb-6 border-b border-gray-100 dark:border-gray-800 pb-4">
+              class="font-semibold text-lg text-[var(--brand-navy)] mb-6 border-b border-gray-100 pb-4">
               Contact & Delivery Information</h3>
             <form *ngIf="userForm" [formGroup]="userForm" class="space-y-6">
 
@@ -23,13 +34,13 @@
                   <label class="block text-xs font-semibold text-gray-500 uppercase tracking-widest mb-2">First
                     Name</label>
                   <input formControlName="firstName" type="text" placeholder="John"
-                    class="w-full bg-gray-50 dark:bg-gray-800 border-2 border-transparent focus:border-[#0D9488] dark:border-gray-700 rounded-xl px-4 py-3 outline-none focus:ring-4 focus:ring-[#0D9488]/10 text-sm font-medium text-[#1F2937] dark:text-white transition-all" />
+                    class="w-full bg-gray-50 border-2 border-transparent focus:border-teal-500 rounded-xl px-4 py-3 outline-none focus:ring-4 focus:ring-teal-500/10 text-sm font-medium text-[var(--brand-navy)] transition-all" />
                 </div>
                 <div>
                   <label class="block text-xs font-semibold text-gray-500 uppercase tracking-widest mb-2">Last
                     Name</label>
                   <input formControlName="lastName" type="text" placeholder="Doe"
-                    class="w-full bg-gray-50 dark:bg-gray-800 border-2 border-transparent focus:border-[#0D9488] dark:border-gray-700 rounded-xl px-4 py-3 outline-none focus:ring-4 focus:ring-[#0D9488]/10 text-sm font-medium text-[#1F2937] dark:text-white transition-all" />
+                    class="w-full bg-gray-50 border-2 border-transparent focus:border-teal-500 rounded-xl px-4 py-3 outline-none focus:ring-4 focus:ring-teal-500/10 text-sm font-medium text-[var(--brand-navy)] transition-all" />
                 </div>
               </div>
 
@@ -37,59 +48,72 @@
                 <label class="block text-xs font-semibold text-gray-500 uppercase tracking-widest mb-2">Communication
                   Email</label>
                 <input formControlName="email" type="email" [value]="user.email"
-                  class="w-full bg-gray-50 dark:bg-gray-800 border-2 border-transparent focus:border-[#0D9488] dark:border-gray-700 rounded-xl px-4 py-3 outline-none focus:ring-4 focus:ring-[#0D9488]/10 text-sm font-medium text-[#1F2937] dark:text-white transition-all" />
+                  class="w-full bg-gray-50 border-2 border-transparent focus:border-teal-500 rounded-xl px-4 py-3 outline-none focus:ring-4 focus:ring-teal-500/10 text-sm font-medium text-[var(--brand-navy)] transition-all" />
               </div>
 
               <div>
                 <label class="block text-xs font-semibold text-gray-500 uppercase tracking-widest mb-2">Phone
                   Number</label>
                 <input formControlName="phone" type="tel" placeholder="+254 7XX XXX XXX"
-                  class="w-full bg-gray-50 dark:bg-gray-800 border-2 border-transparent focus:border-[#0D9488] dark:border-gray-700 rounded-xl px-4 py-3 outline-none focus:ring-4 focus:ring-[#0D9488]/10 text-sm font-medium text-[#1F2937] dark:text-white transition-all" />
+                  class="w-full bg-gray-50 border-2 border-transparent focus:border-teal-500 rounded-xl px-4 py-3 outline-none focus:ring-4 focus:ring-teal-500/10 text-sm font-medium text-[var(--brand-navy)] transition-all" />
               </div>
 
               <div>
                 <label class="block text-xs font-semibold text-gray-500 uppercase tracking-widest mb-2">Shipping
                   Destination Address</label>
                 <input formControlName="address" type="text" placeholder="Street, City, Building"
-                  class="w-full bg-gray-50 dark:bg-gray-800 border-2 border-transparent focus:border-[#0D9488] dark:border-gray-700 rounded-xl px-4 py-3 outline-none focus:ring-4 focus:ring-[#0D9488]/10 text-sm font-medium text-[#1F2937] dark:text-white transition-all" />
+                  class="w-full bg-gray-50 border-2 border-transparent focus:border-teal-500 rounded-xl px-4 py-3 outline-none focus:ring-4 focus:ring-teal-500/10 text-sm font-medium text-[var(--brand-navy)] transition-all" />
+              </div>
+
+              <div class="rounded-2xl bg-slate-50 p-4 sm:p-5 lg:hidden">
+                <div class="flex items-start justify-between gap-4">
+                  <div>
+                    <p class="text-[10px] font-bold uppercase tracking-[0.24em] text-slate-400">Mobile Summary</p>
+                    <p class="mt-2 text-base font-black text-[var(--brand-navy)]">KSH {{ grandTotal.toLocaleString() }}</p>
+                  </div>
+                  <div class="text-right text-xs font-semibold text-slate-500">
+                    <p>{{ cart?.cart?.length || 0 }} items</p>
+                    <p class="mt-1">Shipping KSH {{ shippingFee }}</p>
+                  </div>
+                </div>
               </div>
 
               <div *ngIf="formSubmitted && userForm.invalid"
-                class="p-4 bg-red-50 dark:bg-red-900/10 text-red-600 dark:text-red-400 text-sm rounded-xl border border-red-200 dark:border-red-900/30 font-medium items-center flex gap-3">
+                class="p-4 bg-red-50 text-red-600 text-sm rounded-xl border border-red-200 font-medium items-center flex gap-3">
                 <span class="material-icons">warning</span>
                 <span>Required fields are missing.</span>
               </div>
 
-              <div class="pt-8 mt-4 border-t border-gray-100 dark:border-gray-800">
-                <h3 class="font-semibold text-lg text-[#1F2937] dark:text-gray-100 mb-6">Payment Method</h3>
+              <div class="pt-8 mt-4 border-t border-gray-100">
+                <h3 class="font-semibold text-lg text-[var(--brand-navy)] mb-6">Payment Method</h3>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   <label
-                    class="relative flex cursor-pointer items-center justify-center rounded-xl border-2 border-transparent bg-gray-50 dark:bg-gray-800 p-5 hover:border-[#0D9488] hover:bg-[#0D9488]/5 transition-all has-[:checked]:border-[#0D9488] has-[:checked]:bg-[#0D9488]/10 shadow-sm border-gray-200 dark:border-gray-700">
+                    class="relative flex cursor-pointer items-center justify-center rounded-xl border-2 border-transparent bg-gray-50 p-5 hover:border-teal-500 hover:bg-teal-50 transition-all has-[:checked]:border-teal-500 has-[:checked]:bg-teal-50 shadow-sm border-gray-200">
                     <input type="radio" formControlName="paymentMethod" value="cash" class="peer sr-only" />
                     <div class="text-center group">
                       <span
-                        class="material-icons mb-3 text-gray-400 peer-checked:text-[#0D9488] block text-3xl transition-transform group-hover:scale-110">payments</span>
+                        class="material-icons mb-3 text-gray-400 peer-checked:text-[var(--brand-teal)] block text-3xl transition-transform group-hover:scale-110">payments</span>
                       <span
-                        class="font-semibold text-sm text-[#1F2937] dark:text-gray-300 peer-checked:text-[#0D9488]">Cash
+                        class="font-semibold text-sm text-[var(--brand-navy)] peer-checked:text-[var(--brand-teal)]">Cash
                         on Delivery</span>
                     </div>
                     <div
-                      class="absolute right-4 top-4 h-5 w-5 rounded-full border border-gray-300 dark:border-gray-600 before:absolute before:left-1/2 before:top-1/2 before:h-2.5 before:w-2.5 before:-translate-x-1/2 before:-translate-y-1/2 before:rounded-full before:bg-[#0D9488] before:opacity-0 peer-checked:border-[#0D9488] before:peer-checked:opacity-100 transition-all">
+                      class="absolute right-4 top-4 h-5 w-5 rounded-full border border-gray-300 before:absolute before:left-1/2 before:top-1/2 before:h-2.5 before:w-2.5 before:-translate-x-1/2 before:-translate-y-1/2 before:rounded-full before:bg-[var(--brand-teal)] before:opacity-0 peer-checked:border-[var(--brand-teal)] before:peer-checked:opacity-100 transition-all">
                     </div>
                   </label>
 
                   <label (click)="navigateToPayment()"
-                    class="relative flex cursor-pointer items-center justify-center rounded-xl border-2 border-transparent bg-gray-50 dark:bg-gray-800 p-5 hover:border-[#0D9488] hover:bg-[#0D9488]/5 transition-all has-[:checked]:border-[#0D9488] has-[:checked]:bg-[#0D9488]/10 shadow-sm border-gray-200 dark:border-gray-700">
+                    class="relative flex cursor-pointer items-center justify-center rounded-xl border-2 border-transparent bg-gray-50 p-5 hover:border-teal-500 hover:bg-teal-50 transition-all has-[:checked]:border-teal-500 has-[:checked]:bg-teal-50 shadow-sm border-gray-200">
                     <input type="radio" formControlName="paymentMethod" value="credit" class="peer sr-only" />
                     <div class="text-center group">
                       <span
-                        class="material-icons mb-3 text-gray-400 peer-checked:text-[#0D9488] block text-3xl transition-transform group-hover:scale-110">credit_card</span>
+                        class="material-icons mb-3 text-gray-400 peer-checked:text-[var(--brand-teal)] block text-3xl transition-transform group-hover:scale-110">credit_card</span>
                       <span
-                        class="font-semibold text-sm text-[#1F2937] dark:text-gray-300 peer-checked:text-[#0D9488]">Cloud
+                        class="font-semibold text-sm text-[var(--brand-navy)] peer-checked:text-[var(--brand-teal)]">Cloud
                         Card Pay</span>
                     </div>
                     <div
-                      class="absolute right-4 top-4 h-5 w-5 rounded-full border border-gray-300 dark:border-gray-600 before:absolute before:left-1/2 before:top-1/2 before:h-2.5 before:w-2.5 before:-translate-x-1/2 before:-translate-y-1/2 before:rounded-full before:bg-[#0D9488] before:opacity-0 peer-checked:border-[#0D9488] before:peer-checked:opacity-100 transition-all">
+                      class="absolute right-4 top-4 h-5 w-5 rounded-full border border-gray-300 before:absolute before:left-1/2 before:top-1/2 before:h-2.5 before:w-2.5 before:-translate-x-1/2 before:-translate-y-1/2 before:rounded-full before:bg-[var(--brand-teal)] before:opacity-0 peer-checked:border-[var(--brand-teal)] before:peer-checked:opacity-100 transition-all">
                     </div>
                   </label>
                 </div>
@@ -101,7 +125,7 @@
 
       <!-- Order Summary Column (Right, Sticky) -->
       <div class="w-full lg:w-[400px] order-1 lg:order-2">
-        <div class="bg-[#064E3B] text-white rounded-2xl shadow-xl overflow-hidden lg:sticky lg:top-24">
+        <div class="bg-[var(--surface-summary)] text-white rounded-2xl shadow-xl overflow-hidden lg:sticky lg:top-24">
           <div class="p-6 border-b border-white/10">
             <h2 class="text-xl font-bold tracking-wide uppercase">Order Summary</h2>
           </div>
@@ -117,7 +141,7 @@
                 </div>
                 <div class="flex-1 min-w-0">
                   <p class="text-sm font-medium text-white truncate">{{ getProductById(item.product)?.title }}</p>
-                  <p class="text-[10px] text-teal-300 uppercase tracking-widest mt-0.5">Qty: {{ item.quantity }}</p>
+                  <p class="text-[10px] text-[var(--brand-lime)] uppercase tracking-widest mt-0.5">Qty: {{ item.quantity }}</p>
                 </div>
                 <div class="text-right whitespace-nowrap">
                   <p class="text-sm font-semibold">KSH {{ (getProductById(item.product)?.price || 0).toLocaleString() }}
@@ -135,15 +159,15 @@
               <div class="flex justify-between items-start">
                 <div>
                   <p class="text-white">Flat rate</p>
-                  <p class="text-xs text-teal-300 mt-1 flex items-center gap-1 font-medium">
+                  <p class="text-xs text-[var(--brand-lime)] mt-1 flex items-center gap-1 font-medium">
                     <span class="material-icons text-[14px]">location_on</span>
-                    Kenya
+                    Standard Zone
                   </p>
                 </div>
                 <div class="text-right flex flex-col items-end">
-                  <span class="font-semibold text-white">KSH {{ cart.cart.length === 0 ? 0 : 200 }}</span>
+                  <span class="font-semibold text-white">KSH {{ shippingFee }}</span>
                   <button
-                    class="block text-[10px] text-teal-300 underline mt-1 hover:text-white transition-colors">Modify
+                    class="block text-[10px] text-[var(--brand-lime)] underline mt-1 hover:text-white transition-colors">Modify
                     Location</button>
                 </div>
               </div>
@@ -152,21 +176,20 @@
             <div class="pt-6 border-t border-white/20">
               <div class="flex justify-between items-center text-white">
                 <span class="text-xl font-medium">Grand Total</span>
-                <span class="text-2xl font-bold">KSH {{ cart.cart.length === 0 ? 0 : ((cartState.totalprice
-                  || 0) + 200).toLocaleString() }}</span>
+                <span class="text-2xl font-bold">KSH {{ grandTotal.toLocaleString() }}</span>
               </div>
             </div>
 
             <div class="py-2">
               <button
-                class="text-teal-300 text-sm font-medium flex items-center gap-2 hover:text-white transition-colors">
+                class="text-[var(--brand-lime)] text-sm font-medium flex items-center gap-2 hover:text-white transition-colors">
                 <span class="material-icons text-[15px]">local_offer</span> Have a promo code?
               </button>
             </div>
 
             <button (click)="placeOrder()" type="button" [disabled]="cart.cart.length === 0"
               [ngClass]="{'opacity-50 cursor-not-allowed grayscale': cart.cart.length === 0}"
-              class="w-full bg-[#0D9488] hover:bg-teal-400 text-white py-4 rounded-xl font-bold text-lg shadow-lg shadow-black/20 transition-all flex items-center justify-center gap-3">
+              class="w-full bg-[var(--brand-teal)] hover:bg-[var(--brand-teal-soft)] text-white py-4 rounded-xl font-bold text-lg shadow-lg shadow-black/20 transition-all flex items-center justify-center gap-3">
               <span>SECURE CHECKOUT</span>
               <span class="material-icons text-xl">lock</span>
             </button>
@@ -196,4 +219,18 @@
       </div>
     </div>
   </main>
+
+  <div class="fixed inset-x-0 bottom-0 z-40 border-t border-slate-200 bg-white/95 px-4 py-3 shadow-[0_-12px_28px_rgba(15,23,42,0.12)] backdrop-blur lg:hidden">
+    <div class="mx-auto flex max-w-7xl items-center justify-between gap-4">
+      <div class="min-w-0">
+        <p class="text-[10px] font-bold uppercase tracking-[0.24em] text-slate-400">Pay Today</p>
+        <p class="truncate text-lg font-black text-[var(--brand-navy)]">KSH {{ grandTotal.toLocaleString() }}</p>
+      </div>
+      <button (click)="placeOrder()" type="button" [disabled]="!cart?.cart?.length"
+        [ngClass]="{'opacity-50 cursor-not-allowed grayscale': !cart?.cart?.length}"
+        class="min-w-[12rem] rounded-2xl bg-[var(--brand-teal)] px-5 py-3 text-sm font-bold uppercase tracking-[0.16em] text-white transition-all">
+        Place Order
+      </button>
+    </div>
+  </div>
 </div>

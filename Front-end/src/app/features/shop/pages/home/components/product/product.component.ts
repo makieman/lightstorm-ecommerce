@@ -25,6 +25,9 @@ import { CartProductsCountService } from '@app/core/services/cart-products-count
 
 export class ProductComponent implements OnInit {
   user_id: string | null = null;
+  isLoading = true;
+  readonly skeletonCategories = Array.from({ length: 3 });
+  readonly skeletonCards = Array.from({ length: 4 });
 
   constructor(
     private productService: CoreProductService,
@@ -41,6 +44,10 @@ export class ProductComponent implements OnInit {
       next: (data: any) => {
         this.allProducts = data.products || data;
         this.groupProductsByCategory();
+        this.isLoading = false;
+      },
+      error: () => {
+        this.isLoading = false;
       }
     });
 
@@ -57,13 +64,18 @@ export class ProductComponent implements OnInit {
   }
 
   groupProductsByCategory() {
+    this.categories = [];
+    this.productsByCategory = {};
+
     this.allProducts.forEach(product => {
-      if (!this.productsByCategory[product.category]) {
-        this.productsByCategory[product.category] = [];
-        this.categories.push(product.category);
+      const categoryName = product.category?.name || product.category || 'Uncategorized';
+
+      if (!this.productsByCategory[categoryName]) {
+        this.productsByCategory[categoryName] = [];
+        this.categories.push(categoryName);
       }
-      if (this.productsByCategory[product.category].length < 8) {
-        this.productsByCategory[product.category].push(product);
+      if (this.productsByCategory[categoryName].length < 8) {
+        this.productsByCategory[categoryName].push(product);
       }
     });
   }

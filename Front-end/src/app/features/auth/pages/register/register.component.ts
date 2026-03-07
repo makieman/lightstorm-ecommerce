@@ -6,11 +6,12 @@ import { Router, RouterModule } from '@angular/router';
 import { Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { CommonModule } from '@angular/common';
+import { AuthShellComponent } from '../../components/auth-shell/auth-shell.component';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, RouterModule, ReactiveFormsModule, AuthShellComponent],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css',
 })

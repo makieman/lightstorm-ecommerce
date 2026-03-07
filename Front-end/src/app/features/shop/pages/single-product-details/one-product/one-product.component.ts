@@ -1,8 +1,10 @@
 import { Component, Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 
 import { Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -17,8 +19,9 @@ import Swal from 'sweetalert2';
   selector: 'app-one-product',
   standalone: true,
   imports: [
+    CommonModule,
     MatIconModule,
-
+    RouterModule,
   ],
   templateUrl: './one-product.component.html',
   styleUrl: './one-product.component.css'

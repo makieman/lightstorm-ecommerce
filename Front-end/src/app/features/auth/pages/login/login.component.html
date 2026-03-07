@@ -1,165 +1,74 @@
-<div class="h-[100vh] min-h-screen flex items-center justify-center overflow-x-hidden p-0 m-0 w-full"
-  style="background-color: var(--primary-bg); font-family: 'Plus Jakarta Sans', sans-serif;">
-  <div class="w-full max-w-[1440px] h-screen flex relative overflow-hidden">
-
-    <!-- Left Section -->
-    <div class="hidden lg:flex flex-1 flex-col p-12 relative z-10 w-1/2">
-      <div class="flex items-center gap-2 mb-20 cursor-pointer" routerLink="/">
-        <div class="w-10 h-10 bg-[var(--accent-coral)] rounded-lg flex items-center justify-center shadow-md">
-          <span class="material-symbols-outlined text-white">bolt</span>
-        </div>
-        <span class="text-white text-2xl font-bold tracking-tight">Lightstorm</span>
-      </div>
-
-      <div class="flex-1 flex flex-col justify-center max-w-lg mx-auto w-full">
-        <h1 class="text-5xl font-extrabold text-white leading-tight mb-6">
-          Powering the future with clean energy.
-        </h1>
-        <p class="text-slate-300 text-lg opacity-90 mb-12">
-          Join thousands of households making the switch to sustainable living today.
-        </p>
-
-        <div class="relative w-full aspect-video">
-          <svg class="w-full h-full drop-shadow-2xl" viewBox="0 0 400 300">
-            <!-- Ground -->
-            <path d="M0,280 Q200,260 400,280 L400,300 L0,300 Z" fill="#334155"></path>
-            <!-- Big Mill -->
-            <g transform="translate(100, 100)">
-              <rect fill="#475569" height="180" width="4" x="18" y="0"></rect>
-              <g class="animate-spin-slow origin-center" style="transform-origin: 20px 0px;">
-                <path d="M20,0 L60,-5 L20,5 Z" fill="#E2E8F0"></path>
-                <path d="M20,0 L-20,-40 L15,-10 Z" fill="#E2E8F0"></path>
-                <path d="M20,0 L-20,40 L15,10 Z" fill="#E2E8F0"></path>
-              </g>
-            </g>
-            <!-- Small Mill -->
-            <g transform="translate(250, 150) scale(0.8)">
-              <rect fill="#475569" height="130" width="4" x="18" y="0"></rect>
-              <g class="animate-spin-slow" style="transform-origin: 20px 0px;">
-                <path d="M20,0 L60,-5 L20,5 Z" fill="#CBD5E1"></path>
-                <path d="M20,0 L-20,-40 L15,-10 Z" fill="#CBD5E1"></path>
-                <path d="M20,0 L-20,40 L15,10 Z" fill="#CBD5E1"></path>
-              </g>
-            </g>
-            <!-- Panels -->
-            <rect fill="#0F172A" height="30" rx="2" transform="skewX(-20)" width="60" x="40" y="240"></rect>
-            <rect fill="#0F172A" height="25" rx="2" transform="skewX(-20)" width="50" x="120" y="245"></rect>
-            <!-- Indicators -->
-            <circle cx="90" cy="235" fill="var(--accent-coral)" r="5"></circle>
-            <rect fill="var(--accent-coral)" height="15" rx="2" width="10" x="85" y="240"></rect>
-            <circle cx="200" cy="255" fill="#38BDF8" r="5"></circle>
-            <rect fill="#38BDF8" height="15" rx="2" width="10" x="195" y="260"></rect>
-          </svg>
-        </div>
-      </div>
-
-      <div class="flex gap-8 text-slate-300 text-sm font-medium mt-auto mx-auto w-full max-w-lg mb-8">
-        <a class="hover:text-white transition-colors cursor-pointer" routerLink="/home">Home</a>
-        <a class="hover:text-white transition-colors cursor-pointer" routerLink="/shop">Marketplace</a>
-        <a class="hover:text-white transition-colors cursor-pointer" href="#">Support</a>
-      </div>
-    </div>
-
-    <!-- Right Section -->
-    <div
-      class="w-full lg:w-[580px] bg-white lg:form-card flex flex-col justify-center p-8 md:p-16 lg:p-24 shadow-2xl overflow-y-auto">
-      <div class="max-w-md mx-auto w-full">
-        <!-- Top Controls -->
-        <div class="flex justify-between items-center mb-12">
-          <div class="lg:hidden flex items-center gap-2 cursor-pointer" routerLink="/">
-            <div class="w-8 h-8 bg-[var(--accent-coral)] rounded flex items-center justify-center">
-              <span class="material-symbols-outlined text-white text-sm">bolt</span>
-            </div>
-            <span class="text-[var(--primary-bg)] font-bold">Lightstorm</span>
-          </div>
-          <div class="flex gap-2 ml-auto">
-            <a routerLink="/login"
-              class="px-5 py-2 text-sm font-semibold text-white bg-[var(--primary-bg)] rounded-full transition-all flex items-center justify-center no-underline cursor-default pointer-events-none">Log
-              In</a>
-            <a routerLink="/register"
-              class="px-5 py-2 text-sm font-semibold text-[var(--text-dark)] hover:bg-gray-100 rounded-full transition-all flex items-center justify-center no-underline">Sign
-              Up</a>
-          </div>
-        </div>
-
-        <!-- Verification Banner -->
-        <div *ngIf="showVerificationBanner && !resendSent"
-          class="verification-banner mb-6 p-4 bg-amber-50 border border-amber-200 rounded-2xl">
-          <div class="flex items-start gap-3">
-            <span class="material-symbols-outlined text-amber-500 mt-0.5">warning</span>
-            <div class="flex-1">
-              <p class="text-sm font-semibold text-amber-800 mb-1">Email not verified</p>
-              <p class="text-xs text-amber-700 mb-3">Please verify your email before logging in. Check your inbox for
-                the verification link.</p>
-              <button (click)="resendVerification()" [disabled]="resendLoading"
-                class="text-xs font-bold text-white bg-amber-500 hover:bg-amber-600 px-4 py-2 rounded-xl transition-all inline-flex items-center gap-1.5 border-0 disabled:opacity-50">
-                <span class="material-symbols-outlined text-sm" *ngIf="!resendLoading">mail</span>
-                <span>{{ resendLoading ? 'Sending...' : 'Resend Verification Email' }}</span>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Resend Success -->
-        <div *ngIf="resendSent" class="mb-6 p-4 bg-green-50 border border-green-200 rounded-2xl">
-          <div class="flex items-center gap-2 text-green-700">
-            <span class="material-symbols-outlined text-lg">check_circle</span>
-            <span class="text-sm font-medium">Verification email sent! Check your inbox.</span>
-          </div>
-        </div>
-
-        <div class="mb-10">
-          <h2 class="text-3xl font-bold text-[var(--text-dark)] mb-2">Welcome Back</h2>
-          <p class="text-[var(--text-muted)]">Please enter your details to log in to your account</p>
-        </div>
-
-        <form [formGroup]="form" (ngSubmit)="login()" class="space-y-6">
-          <div class="relative group">
-            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-              <span
-                class="material-symbols-outlined text-gray-400 group-focus-within:text-[var(--primary-bg)] transition-colors text-xl">alternate_email</span>
-            </div>
-            <input formControlName="email"
-              class="custom-input block w-full pl-12 pr-4 py-4 bg-slate-50 border border-transparent rounded-2xl transition-all text-[var(--text-dark)] placeholder-gray-400"
-              placeholder="user@gmail.com" type="email" />
-          </div>
-
-          <div class="relative group">
-            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-              <span
-                class="material-symbols-outlined text-gray-400 group-focus-within:text-[var(--primary-bg)] transition-colors text-xl">lock</span>
-            </div>
-            <input [type]="showPassword ? 'text' : 'password'" formControlName="password"
-              class="custom-input block w-full pl-12 pr-12 py-4 bg-slate-50 border border-transparent rounded-2xl transition-all text-[var(--text-dark)] placeholder-gray-400"
-              placeholder="Password" />
-            <button class="absolute inset-y-0 right-0 pr-4 flex items-center bg-transparent border-0 outline-none"
-              type="button" (click)="showPassword = !showPassword">
-              <span
-                class="material-symbols-outlined text-gray-400 hover:text-[var(--text-dark)] transition-colors text-xl">
-                {{ showPassword ? 'visibility_off' : 'visibility' }}
-              </span>
-            </button>
-          </div>
-
-          <div class="flex flex-col sm:flex-row items-center justify-between gap-6 pt-4">
-            <button type="submit" [disabled]="form.invalid"
-              class="w-full sm:w-auto px-8 py-4 bg-[var(--accent-coral)] text-white border-0 font-bold rounded-2xl shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed">
-              <span>Log In</span>
-              <span class="material-symbols-outlined">login</span>
-            </button>
-            <div class="flex items-center gap-2 text-sm text-[var(--text-muted)]">
-              <span class="material-symbols-outlined text-gray-400 text-lg">lock_reset</span>
-              <a class="font-medium hover:text-[var(--text-dark)] transition-colors text-decoration-none"
-                href="#">Forgot Password?</a>
-            </div>
-          </div>
-        </form>
-
-        <div class="mt-12 text-center text-sm text-[var(--text-muted)]">
-          Don't have an account? <a routerLink="/register"
-            class="text-[var(--accent-coral)] font-bold text-decoration-none hover:underline">Sign up here</a>
+<app-auth-shell activeTab="login" heading="Welcome Back"
+  subheading="Please enter your details to log in to your account">
+  <ng-container auth-banner>
+    <div *ngIf="showVerificationBanner && !resendSent"
+      class="verification-banner mb-6 p-4 bg-amber-50 border border-amber-200 rounded-2xl">
+      <div class="flex items-start gap-3">
+        <span class="material-symbols-outlined text-amber-500 mt-0.5">warning</span>
+        <div class="flex-1">
+          <p class="text-sm font-semibold text-amber-800 mb-1">Email not verified</p>
+          <p class="text-xs text-amber-700 mb-3">Please verify your email before logging in. Check your inbox for
+            the verification link.</p>
+          <button (click)="resendVerification()" [disabled]="resendLoading"
+            class="text-xs font-bold text-white bg-amber-500 hover:bg-amber-600 px-4 py-2 rounded-xl transition-all inline-flex items-center gap-1.5 border-0 disabled:opacity-50">
+            <span class="material-symbols-outlined text-sm" *ngIf="!resendLoading">mail</span>
+            <span>{{ resendLoading ? 'Sending...' : 'Resend Verification Email' }}</span>
+          </button>
         </div>
       </div>
     </div>
+
+    <div *ngIf="resendSent" class="mb-6 p-4 bg-green-50 border border-green-200 rounded-2xl">
+      <div class="flex items-center gap-2 text-green-700">
+        <span class="material-symbols-outlined text-lg">check_circle</span>
+        <span class="text-sm font-medium">Verification email sent! Check your inbox.</span>
+      </div>
+    </div>
+  </ng-container>
+
+  <form auth-form [formGroup]="form" (ngSubmit)="login()" class="space-y-5 sm:space-y-6">
+    <div class="relative group">
+      <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+        <span
+          class="material-symbols-outlined text-gray-400 group-focus-within:text-[var(--primary-bg)] transition-colors text-xl">alternate_email</span>
+      </div>
+      <input formControlName="email"
+        class="custom-input block w-full pl-12 pr-4 py-4 bg-slate-50 border border-transparent rounded-2xl transition-all text-[var(--text-dark)] placeholder-gray-400"
+        placeholder="user@gmail.com" type="email" />
+    </div>
+
+    <div class="relative group">
+      <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+        <span
+          class="material-symbols-outlined text-gray-400 group-focus-within:text-[var(--primary-bg)] transition-colors text-xl">lock</span>
+      </div>
+      <input [type]="showPassword ? 'text' : 'password'" formControlName="password"
+        class="custom-input block w-full pl-12 pr-12 py-4 bg-slate-50 border border-transparent rounded-2xl transition-all text-[var(--text-dark)] placeholder-gray-400"
+        placeholder="Password" />
+      <button class="absolute inset-y-0 right-0 pr-4 flex items-center bg-transparent border-0 outline-none"
+        type="button" (click)="showPassword = !showPassword">
+        <span class="material-symbols-outlined text-gray-400 hover:text-[var(--text-dark)] transition-colors text-xl">
+          {{ showPassword ? 'visibility_off' : 'visibility' }}
+        </span>
+      </button>
+    </div>
+
+    <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 sm:gap-6 pt-2 sm:pt-4">
+      <button type="submit" [disabled]="form.invalid"
+        class="w-full sm:w-auto px-8 py-4 bg-[var(--accent-coral)] text-white border-0 font-bold rounded-2xl shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed">
+        <span>Log In</span>
+        <span class="material-symbols-outlined">login</span>
+      </button>
+      <div class="flex items-center justify-center sm:justify-start gap-2 text-sm text-[var(--text-muted)]">
+        <span class="material-symbols-outlined text-gray-400 text-lg">lock_reset</span>
+        <a class="font-medium hover:text-[var(--text-dark)] transition-colors text-decoration-none" href="#">Forgot
+          Password?</a>
+      </div>
+    </div>
+  </form>
+
+  <div auth-footer class="mt-10 sm:mt-12 text-center text-sm text-[var(--text-muted)]">
+    Don't have an account? <a routerLink="/register"
+      class="text-[var(--accent-coral)] font-bold text-decoration-none hover:underline">Sign up here</a>
   </div>
-</div>
+</app-auth-shell>
