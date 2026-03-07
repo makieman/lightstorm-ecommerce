@@ -10,6 +10,8 @@ Router.post("/register", UserController.RegisterUser);
 Router.post("/verify-email", UserController.VerifyEmail);
 Router.get("/verify/:token", UserController.VerifyEmailGET);
 Router.post("/resend-verification", UserController.ResendVerificationEmail);
+Router.post("/forgot-password", UserController.ForgotPassword);
+Router.post("/reset-password", UserController.ResetPassword);
 Router.get("/user/user", UserController.GetUserByToken);
 Router.post("/user/logout", UserController.userLogout);
 Router.put("/cart/decrease", UserController.DecreaseProductQuantity);

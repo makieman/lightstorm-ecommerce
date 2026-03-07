@@ -22,6 +22,9 @@ const authLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 10 });
 app.use("/api/users/login", authLimiter);
 app.use("/api/users/register", authLimiter);
 app.use("/api/users/resend-verification", authLimiter);
+const resetLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 5 });
+app.use("/api/users/forgot-password", resetLimiter);
+app.use("/api/users/reset-password", resetLimiter);
 
 // Middleware
 app.use(helmet());

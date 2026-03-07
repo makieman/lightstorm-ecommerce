@@ -36,3 +36,30 @@ const sendVerificationEmail = async (email, token) => {
 };
 
 module.exports = { sendVerificationEmail };
+
+const sendPasswordResetEmail = async (email, token) => {
+    const baseUrl = process.env.APP_URL || "http://localhost:4200";
+    const link = `${baseUrl}/reset-password?token=${token}`;
+
+    try {
+        await transporter.sendMail({
+            from: `"Lightstorm Ecommerce" <${process.env.SMTP_USER}>`,
+            to: email,
+            subject: "Reset your Lightstorm password",
+            html: `
+        <h2>Password reset request</h2>
+        <p>We received a request to reset your password. Click the link below to set a new password (valid for 1 hour):</p>
+        <a href="${link}" style="display:inline-block;padding:10px 20px;background-color:#dc2626;color:#ffffff;text-decoration:none;border-radius:5px;">Reset Password</a>
+        <p>Or copy and paste this link in your browser:</p>
+        <p><a href="${link}">${link}</a></p>
+        <p>If you did not request this, you can safely ignore this email.</p>
+        `,
+        });
+        console.log(`Password reset email successfully sent to ${email}`);
+    } catch (error) {
+        console.error(`Failed to send password reset email to ${email}:`, error);
+        throw error;
+    }
+};
+
+module.exports = { sendVerificationEmail, sendPasswordResetEmail };

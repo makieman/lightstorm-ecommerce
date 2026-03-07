@@ -7,7 +7,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 const cloudUpload = require("../services/cloudinary.service");
-const { sendVerificationEmail } = require("../services/email.service");
+const { sendVerificationEmail, sendPasswordResetEmail } = require("../services/email.service");
 const JWT_SECRET = process.env.JWT_SECRET;
 if (!JWT_SECRET) throw new Error("JWT_SECRET env var is required");
 const COOKIE_OPTIONS = ({
@@ -267,6 +267,58 @@ const ResendVerificationEmail = async (req, res) => {
     return res.status(200).json({ message: "Verification email sent successfully" });
   } catch (error) {
     return res.status(500).json({ message: error.message });
+  }
+};
+
+// ------------------------ Forgot Password -------------------------
+const ForgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+    if (!email) return res.status(400).json({ message: "Email is required" });
+
+    const user = await UserModel.findOne({ email });
+    if (user) {
+      const token = crypto.randomBytes(32).toString('hex');
+      const hashed = crypto.createHash('sha256').update(token).digest('hex');
+      user.passwordResetToken = hashed;
+      user.passwordResetTokenExpiry = Date.now() + 60 * 60 * 1000; // 1 hour
+      await user.save();
+      try {
+        await sendPasswordResetEmail(email, token);
+      } catch (err) {
+        console.error('Failed sending password reset email', err);
+      }
+    }
+
+    // Always return 200 to avoid account enumeration
+    return res.status(200).json({ message: 'If an account exists, a reset link will be sent to the email provided.' });
+  } catch (error) {
+    console.error('ForgotPassword error', error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+// ------------------------ Reset Password -------------------------
+const ResetPassword = async (req, res) => {
+  try {
+    const { token, password } = req.body;
+    if (!token || !password) return res.status(400).json({ message: 'Token and password are required' });
+
+    const hashed = crypto.createHash('sha256').update(token).digest('hex');
+    const user = await UserModel.findOne({ passwordResetToken: hashed, passwordResetTokenExpiry: { $gt: Date.now() } });
+    if (!user) return res.status(400).json({ message: 'Invalid or expired token' });
+
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(password, salt);
+    user.passwordResetToken = null;
+    user.passwordResetTokenExpiry = null;
+    user.passwordChangedAt = Date.now();
+    await user.save();
+
+    return res.status(200).json({ message: 'Password has been reset successfully' });
+  } catch (error) {
+    console.error('ResetPassword error', error);
+    return res.status(500).json({ message: 'Internal Server Error' });
   }
 };
 // ---------------------------------- Add Product To Cart ------------------------
@@ -574,5 +626,7 @@ module.exports = {
   VerifyEmail,
   VerifyEmailGET,
   ResendVerificationEmail,
+  ForgotPassword,
+  ResetPassword,
 };
 // ---------------------------------- End Of Controller ----------------------------------

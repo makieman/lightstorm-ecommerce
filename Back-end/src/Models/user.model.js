@@ -23,6 +23,9 @@ const UserSchema = new mongoose.Schema({
     "isVerified": { type: Boolean, default: false },
     "verificationToken": { type: String, default: null },
     "verificationTokenExpiry": { type: Date, default: null },
+    "passwordResetToken": { type: String, default: null },
+    "passwordResetTokenExpiry": { type: Date, default: null },
+    "passwordChangedAt": { type: Date, default: null },
     "orders": [{ type: mongoose.Schema.Types.ObjectId, ref: "orders" },],
     "carts": [cartSchema],
     "isAdmin": { type: Boolean, default: false }
