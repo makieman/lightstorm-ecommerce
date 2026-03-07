@@ -1,76 +1,199 @@
-<html>
-<div class='container'>
-  <div class='window'>
-    <div class='order-info'>
-      <div class='order-info-content'>
-        <div class='order-items'  *ngIf="cart && cart.cart">
-          <h2>Cart Items</h2>
-          <div class='line'></div>
-          <table>
-            <thead>
-              <tr>
-                <th>Product</th>
-                <th>Title</th>
-                <th>Quantity</th>
-                <th>Price</th>
-              </tr>
-            </thead>
-            <tbody style="text-align: center;">
-              <tr *ngFor="let item of cart.cart">
-                <td><img [src]="getProductById(item.product)?.image" alt="Product Image" class="full-width" style="height: 85px;"></td>
-                <td>{{ getProductById(item.product)?.title }}</td>
-                <td>{{ item.quantity }}</td>
-                <td>
-                  <div class='product-info'>
-                    <span class='thin small'>KSH {{ getProductById(item.product)?.price }}</span><br>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>        
-        <h2>Order Summary</h2>
-        <div class='line'></div>
-          <div class='total'>
-          <span style='float:left;'>
-            <div class='thin dense'>total Items</div>
-            <div class='thin dense'>Delivery</div>
-            TOTAL
-          </span>
-          <span style='float:right; text-align:right;'>
-            <div class='thin dense'></div>
-            <div class='thin dense'></div>
-          </span>
+<div class="bg-[#F9FAFB] dark:bg-gray-950 text-[#1F2937] dark:text-gray-100 min-h-screen font-sans">
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full overflow-hidden">
+    <div class="flex flex-col lg:flex-row gap-8">
+
+      <!-- Checkout Form Column (Left) -->
+      <div class="flex-1 space-y-6 order-2 lg:order-1">
+        <h1 class="text-2xl font-bold flex items-center gap-2 mb-6 text-[#1F2937] dark:text-white">
+          Secure Checkout
+          <span class="material-icons text-[#0D9488]">lock</span>
+        </h1>
+
+        <div
+          class="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 overflow-hidden"
+          *ngIf="user">
+          <div class="p-6 sm:p-8">
+            <h3
+              class="font-semibold text-lg text-[#1F2937] dark:text-gray-100 mb-6 border-b border-gray-100 dark:border-gray-800 pb-4">
+              Contact & Delivery Information</h3>
+            <form *ngIf="userForm" [formGroup]="userForm" class="space-y-6">
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label class="block text-xs font-semibold text-gray-500 uppercase tracking-widest mb-2">First
+                    Name</label>
+                  <input formControlName="firstName" type="text" placeholder="John"
+                    class="w-full bg-gray-50 dark:bg-gray-800 border-2 border-transparent focus:border-[#0D9488] dark:border-gray-700 rounded-xl px-4 py-3 outline-none focus:ring-4 focus:ring-[#0D9488]/10 text-sm font-medium text-[#1F2937] dark:text-white transition-all" />
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-gray-500 uppercase tracking-widest mb-2">Last
+                    Name</label>
+                  <input formControlName="lastName" type="text" placeholder="Doe"
+                    class="w-full bg-gray-50 dark:bg-gray-800 border-2 border-transparent focus:border-[#0D9488] dark:border-gray-700 rounded-xl px-4 py-3 outline-none focus:ring-4 focus:ring-[#0D9488]/10 text-sm font-medium text-[#1F2937] dark:text-white transition-all" />
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-xs font-semibold text-gray-500 uppercase tracking-widest mb-2">Communication
+                  Email</label>
+                <input formControlName="email" type="email" [value]="user.email"
+                  class="w-full bg-gray-50 dark:bg-gray-800 border-2 border-transparent focus:border-[#0D9488] dark:border-gray-700 rounded-xl px-4 py-3 outline-none focus:ring-4 focus:ring-[#0D9488]/10 text-sm font-medium text-[#1F2937] dark:text-white transition-all" />
+              </div>
+
+              <div>
+                <label class="block text-xs font-semibold text-gray-500 uppercase tracking-widest mb-2">Phone
+                  Number</label>
+                <input formControlName="phone" type="tel" placeholder="+254 7XX XXX XXX"
+                  class="w-full bg-gray-50 dark:bg-gray-800 border-2 border-transparent focus:border-[#0D9488] dark:border-gray-700 rounded-xl px-4 py-3 outline-none focus:ring-4 focus:ring-[#0D9488]/10 text-sm font-medium text-[#1F2937] dark:text-white transition-all" />
+              </div>
+
+              <div>
+                <label class="block text-xs font-semibold text-gray-500 uppercase tracking-widest mb-2">Shipping
+                  Destination Address</label>
+                <input formControlName="address" type="text" placeholder="Street, City, Building"
+                  class="w-full bg-gray-50 dark:bg-gray-800 border-2 border-transparent focus:border-[#0D9488] dark:border-gray-700 rounded-xl px-4 py-3 outline-none focus:ring-4 focus:ring-[#0D9488]/10 text-sm font-medium text-[#1F2937] dark:text-white transition-all" />
+              </div>
+
+              <div *ngIf="formSubmitted && userForm.invalid"
+                class="p-4 bg-red-50 dark:bg-red-900/10 text-red-600 dark:text-red-400 text-sm rounded-xl border border-red-200 dark:border-red-900/30 font-medium items-center flex gap-3">
+                <span class="material-icons">warning</span>
+                <span>Required fields are missing.</span>
+              </div>
+
+              <div class="pt-8 mt-4 border-t border-gray-100 dark:border-gray-800">
+                <h3 class="font-semibold text-lg text-[#1F2937] dark:text-gray-100 mb-6">Payment Method</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                  <label
+                    class="relative flex cursor-pointer items-center justify-center rounded-xl border-2 border-transparent bg-gray-50 dark:bg-gray-800 p-5 hover:border-[#0D9488] hover:bg-[#0D9488]/5 transition-all has-[:checked]:border-[#0D9488] has-[:checked]:bg-[#0D9488]/10 shadow-sm border-gray-200 dark:border-gray-700">
+                    <input type="radio" formControlName="paymentMethod" value="cash" class="peer sr-only" />
+                    <div class="text-center group">
+                      <span
+                        class="material-icons mb-3 text-gray-400 peer-checked:text-[#0D9488] block text-3xl transition-transform group-hover:scale-110">payments</span>
+                      <span
+                        class="font-semibold text-sm text-[#1F2937] dark:text-gray-300 peer-checked:text-[#0D9488]">Cash
+                        on Delivery</span>
+                    </div>
+                    <div
+                      class="absolute right-4 top-4 h-5 w-5 rounded-full border border-gray-300 dark:border-gray-600 before:absolute before:left-1/2 before:top-1/2 before:h-2.5 before:w-2.5 before:-translate-x-1/2 before:-translate-y-1/2 before:rounded-full before:bg-[#0D9488] before:opacity-0 peer-checked:border-[#0D9488] before:peer-checked:opacity-100 transition-all">
+                    </div>
+                  </label>
+
+                  <label (click)="navigateToPayment()"
+                    class="relative flex cursor-pointer items-center justify-center rounded-xl border-2 border-transparent bg-gray-50 dark:bg-gray-800 p-5 hover:border-[#0D9488] hover:bg-[#0D9488]/5 transition-all has-[:checked]:border-[#0D9488] has-[:checked]:bg-[#0D9488]/10 shadow-sm border-gray-200 dark:border-gray-700">
+                    <input type="radio" formControlName="paymentMethod" value="credit" class="peer sr-only" />
+                    <div class="text-center group">
+                      <span
+                        class="material-icons mb-3 text-gray-400 peer-checked:text-[#0D9488] block text-3xl transition-transform group-hover:scale-110">credit_card</span>
+                      <span
+                        class="font-semibold text-sm text-[#1F2937] dark:text-gray-300 peer-checked:text-[#0D9488]">Cloud
+                        Card Pay</span>
+                    </div>
+                    <div
+                      class="absolute right-4 top-4 h-5 w-5 rounded-full border border-gray-300 dark:border-gray-600 before:absolute before:left-1/2 before:top-1/2 before:h-2.5 before:w-2.5 before:-translate-x-1/2 before:-translate-y-1/2 before:rounded-full before:bg-[#0D9488] before:opacity-0 peer-checked:border-[#0D9488] before:peer-checked:opacity-100 transition-all">
+                    </div>
+                  </label>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Order Summary Column (Right, Sticky) -->
+      <div class="w-full lg:w-[400px] order-1 lg:order-2">
+        <div class="bg-[#064E3B] text-white rounded-2xl shadow-xl overflow-hidden lg:sticky lg:top-24">
+          <div class="p-6 border-b border-white/10">
+            <h2 class="text-xl font-bold tracking-wide uppercase">Order Summary</h2>
+          </div>
+
+          <div class="p-6 sm:p-8 space-y-6" *ngIf="cart && cart.cart">
+
+            <!-- Item List Preview -->
+            <div class="space-y-4 max-h-60 overflow-y-auto pr-2 custom-scrollbar">
+              <div *ngFor="let item of cart.cart" class="flex items-center gap-3">
+                <div class="w-12 h-12 bg-white/10 rounded-lg overflow-hidden flex-shrink-0">
+                  <img [src]="getProductById(item.product)?.image" alt="Product Image"
+                    class="w-full h-full object-cover" />
+                </div>
+                <div class="flex-1 min-w-0">
+                  <p class="text-sm font-medium text-white truncate">{{ getProductById(item.product)?.title }}</p>
+                  <p class="text-[10px] text-teal-300 uppercase tracking-widest mt-0.5">Qty: {{ item.quantity }}</p>
+                </div>
+                <div class="text-right whitespace-nowrap">
+                  <p class="text-sm font-semibold">KSH {{ (getProductById(item.product)?.price || 0).toLocaleString() }}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="pt-4 border-t border-white/10 flex justify-between text-gray-200">
+              <span>Subtotal</span>
+              <span class="font-semibold text-white">KSH {{ (cartState.totalprice || 0).toLocaleString() }}</span>
+            </div>
+
+            <div class="pt-4 border-t border-white/10">
+              <div class="flex justify-between items-start">
+                <div>
+                  <p class="text-white">Flat rate</p>
+                  <p class="text-xs text-teal-300 mt-1 flex items-center gap-1 font-medium">
+                    <span class="material-icons text-[14px]">location_on</span>
+                    Kenya
+                  </p>
+                </div>
+                <div class="text-right flex flex-col items-end">
+                  <span class="font-semibold text-white">KSH {{ cart.cart.length === 0 ? 0 : 200 }}</span>
+                  <button
+                    class="block text-[10px] text-teal-300 underline mt-1 hover:text-white transition-colors">Modify
+                    Location</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="pt-6 border-t border-white/20">
+              <div class="flex justify-between items-center text-white">
+                <span class="text-xl font-medium">Grand Total</span>
+                <span class="text-2xl font-bold">KSH {{ cart.cart.length === 0 ? 0 : ((cartState.totalprice
+                  || 0) + 200).toLocaleString() }}</span>
+              </div>
+            </div>
+
+            <div class="py-2">
+              <button
+                class="text-teal-300 text-sm font-medium flex items-center gap-2 hover:text-white transition-colors">
+                <span class="material-icons text-[15px]">local_offer</span> Have a promo code?
+              </button>
+            </div>
+
+            <button (click)="placeOrder()" type="button" [disabled]="cart.cart.length === 0"
+              [ngClass]="{'opacity-50 cursor-not-allowed grayscale': cart.cart.length === 0}"
+              class="w-full bg-[#0D9488] hover:bg-teal-400 text-white py-4 rounded-xl font-bold text-lg shadow-lg shadow-black/20 transition-all flex items-center justify-center gap-3">
+              <span>SECURE CHECKOUT</span>
+              <span class="material-icons text-xl">lock</span>
+            </button>
+
+            <div class="flex flex-col items-center gap-2 text-white/60 text-[10px] uppercase tracking-widest pt-4">
+              <div class="flex justify-center flex-wrap gap-4">
+                <span class="flex items-center gap-1">
+                  <span class="material-icons text-xs">verified_user</span> Secure Payments
+                </span>
+                <span class="flex items-center gap-1">
+                  <span class="material-icons text-xs">workspace_premium</span> Warranty Guaranteed
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-6 flex justify-center gap-4">
+          <img alt="PayPal" class="h-6 opacity-40 grayscale hover:grayscale-0 hover:opacity-100 transition-all"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDWR2UsT5kUcvs7g-K0EbFoj6MzxHy1CfvYWUI5Yvjttsz0IU_HkJdMIjkuxGH_TrY4FyDpyC-un8jMQa5c32up6rVtnlgSqReRQbnQm-MQPDDU6hpWVl_TiyoLyIhYPFyPWJYZp1mQlcp_Jks5efN1LlgHMpOs4sne1XslisTyW7YM96IPQwRy3U92o8m7LSJ4ZL1rDJ497ARfrbRYkMgRZRMoyPcbo3Ckf3-BWOR8_IKL7I-JDlleLOB7MO0kyLtebqSS6yuQv48" />
+          <img alt="Visa"
+            class="h-4 opacity-40 grayscale hover:grayscale-0 hover:opacity-100 transition-all self-center"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDCcLkJFDUBE-AQgoU0RIH4Ti0TiGZY7grbg-tRt_bPkPkraVBvrIHcOBKCny1Wy4hbE-SRZGBj1XOdjkGQTCc8-9MWuxqMQzJ4xn1043oGbk_VNapKK4RHaNIE9pOEaw2qeKMVhBTfqvqYiv3uXBNiPHjw4yRP4_ukxIuz-lTukb-oAveLUPlJcvuy6hDWwzQXcFDHcZRemZw-u9AXWu-0ek4Q8OgrUaiadXQU4QpXJZ1hrGNKy6b3DrUc7-S0VjH5m9SNDtBDHro" />
+          <img alt="Mastercard" class="h-6 opacity-40 grayscale hover:grayscale-0 hover:opacity-100 transition-all"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuAN6eYIihwHev2MBbpIaNeE1VmpCaDbjHOSIpImCxbAoAr8AquW8PSvB5G_dKHEAH0WhfWsnKCzqQKapF_OcBHz-6tWVy8oHTmIv8sbLijwkT985izqZtfTR5XdeasASA4Nt3xo5ymiRjznOFYeEnEkZSo3CTWkd-N4AOoARk6LUyEc-NEVhHetZs6JcC6F86NMP2hwEBGMkLGKyh_ouDuxnlJZD1Xz2ptY-K316ZqrKxpyqM6m6BYPTgGURS_JofTECiXgjK9-eeU" />
         </div>
       </div>
     </div>
-    <div class='user-info'>
-      <div class='user-info-content' *ngIf="user">
-        <h2>User Information</h2>
-<div class='line'></div>
-<form *ngIf="userForm" [formGroup]="userForm" class='user-info-content'>
-  <table>
-    <tr><td>Full Name: </td><td><input class='input-field' value="{{ user.username }}" formControlName="fullName"></td></tr>
-    <tr><td>First Name: </td><td><input class='input-field' formControlName="firstName"></td></tr>
-    <tr><td>Last Name: </td><td><input class='input-field' formControlName="lastName"></td></tr>
-    <tr><td>Email: </td><td><input class='input-field' value="{{ user.email }}" formControlName="email" ></td></tr>
-    <tr><td>Phone: </td><td><input class='input-field' formControlName="phone"></td></tr>
-    <tr><td>Address: </td><td><input class='input-field' formControlName="address"></td></tr>
-  </table>
-  <div *ngIf="formSubmitted && userForm.invalid" class="error-message">
-    Please fill in all required fields before proceeding.
-  </div>
-  <p>Select Payment Method</p>
-  <div class='line'></div>
-  <label for='cash' class='radio'><input type='radio' id='cash' name='paymentMethod' value='cash' formControlName="paymentMethod"> <span class='radio-btn'></span> Cash</label><br>
-  <label for='credit' class='radio'>
-    <input type='radio' id='credit' name='paymentMethod' value='credit' (click)="navigateToPayment()">
-    <span class='radio-btn'></span> Credit
-  </label><br>
-  <button type="button" class="pay-btn" (click)="placeOrder()">Place Order</button>
-</form>
-      </div>
-    </div>
-  </div>
-</div>  
-</html>
+  </main>
+</div>

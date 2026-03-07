@@ -41,6 +41,13 @@ export class OneProductComponent {
       console.log(`Dialog result: ${result}`);
     });
   }
+
+  onImageError(event: Event) {
+    const target = event.target as HTMLImageElement;
+    if (target) {
+      target.src = 'assets/images/placeholder-product.png';
+    }
+  }
 }
 
 

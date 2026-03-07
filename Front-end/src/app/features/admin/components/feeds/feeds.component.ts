@@ -82,7 +82,7 @@ export class FeedsComponent implements OnInit {
           {
             class: 'bg-primary',
             icon: 'bi bi-person',
-            task: 'Total Users Number ' + this.users.length,
+            task: 'Total Users Number ' + (this.users ? this.users.length : '...'),
             time: '21 May',
           },
         ];

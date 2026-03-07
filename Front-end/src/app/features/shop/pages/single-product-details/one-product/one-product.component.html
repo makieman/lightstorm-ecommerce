@@ -2,7 +2,7 @@
     <div class="card-title">
         <a href="/product/{{ product._id }}" class="w-100 product-anchor position-relative">
             <img src="{{ product.image }}" alt="Card image cap" class="img-fluid product-image"
-                (error)="$event.target.src='assets/images/placeholder-product.png'">
+                (error)="onImageError($event)">
             <!-- i will put alert details btn here -->
         </a>
     </div>

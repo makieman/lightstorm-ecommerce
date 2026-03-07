@@ -23,6 +23,7 @@ export class CheckoutComponent implements OnInit {
   products: Product[] = [];
   userForm!: FormGroup;
   formSubmitted = false;
+  cartState: { totalprice: number } = { totalprice: 0 };
 
   constructor(private userService: UserService, private productService: CoreProductService, private router: Router, private formBuilder: FormBuilder) { }
 
@@ -68,6 +69,7 @@ export class CheckoutComponent implements OnInit {
           next: (product: Product) => {
             this.products.push(product);
             totalPrice += product.price * item.quantity;
+            this.cartState.totalprice = totalPrice;
             totalQuantity += item.quantity;
           },
           error: (error) => {

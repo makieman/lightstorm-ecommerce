@@ -67,6 +67,13 @@ export class ProductComponent implements OnInit {
       }
     });
   }
+
+  onImageError(event: Event) {
+    const target = event.target as HTMLImageElement;
+    if (target) {
+      target.src = 'assets/images/placeholder-product.png';
+    }
+  }
   openDialog(productId: string) {
     this.productService.getProductById(productId).subscribe((product: any) => {
       const dialogRef = this.dialog.open(DialogContentExampleDialog, {

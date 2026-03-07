@@ -27,78 +27,76 @@ export class TopCardsComponent implements OnInit {
   constructor(private myorderService: OrderService) { }
 
   ngOnInit() {
+    this.updateTopCards();
     this.myorderService.weeklyOrders().subscribe(
       (data: any) => {
-        this.weekly = data;
-        this.weeklyOrders = this.weekly[0].totalOrders;
+        if (data && data[0]) {
+          this.weeklyOrders = data[0].totalOrders;
+          this.updateTopCards();
+        }
       },
-      (error: any) => {
-        console.log(error);
-      }
+      (error: any) => console.log(error)
     );
 
     this.myorderService.dailyOrders().subscribe(
       (data: any) => {
-        if (data) {
-          this.daily = data;
-          if (this.daily[0] === undefined) {
-            this.dailyOrders = 0;
-          }
+        if (data && data[0]) {
+          this.dailyOrders = data[0].totalOrders || 0;
+        } else {
+          this.dailyOrders = 0;
         }
+        this.updateTopCards();
       },
-      (error: any) => {
-        console.log(error);
-      }
+      (error: any) => console.log(error)
     );
 
     this.myorderService.weeklySales().subscribe(
       (data: any) => {
-        this.weekly = data;
-        this.totalSales = this.weekly[0].totalSales;
+        if (data && data[0]) {
+          this.totalSales = data[0].totalSales || 0;
+          this.updateTopCards();
+        }
       },
-      (error: any) => {
-        console.log(error);
-      }
+      (error: any) => console.log(error)
     );
 
     this.myorderService.dailySales().subscribe(
       (data: any) => {
-        this.dailySales = data;
-        if (this.dailySales[0] === undefined) {
-          this.totalDailySales = 0;
+        if (data && data[0]) {
+          this.totalDailySales = data[0].totalSales || 0;
         } else {
-          this.dailySales = data;
-          this.totalDailySales = this.dailySales[0].totalSales;
+          this.totalDailySales = 0;
         }
+        this.updateTopCards();
       },
-      (error: any) => {
-        console.log(error);
-      }
+      (error: any) => console.log(error)
     );
+  }
 
+  updateTopCards() {
     this.topcards = [
       {
         bgcolor: 'success',
         icon: 'bi bi-wallet',
-        title: this.totalSales,
+        title: this.totalSales || 0,
         subtitle: 'Weekly Sales',
       },
       {
         bgcolor: 'danger',
         icon: 'bi bi-coin',
-        title: this.dailyOrders,
+        title: this.totalDailySales || 0,
         subtitle: 'Daily Sales',
       },
       {
         bgcolor: 'warning',
         icon: 'bi bi-basket3',
-        title: this.weeklyOrders,
+        title: this.weeklyOrders || 0,
         subtitle: 'Weekly Orders',
       },
       {
         bgcolor: 'info',
         icon: 'bi bi-bag',
-        title: this.totalDailySales,
+        title: this.dailyOrders || 0,
         subtitle: 'Daily Orders',
       },
     ];

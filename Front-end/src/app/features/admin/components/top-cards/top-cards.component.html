@@ -14,7 +14,7 @@
       <div>
         <p class="text-sm font-medium text-gray-500">{{ card.subtitle }}</p>
         <h3 class="text-2xl font-bold text-gray-900">
-          {{ card.subtitle.includes('Sales') ? '$' + card.title.toFixed(2) : card.title }}
+          {{ card.subtitle.includes('Sales') ? '$' + (card.title?.toFixed(2) ?? '0.00') : (card.title ?? 0) }}
         </h3>
       </div>
     </div>

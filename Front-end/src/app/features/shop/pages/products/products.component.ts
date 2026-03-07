@@ -140,6 +140,13 @@ export class ProductsComponent implements OnInit {
     });
   }
 
+  onImageError(event: Event) {
+    const target = event.target as HTMLImageElement;
+    if (target) {
+      target.src = 'assets/images/placeholder-product.png';
+    }
+  }
+
   addToCart(product: any): void {
     this.productService.getUserToken().subscribe(
       (response: any) => {
