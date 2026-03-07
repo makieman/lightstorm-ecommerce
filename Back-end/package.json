@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "serve": "nodemon src/server.js",
-    "start": "node src/server.js"
+    "start": "node src/server.js",
+    "smoke-test": "node test/local_auth_flow.js"
   },
   "author": "",
   "license": "ISC",
@@ -31,6 +32,8 @@
     "nodemailer": "^8.0.1"
   },
   "devDependencies": {
-    "nodemon": "^3.1.11"
+    "mongodb-memory-server": "^11.0.1",
+    "nodemon": "^3.1.11",
+    "supertest": "^7.2.2"
   }
 }
