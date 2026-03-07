@@ -61,14 +61,20 @@ const getAllProducts = async (req, res) => {
     const skip = (page - 1) * limit;
 
     // --- Database Query ---
-    const totalItems = await productModel.countDocuments(query);
+    const [totalItems, products] = await Promise.all([
+      productModel.countDocuments(query),
+      productModel.find(query)
+        .select('title price quantity type details image category lowStockThreshold wattage voltage batteryType createdAt updatedAt')
+        .populate('category', 'name slug')
+        .sort(sortOption)
+        .skip(skip)
+        .limit(limit)
+        .lean()
+    ]);
+
     const totalPages = Math.ceil(totalItems / limit);
 
-    const products = await productModel.find(query)
-      .populate('category', 'name slug')
-      .sort(sortOption)
-      .skip(skip)
-      .limit(limit);
+    res.set('Cache-Control', 'public, max-age=60, s-maxage=300, stale-while-revalidate=600');
 
     res.json({
       products,
@@ -90,7 +96,13 @@ const getAllProducts = async (req, res) => {
  */
 const getFeaturedProducts = async (req, res) => {
   try {
-    const products = await productModel.find({}).sort({ createdAt: -1 }).limit(4);
+    const products = await productModel.find({})
+      .select('title price quantity type details image category lowStockThreshold wattage voltage batteryType createdAt updatedAt')
+      .sort({ createdAt: -1 })
+      .limit(4)
+      .lean();
+
+    res.set('Cache-Control', 'public, max-age=60, s-maxage=300, stale-while-revalidate=600');
     res.json(products);
   } catch (err) {
     res.status(500).json({ message: "Internal Server Error", error: err.message });
