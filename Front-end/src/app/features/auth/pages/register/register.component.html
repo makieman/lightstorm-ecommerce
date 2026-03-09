@@ -2,75 +2,68 @@
   subheading="Please enter your details to create an account">
   <form auth-form [formGroup]="form" (ngSubmit)="submit()" class="space-y-5">
     <div class="relative group">
-      <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+      <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none" [class.hidden]="usernameFocused && form.get('username')?.value">
         <span
           class="material-symbols-outlined text-gray-400 group-focus-within:text-[var(--primary-bg)] transition-colors text-xl">person</span>
       </div>
-      <input formControlName="username"
-        class="custom-input block w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-transparent rounded-2xl transition-all text-[var(--text-dark)] placeholder-gray-400"
-        placeholder="Username" type="text" />
+      <input formControlName="username" (focus)="usernameFocused = true" (blur)="usernameFocused = false"
+        class="custom-input block w-full !pl-14 pr-4 py-3.5 bg-slate-50 border border-transparent rounded-2xl transition-all text-[var(--text-dark)] placeholder-transparent"
+        type="text" />
       <div *ngIf="form.get('username')!.invalid && (form.get('username')!.dirty || form.get('username')!.touched)"
         class="text-red-500 text-xs mt-1 ml-2">
-        <span *ngIf="form.get('username')!.errors?.['required']">Username is required</span>
+        <span>{{ usernameError }}</span>
       </div>
     </div>
 
     <div class="relative group">
-      <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+      <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none" [class.hidden]="emailFocused && form.get('email')?.value">
         <span
           class="material-symbols-outlined text-gray-400 group-focus-within:text-[var(--primary-bg)] transition-colors text-xl">alternate_email</span>
       </div>
-      <input formControlName="email"
-        class="custom-input block w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-transparent rounded-2xl transition-all text-[var(--text-dark)] placeholder-gray-400"
-        placeholder="Email Address" type="email" />
+      <input formControlName="email" (focus)="emailFocused = true" (blur)="emailFocused = false"
+        class="custom-input block w-full !pl-14 pr-4 py-3.5 bg-slate-50 border border-transparent rounded-2xl transition-all text-[var(--text-dark)] placeholder-transparent"
+        type="email" />
       <div *ngIf="form.get('email')!.invalid && (form.get('email')!.dirty || form.get('email')!.touched)"
         class="text-red-500 text-xs mt-1 ml-2">
-        <span *ngIf="form.get('email')!.errors?.['required']">Email is required</span>
-        <span *ngIf="form.get('email')!.errors?.['email']">Invalid email format</span>
+        <span>{{ emailError }}</span>
       </div>
     </div>
 
     <div class="relative group">
-      <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+      <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none" [class.hidden]="passwordFocused && form.get('password')?.value">
         <span
           class="material-symbols-outlined text-gray-400 group-focus-within:text-[var(--primary-bg)] transition-colors text-xl">lock</span>
       </div>
-      <input [type]="showPassword ? 'text' : 'password'" formControlName="password"
-        class="custom-input block w-full pl-12 pr-12 py-3.5 bg-slate-50 border border-transparent rounded-2xl transition-all text-[var(--text-dark)] placeholder-gray-400"
-        placeholder="Password" />
+      <input [type]="showPassword ? 'text' : 'password'" formControlName="password" (focus)="passwordFocused = true" (blur)="passwordFocused = false"
+        class="custom-input block w-full !pl-14 pr-4 py-3.5 bg-slate-50 border border-transparent rounded-2xl transition-all text-[var(--text-dark)] placeholder-transparent"
+        />
       <button class="absolute top-3.5 right-0 pr-4 flex items-center bg-transparent border-0 outline-none"
         type="button" (click)="showPassword = !showPassword">
-        <span class="material-symbols-outlined text-gray-400 hover:text-[var(--text-dark)] transition-colors text-xl">
-          {{ showPassword ? 'visibility_off' : 'visibility' }}
-        </span>
       </button>
       <div *ngIf="form.get('password')!.invalid && (form.get('password')!.dirty || form.get('password')!.touched)"
         class="text-red-500 text-xs mt-1 ml-2">
-        <span *ngIf="form.get('password')!.errors?.['required']">Password is required</span>
+        <span>{{ passwordError }}</span>
       </div>
     </div>
 
     <div class="relative group">
-      <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+      <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none" [class.hidden]="confirmPasswordFocused && form.get('confirmPassword')?.value">
         <span
           class="material-symbols-outlined text-gray-400 group-focus-within:text-[var(--primary-bg)] transition-colors text-xl">lock_check</span>
       </div>
-      <input [type]="showConPassword ? 'text' : 'password'" formControlName="confirmPassword"
-        class="custom-input block w-full pl-12 pr-12 py-3.5 bg-slate-50 border border-transparent rounded-2xl transition-all text-[var(--text-dark)] placeholder-gray-400"
-        placeholder="Confirm Password" />
+      <input [type]="showConPassword ? 'text' : 'password'" formControlName="confirmPassword" (focus)="confirmPasswordFocused = true" (blur)="confirmPasswordFocused = false"
+        class="custom-input block w-full !pl-14 pr-4 py-3.5 bg-slate-50 border border-transparent rounded-2xl transition-all text-[var(--text-dark)] placeholder-transparent"
+        />
       <button class="absolute top-3.5 right-0 pr-4 flex items-center bg-transparent border-0 outline-none"
         type="button" (click)="showConPassword = !showConPassword">
-        <span class="material-symbols-outlined text-gray-400 hover:text-[var(--text-dark)] transition-colors text-xl">
-          {{ showConPassword ? 'visibility_off' : 'visibility' }}
-        </span>
       </button>
       <div
         *ngIf="form.get('confirmPassword')!.invalid && (form.get('confirmPassword')!.dirty || form.get('confirmPassword')!.touched)"
         class="text-red-500 text-xs mt-1 ml-2">
-        <span *ngIf="form.get('confirmPassword')!.errors?.['required']">Please confirm your password</span>
+        <span>{{ confirmPasswordError }}</span>
       </div>
       <div *ngIf="passwordMismatch" class="text-red-500 text-xs mt-1 ml-2">
-        Passwords do not match
+        Passwords do not match. Please re-enter to confirm.
       </div>
     </div>
 

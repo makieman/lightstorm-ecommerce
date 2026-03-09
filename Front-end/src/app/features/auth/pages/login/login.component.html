@@ -28,28 +28,25 @@
 
   <form auth-form [formGroup]="form" (ngSubmit)="login()" class="space-y-5 sm:space-y-6">
     <div class="relative group">
-      <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+      <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none" [class.hidden]="emailFocused && form.get('email')?.value">
         <span
           class="material-symbols-outlined text-gray-400 group-focus-within:text-[var(--primary-bg)] transition-colors text-xl">alternate_email</span>
       </div>
-      <input formControlName="email"
-        class="custom-input block w-full pl-12 pr-4 py-4 bg-slate-50 border border-transparent rounded-2xl transition-all text-[var(--text-dark)] placeholder-gray-400"
-        placeholder="user@gmail.com" type="email" />
+      <input formControlName="email" (focus)="emailFocused = true" (blur)="emailFocused = false"
+        class="custom-input block w-full !pl-14 pr-4 py-4 bg-slate-50 border border-transparent rounded-2xl transition-all text-[var(--text-dark)] placeholder-transparent"
+        type="email" />
     </div>
 
     <div class="relative group">
-      <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+      <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none" [class.hidden]="passwordFocused && form.get('password')?.value">
         <span
           class="material-symbols-outlined text-gray-400 group-focus-within:text-[var(--primary-bg)] transition-colors text-xl">lock</span>
       </div>
-      <input [type]="showPassword ? 'text' : 'password'" formControlName="password"
-        class="custom-input block w-full pl-12 pr-12 py-4 bg-slate-50 border border-transparent rounded-2xl transition-all text-[var(--text-dark)] placeholder-gray-400"
-        placeholder="Password" />
+      <input [type]="showPassword ? 'text' : 'password'" formControlName="password" (focus)="passwordFocused = true" (blur)="passwordFocused = false"
+        class="custom-input block w-full !pl-14 pr-4 py-4 bg-slate-50 border border-transparent rounded-2xl transition-all text-[var(--text-dark)] placeholder-transparent"
+        />
       <button class="absolute inset-y-0 right-0 pr-4 flex items-center bg-transparent border-0 outline-none"
         type="button" (click)="showPassword = !showPassword">
-        <span class="material-symbols-outlined text-gray-400 hover:text-[var(--text-dark)] transition-colors text-xl">
-          {{ showPassword ? 'visibility_off' : 'visibility' }}
-        </span>
       </button>
     </div>
 
