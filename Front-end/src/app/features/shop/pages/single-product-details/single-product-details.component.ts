@@ -79,6 +79,7 @@ export class SingleProductDetailsComponent implements OnInit {
     private dialog: MatDialog
   ) {
     this.ID = route.snapshot.params["id"];
+    console.debug('[SingleProduct] initialized, route id =', this.ID);
   }
 
   /************** Open dialog for image full screen ***************/
@@ -99,11 +100,12 @@ export class SingleProductDetailsComponent implements OnInit {
           this.router.navigate(['/']);
         }
         this.product = data;
+        console.debug('[SingleProduct] product loaded:', this.ID, this.product);
         this.syncRelatedProducts();
 
       },
       error: (err: any) => {
-        console.log("cannot get the product !!");
+        console.error('[SingleProduct] cannot get the product !!', err);
       }
     })
 
