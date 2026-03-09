@@ -26,6 +26,11 @@ const requireAuth = async (req, res, next) => {
     if (!user) {
       return res.status(401).json({ message: "Unauthorized: User not found." });
     }
+    // Invalidate token if password was changed after token issuance
+    const { isTokenInvalidatedByPasswordChange } = require('../Utils/auth.utils');
+    if (isTokenInvalidatedByPasswordChange(claims, user)) {
+      return res.status(401).json({ message: 'Unauthorized: Token invalidated due to password change.' });
+    }
 
     // Attach authenticated user to the request for downstream use
     req.user = user;

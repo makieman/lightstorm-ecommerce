@@ -579,10 +579,14 @@ const GetUserByToken = async (req, res) => {
     if (!claims) {
       return res.status(401).json({ message: "Unauthorized: Invalid token" });
     }
-
     const user = await UserModel.findOne({ _id: claims._id });
     if (!user) {
       return res.status(401).json({ message: "Unauthorized: User not found" });
+    }
+
+    const { isTokenInvalidatedByPasswordChange } = require('../Utils/auth.utils');
+    if (isTokenInvalidatedByPasswordChange(claims, user)) {
+      return res.status(401).json({ message: 'Unauthorized: Token invalidated due to password change.' });
     }
 
     const { password, ...data } = user.toJSON();

@@ -24,6 +24,11 @@ const adminMiddleware = async (req, res, next) => {
             return res.status(401).json({ message: "Unauthorized: User not found" });
         }
 
+        const { isTokenInvalidatedByPasswordChange } = require('../Utils/auth.utils');
+        if (isTokenInvalidatedByPasswordChange(claims, user)) {
+            return res.status(401).json({ message: 'Unauthorized: Token invalidated due to password change.' });
+        }
+
         if (!user.isAdmin) {
             return res.status(403).json({ message: "Forbidden: Admin access required" });
         }
