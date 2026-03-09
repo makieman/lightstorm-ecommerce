@@ -23,6 +23,8 @@ export class LoginComponent implements OnInit {
   resendEmail = '';
   resendLoading = false;
   resendSent = false;
+  emailFocused = false;
+  passwordFocused = false;
 
   constructor(
     private http: HttpClient,

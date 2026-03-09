@@ -19,6 +19,14 @@ export class RegisterComponent implements OnInit {
   form!: FormGroup;
   showPassword = false;
   showConPassword = false;
+  usernameFocused = false;
+  usernameError: string = '';
+  emailFocused = false;
+  emailError: string = '';
+  passwordFocused = false;
+  passwordError: string = '';
+  confirmPasswordFocused = false;
+  confirmPasswordError: string = '';
 
   constructor(
     private http: HttpClient,
