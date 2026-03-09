@@ -62,6 +62,10 @@ app.use('/api/orders', orderRoutes);
 app.use('/api/ai', aiRoutes);
 app.use('/api/admin', adminRoutes);
 
+app.get('/ping', (req, res) => {
+  res.status(200).type('text/plain').send('ok');
+});
+
 // Health check endpoint for deployment verification
 app.get('/health', (req, res) => res.json({ status: 'ok', timestamp: new Date().toISOString() }));
 
