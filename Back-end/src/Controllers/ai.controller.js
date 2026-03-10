@@ -14,7 +14,7 @@ const generateDescription = async (req, res) => {
       });
     }
 
-    const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
     
     const prompt = `Write a compelling, professional product description for "${productName}"${category ? ` in the ${category} category` : ''}.
 

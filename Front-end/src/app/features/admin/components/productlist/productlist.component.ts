@@ -59,8 +59,8 @@ export class ProductlistComponent implements OnInit {
         console.error('Error loading grouped products:', err);
         this.isLoading = false;
         // Fallback to flat list
-        this.myproductService.getAllProducts().subscribe((data) => {
-          this.products = data;
+        this.myproductService.getAllProducts().subscribe((data: any) => {
+          this.products = data.products || [];
         });
       }
     });

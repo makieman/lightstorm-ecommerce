@@ -1,7 +1,8 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, NgZone, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { distinctUntilChanged } from 'rxjs/operators';
 
 import { CoreProductService } from '@app/core/services/core-product.service';
 
@@ -47,11 +48,22 @@ export class ProductsComponent implements OnInit {
     private userService: UserService,
     private productService: CoreProductService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private zone: NgZone,
+    private cdr: ChangeDetectorRef
   ) { }
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe(params => {
+    this.route.queryParams.pipe(
+      distinctUntilChanged((prev, curr) =>
+        prev['category'] === curr['category'] &&
+        prev['search'] === curr['search'] &&
+        prev['minPrice'] === curr['minPrice'] &&
+        prev['maxPrice'] === curr['maxPrice'] &&
+        prev['page'] === curr['page'] &&
+        prev['sort'] === curr['sort']
+      )
+    ).subscribe(params => {
       this.selectedCategory = params['category'] || 'All Categories';
       this.searchTerm = params['search'] || '';
       this.minPrice = params['minPrice'] ? Number(params['minPrice']) : undefined;
@@ -72,33 +84,38 @@ export class ProductsComponent implements OnInit {
       search: this.searchTerm,
       minPrice: this.minPrice,
       maxPrice: this.maxPrice,
-      category: this.selectedCategory !== 'All Categories' ? this.selectedCategory : undefined
+      category: this.selectedCategory !== 'All Categories' 
+        ? this.selectedCategory 
+        : undefined
     };
 
-    this.productService.getAllProducts(params).subscribe(
-      (response: any) => {
-        this.filteredProducts = response.products || [];
-        this.products = this.filteredProducts; // Keep in sync for template compatibility
-
-        if (response.pagination) {
-          this.currentPage = response.pagination.page;
-          this.totalItems = response.pagination.totalItems;
-          this.totalPages = response.pagination.totalPages;
-        }
-
-        this.isLoading = false;
-        this.updateUrlWithFilters();
+    this.productService.getAllProducts(params).subscribe({
+      next: (response: any) => {
+        this.zone.run(() => {
+          this.filteredProducts = response.products || [];
+          this.products = this.filteredProducts;
+          if (response.pagination) {
+            this.currentPage = response.pagination.page;
+            this.totalItems = response.pagination.totalItems;
+            this.totalPages = response.pagination.totalPages;
+          }
+          this.isLoading = false;
+          this.cdr.markForCheck();
+        });
       },
-      (error) => {
-        console.error('Error loading products:', error);
-        this.isLoading = false;
+      error: (error: any) => {
+        this.zone.run(() => {
+          console.error('Error loading products:', error);
+          this.isLoading = false;
+          this.cdr.markForCheck();
+        });
       }
-    );
+    });
   }
 
   applyFilters(): void {
     this.currentPage = 1;
-    this.loadProducts();
+    this.updateUrlWithFilters();
     this.closeFilterDrawer();
   }
 
@@ -109,7 +126,7 @@ export class ProductsComponent implements OnInit {
     this.maxPrice = undefined;
     this.sortOption = '-createdAt';
     this.currentPage = 1;
-    this.loadProducts();
+    this.updateUrlWithFilters();
     this.closeFilterDrawer();
   }
 
@@ -132,7 +149,7 @@ export class ProductsComponent implements OnInit {
     }
 
     this.currentPage -= 1;
-    this.loadProducts();
+    this.updateUrlWithFilters();
   }
 
   goToNextPage(): void {
@@ -141,7 +158,7 @@ export class ProductsComponent implements OnInit {
     }
 
     this.currentPage += 1;
-    this.loadProducts();
+    this.updateUrlWithFilters();
   }
 
   navigateToProductDetails(productId: string): void {

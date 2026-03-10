@@ -151,7 +151,6 @@ let dailyOrders = async (req, res) => {
       },
     ];
     let orders = await OrderModel.aggregate(pipeline);
-    console.log(orders);
     if (orders.length === 0) {
       return res.status(404).json({ message: "No orders found" });
     }

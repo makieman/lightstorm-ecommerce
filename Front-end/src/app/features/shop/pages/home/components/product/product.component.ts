@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 import { CommonModule } from '@angular/common';
@@ -9,6 +9,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormsModule } from '@angular/forms';
+import { finalize, catchError } from 'rxjs/operators';
+import { of } from 'rxjs';
 import Swal from 'sweetalert2';
 import { ActivatedRoute } from '@angular/router';
 import { CoreProductService } from '@app/core/services/core-product.service';
@@ -18,7 +20,7 @@ import { CartProductsCountService } from '@app/core/services/cart-products-count
 @Component({
   selector: 'app-product',
   standalone: true,
-  imports: [CommonModule, MatIconModule, RouterModule, MatButtonModule],
+  imports: [CommonModule, MatIconModule, RouterModule, MatButtonModule, MatDialogModule],
   templateUrl: './product.component.html',
   styleUrl: './product.component.css'
 })
@@ -33,32 +35,37 @@ export class ProductComponent implements OnInit {
     private productService: CoreProductService,
     private cartService: CartService,
     private cartCountService: CartProductsCountService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private cdr: ChangeDetectorRef
   ) { }
   allProducts: any[] = [];
   categories: string[] = [];
   productsByCategory: { [key: string]: any[] } = {};
 
   ngOnInit(): void {
-    this.productService.getAllProducts().subscribe({
+    this.productService.getAllProducts().pipe(
+      finalize(() => { this.isLoading = false; this.cdr.detectChanges(); })
+    ).subscribe({
       next: (data: any) => {
-        this.allProducts = data.products || data;
+        this.allProducts = data.products || [];
         this.groupProductsByCategory();
         this.isLoading = false;
+        this.cdr.detectChanges();
       },
-      error: () => {
+      error: (err: any) => {
+        console.error('Failed to load products:', err);
         this.isLoading = false;
+        this.cdr.detectChanges();
       }
     });
 
-    this.productService.getUserToken().subscribe({
+    this.productService.getUserToken().pipe(
+      catchError(() => of(null))
+    ).subscribe({
       next: (data: any) => {
         if (data && data.data) {
           this.user_id = data.data._id;
         }
-      },
-      error: (err: any) => {
-        console.log('Guest user detected');
       }
     });
   }
