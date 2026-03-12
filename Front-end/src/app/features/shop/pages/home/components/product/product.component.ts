@@ -125,7 +125,7 @@ export class ProductComponent implements OnInit {
           });
           // Update global count by reloading or using a shared state
           // For now, reload is simpler if count is in header
-          setTimeout(() => window.location.reload(), 1500);
+          // removed - provideZoneChangeDetection handles re-rendering now
         },
         error: () => {
           Swal.fire({
@@ -147,7 +147,7 @@ export class ProductComponent implements OnInit {
         toast: true,
         position: 'top-end'
       });
-      setTimeout(() => window.location.reload(), 1500);
+      // removed - provideZoneChangeDetection handles re-rendering now
     }
   }
 
@@ -232,7 +232,7 @@ export class DialogContentExampleDialog {
                 timer: 2000,
                 showConfirmButton: false
               }).then(() => {
-                window.location.reload();
+                // removed - provideZoneChangeDetection handles re-rendering now
               });
             },
             error: (err: any) => {
@@ -253,8 +253,7 @@ export class DialogContentExampleDialog {
           timer: 2000,
           showConfirmButton: false
         }).then(() => {
-          // Re-update count if needed or just reload
-          window.location.reload();
+          // removed - provideZoneChangeDetection handles re-rendering now
         });
       }
     } else {

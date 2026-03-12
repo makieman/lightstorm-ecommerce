@@ -119,9 +119,8 @@ export class DialogContentExampleDialog {
             Swal.fire({
               icon: 'success',
               title: 'Product added to cart successfully',
-            }).then(() => {
-              window.location.reload();
             });
+            // removed - provideZoneChangeDetection handles re-rendering now
 
           },
           error: (err: any) => {

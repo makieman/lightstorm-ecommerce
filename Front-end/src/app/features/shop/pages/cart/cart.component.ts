@@ -1,11 +1,13 @@
 import { CoreProductService } from '@app/core/services/core-product.service';
 import { CartService } from '@app/core/services/cart.service';
-import { Component, OnInit } from '@angular/core';
+import { CartProductsCountService } from '@app/core/services/cart-products-count.service';
+import { Component, OnInit, NgZone, ChangeDetectorRef } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { HttpClient } from '@angular/common/http'; // Import HttpClientModule
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Observable, map } from 'rxjs';
+import { Observable, forkJoin, of, map } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { CartItem, cartState } from '@app/core/models/cart.models';
 
 @Component({
@@ -31,7 +33,15 @@ export class CartComponent implements OnInit {
 
   deletedProduct: { _id: string, title: string, image: string, quantity: number, price: number } | null = null;
 
-  constructor(private userService: CartService, private productsService: CoreProductService, private http: HttpClient, private router: Router) { }
+  constructor(
+    private userService: CartService,
+    private productsService: CoreProductService,
+    private cartCountService: CartProductsCountService,
+    private http: HttpClient,
+    private router: Router,
+    private zone: NgZone,
+    private cdr: ChangeDetectorRef
+  ) { }
 
   updateTotal() {
     this.total = 0;
@@ -171,44 +181,116 @@ export class CartComponent implements OnInit {
   ngOnInit() {
     this.getAuthUser().subscribe({
       next: (userid) => {
-        this.userid = userid;
-        this.loadBackendCart();
+        this.zone.run(() => {
+          this.userid = userid;
+          this.loadBackendCart();
+          this.cdr.markForCheck();
+        });
       },
       error: () => {
-        this.userid = "";
-        this.loadGuestCart();
-      }
-    });
-  }
-
-  loadBackendCart() {
-    this.cart = [];
-    this.selectedCountry = localStorage.getItem('selectedCountry') || 'Kenya';
-    this.userService.getUserById(this.userid).subscribe({
-      next: (data: any) => {
-        data.carts.forEach((item: { product: string; quantity: number }) => {
-          this.productsService.getProductById(item.product).subscribe({
-            next: (productData: any) => {
-              this.cart.push({ product: productData, quantity: item.quantity });
-              this.updateTotal();
-            }
-          });
+        this.zone.run(() => {
+          this.userid = "";
+          this.loadGuestCart();
+          this.cdr.markForCheck();
         });
       }
     });
   }
 
-  loadGuestCart() {
+  loadBackendCart(): void {
     this.cart = [];
     this.selectedCountry = localStorage.getItem('selectedCountry') || 'Kenya';
-    const guestItems = this.userService.getGuestCart();
-    guestItems.forEach(item => {
-      this.productsService.getProductById(item.product).subscribe({
-        next: (productData: any) => {
-          this.cart.push({ product: productData, quantity: item.quantity });
-          this.updateTotal();
+
+    this.userService.getUserById(this.userid).subscribe({
+      next: (data: any) => {
+        const cartItems: { product: string; quantity: number }[] = data.carts || [];
+
+        if (cartItems.length === 0) {
+          this.zone.run(() => {
+            this.cart = [];
+            this.updateTotal();
+            this.cartCountService.updateData(0);
+            this.cdr.detectChanges();
+          });
+          return;
         }
+
+        const productRequests: Observable<any>[] = cartItems.map(item =>
+          this.productsService.getProductById(item.product).pipe(
+            map(productData => ({ product: productData, quantity: item.quantity })),
+            catchError(() => {
+              // Product deleted - remove from backend cart silently
+              this.userService.removeProductFromCart(this.userid, item.product).subscribe();
+              return of(null);
+            })
+          )
+        );
+
+        forkJoin(productRequests).subscribe({
+          next: (results: any[]) => {
+            this.zone.run(() => {
+              this.cart = results.filter(r => r !== null);
+              this.updateTotal();
+              const totalQty = this.cart.reduce((sum, i) => sum + i.quantity, 0);
+              this.cartCountService.updateData(totalQty);
+              this.cdr.detectChanges();
+            });
+          },
+          error: () => {
+            this.zone.run(() => {
+              this.cart = [];
+              this.cdr.detectChanges();
+            });
+          }
+        });
+      },
+      error: () => {
+        this.zone.run(() => {
+          this.cart = [];
+          this.cdr.detectChanges();
+        });
+      }
+    });
+  }
+
+  loadGuestCart(): void {
+    this.cart = [];
+    this.selectedCountry = localStorage.getItem('selectedCountry') || 'Kenya';
+
+    const guestItems = this.userService.getGuestCart();
+
+    if (guestItems.length === 0) {
+      this.zone.run(() => {
+        this.cart = [];
+        this.updateTotal();
+        this.cdr.detectChanges();
       });
+      return;
+    }
+
+    const productRequests: Observable<any>[] = guestItems.map(item =>
+      this.productsService.getProductById(item.product).pipe(
+        map(productData => ({ product: productData, quantity: item.quantity })),
+        catchError(() => of(null))
+      )
+    );
+
+    forkJoin(productRequests).subscribe({
+      next: (results: any[]) => {
+        this.zone.run(() => {
+          this.cart = results.filter(r => r !== null);
+          this.updateTotal();
+          const totalQty = this.cart.reduce((sum, i) => sum + i.quantity, 0);
+          this.cartCountService.updateData(totalQty);
+          this.cdr.detectChanges();
+        });
+      },
+      error: () => {
+        this.zone.run(() => {
+          this.cart = [];
+          this.cdr.detectChanges();
+        });
+      }
     });
   }
 }

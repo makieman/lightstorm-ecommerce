@@ -362,9 +362,8 @@ export class SingleProductDetailsComponent implements OnInit {
                 text: `${this.product.title} has been added to your cart.`,
                 timer: 2000,
                 showConfirmButton: false
-              }).then(() => {
-                window.location.reload();
               });
+              // removed - provideZoneChangeDetection handles re-rendering now
             },
             error: (err: any) => {
               Swal.fire({
@@ -383,9 +382,8 @@ export class SingleProductDetailsComponent implements OnInit {
           text: `${this.product.title} added to your guest cart.`,
           timer: 2000,
           showConfirmButton: false
-        }).then(() => {
-          window.location.reload();
         });
+        // removed - provideZoneChangeDetection handles re-rendering now
       }
     } else {
       Swal.fire({

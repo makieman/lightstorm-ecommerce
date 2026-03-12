@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone, ChangeDetectorRef } from '@angular/core';
 import { MatMenuModule } from '@angular/material/menu';
 import { RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
@@ -61,36 +61,52 @@ export class HeaderComponent implements OnInit {
   constructor(
     private productService: CoreProductService, 
     private productsCount: CartProductsCountService,
-    private cartService: CartService
+    private cartService: CartService,
+    private zone: NgZone,
+    private cdr: ChangeDetectorRef
   ) { }
+
+  private getCartCount(carts: any[] = []): number {
+    return carts.reduce((sum, item) => sum + (item.quantity || 0), 0);
+  }
 
   ngOnInit() {
     this.productService.getUserToken().subscribe({
       next: (data: any) => {
-        this.data = data.data.carts.length;
-        this.user_id = data.data._id;
-        // Optionally update the count service with the real backend count
-        this.productsCount.updateData(this.data);
-        
+        this.zone.run(() => {
+          this.data = this.getCartCount(data.data.carts);
+          this.user_id = data.data._id;
+          this.productsCount.updateData(this.data);
+          this.cdr.markForCheck();
+        });
+
         data.data.orders.forEach((element: { totalPrice: number; }) => {
           this.productService.getOrderById(element).subscribe({
-            next: (data: any) => {
-              if (data && data.totalPrice) {
-                this.oredersTotalPrice += data.totalPrice;
+            next: (orderData: any) => {
+              if (orderData && orderData.totalPrice) {
+                this.zone.run(() => {
+                  this.oredersTotalPrice += orderData.totalPrice;
+                  this.cdr.markForCheck();
+                });
               }
             }
           });
         });
       },
       error: (err) => {
-        // Guest user: Load guest count
-        this.cartService.updateCartCount();
+        this.zone.run(() => {
+          this.cartService.updateCartCount();
+          this.cdr.markForCheck();
+        });
       }
     });
 
     this.productsCount.data$.subscribe({
       next: (data) => {
-        this.data = data;
+        this.zone.run(() => {
+          this.data = data;
+          this.cdr.markForCheck();
+        });
       }
     });
   }

@@ -34,13 +34,25 @@ app.use(bodyParser.json());
 const allowedOrigins = [
   "http://localhost:4200",
   "http://localhost:7000",
+  "https://lightstorm-ecommerce.vercel.app",
   process.env.FRONTEND_URL
 ].filter(Boolean);
 
 app.use(cors({
   credentials: true,
-  origin: allowedOrigins
+  origin: (origin, callback) => {
+    // Allow requests with no origin (e.g. server-to-server, curl)
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error(`CORS: origin '${origin}' not allowed`));
+    }
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  exposedHeaders: ['set-cookie']
 }));
+app.options('*', cors());
 app.use(cookieParser());
 
 // Database connection

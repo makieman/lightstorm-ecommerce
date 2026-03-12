@@ -1,10 +1,13 @@
-import { Component, OnInit, ViewEncapsulation, NgZone, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { distinctUntilChanged } from 'rxjs/operators';
+import { catchError, of } from 'rxjs';
 
 import { CoreProductService } from '@app/core/services/core-product.service';
+import { CartService } from '@app/core/services/cart.service';
+import { CartProductsCountService } from '@app/core/services/cart-products-count.service';
 
 import { UserService } from '../checkout/user.service';
 
@@ -46,11 +49,11 @@ export class ProductsComponent implements OnInit {
 
   constructor(
     private userService: UserService,
+    private cartService: CartService,
+    private cartCountService: CartProductsCountService,
     private productService: CoreProductService,
     private route: ActivatedRoute,
-    private router: Router,
-    private zone: NgZone,
-    private cdr: ChangeDetectorRef
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -91,24 +94,18 @@ export class ProductsComponent implements OnInit {
 
     this.productService.getAllProducts(params).subscribe({
       next: (response: any) => {
-        this.zone.run(() => {
-          this.filteredProducts = response.products || [];
-          this.products = this.filteredProducts;
-          if (response.pagination) {
-            this.currentPage = response.pagination.page;
-            this.totalItems = response.pagination.totalItems;
-            this.totalPages = response.pagination.totalPages;
-          }
-          this.isLoading = false;
-          this.cdr.markForCheck();
-        });
+        this.filteredProducts = response.products || [];
+        this.products = this.filteredProducts;
+        if (response.pagination) {
+          this.currentPage = response.pagination.page;
+          this.totalItems = response.pagination.totalItems;
+          this.totalPages = response.pagination.totalPages;
+        }
+        this.isLoading = false;
       },
       error: (error: any) => {
-        this.zone.run(() => {
-          console.error('Error loading products:', error);
-          this.isLoading = false;
-          this.cdr.markForCheck();
-        });
+        console.error('Error loading products:', error);
+        this.isLoading = false;
       }
     });
   }
@@ -191,31 +188,35 @@ export class ProductsComponent implements OnInit {
   }
 
   addToCart(product: any): void {
-    this.productService.getUserToken().subscribe(
-      (response: any) => {
-        const userId = response.data._id;
-        const quantity = 1;
-        this.userService.addProductToCart(userId, product._id, quantity).subscribe(
-          (addResponse: any) => {
-            console.log('Item added to cart successfully:', addResponse);
+    const quantity = 1;
+
+    this.productService.getUserToken().pipe(
+      catchError(() => of(null))
+    ).subscribe((response: any) => {
+      const userId = response?.data?._id;
+
+      if (userId) {
+        this.userService.addProductToCart(userId, product._id, quantity).subscribe({
+          next: (addResponse: any) => {
+            const cartCount = (addResponse?.user?.carts || []).reduce(
+              (sum: number, item: any) => sum + item.quantity,
+              0
+            );
+            this.cartCountService.updateData(cartCount);
           },
-          (error: any) => {
+          error: (error: any) => {
             if (error.error && error.error.message) {
               console.error('Error adding item to cart:', error.error.message);
             } else {
               console.error('Error adding item to cart:', error);
             }
           }
-        );
-      },
-      (error: any) => {
-        if (error.error && error.error.message) {
-          console.error('Error getting user details:', error.error.message);
-        } else {
-          console.error('Error getting user details:', error);
-        }
+        });
+        return;
       }
-    );
+
+      this.cartService.addToGuestCart(product._id, quantity);
+    });
   }
 
   trackByProduct(_index: number, product: any): string {
