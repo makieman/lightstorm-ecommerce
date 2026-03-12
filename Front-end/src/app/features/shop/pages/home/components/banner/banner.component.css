@@ -89,9 +89,3 @@
   }
 }
 
-/* Parallax Effect Styles */
-.parallax-bg {
-  will-change: transform;
-  transform: translateY(0);
-  transition: transform 0.1s ease-out;
-}

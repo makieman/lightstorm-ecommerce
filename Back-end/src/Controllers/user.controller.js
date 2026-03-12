@@ -183,11 +183,24 @@ let RegisterUser = async (req, res) => {
     });
     const savedUser = await newUser.save();
 
-    await sendVerificationEmail(email, verificationToken);
+    // Send verification email but don't let email failure crash registration
+    let emailSent = true;
+    try {
+      await sendVerificationEmail(email, verificationToken);
+    } catch (emailErr) {
+      console.error("Verification email failed (user still created):", emailErr.message);
+      emailSent = false;
+    }
 
     return res
       .status(201)
-      .json({ message: "User Created Successfully. Check your email to activate account.", user: { id: savedUser._id, email: savedUser.email } });
+      .json({
+        message: emailSent
+          ? "User Created Successfully. Check your email to activate account."
+          : "User Created Successfully. Email sending failed — use 'Resend Verification' to get your activation link.",
+        user: { id: savedUser._id, email: savedUser.email },
+        emailSent,
+      });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }

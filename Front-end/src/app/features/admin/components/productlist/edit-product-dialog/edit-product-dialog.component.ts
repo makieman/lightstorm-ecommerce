@@ -31,7 +31,7 @@ export class EditProductDialogComponent {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private productService: CoreProductService,
-    private dialog: MatDialogRef<any>,
+    protected dialog: MatDialogRef<any>,
     private router: Router
   ) {
     this.product = data.productFromParent;
