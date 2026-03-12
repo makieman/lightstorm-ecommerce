@@ -6,6 +6,8 @@ import { CoreProductService } from '@app/core/services/core-product.service';
 import { AIService } from '@app/core/services/ai.service';
 import { Category } from '@app/features/shop/pages/products/product.model';
 import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { finalize } from 'rxjs/operators';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -99,6 +101,44 @@ import Swal from 'sweetalert2';
                   <p class="mt-1 text-xs text-red-500">Valid price is required</p>
                 }
               </div>
+            </div>
+
+            <!-- Product Image -->
+            <div>
+              <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
+                Product Image
+                <span class="ml-1 text-gray-400 font-normal normal-case tracking-normal text-[10px]">— upload first, then let AI auto-fill the form</span>
+              </label>
+              <div class="flex gap-2 items-center">
+                <input 
+                  type="file" 
+                  (change)="onFileSelected($event)"
+                  accept="image/*"
+                  class="flex-1 px-4 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-gray-800 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-indigo-50 file:text-indigo-600 hover:file:bg-indigo-100 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none"
+                >
+                <button
+                  type="button"
+                  (click)="analyzeImageWithAI()"
+                  [disabled]="!imageFile || isAnalyzingImage()"
+                  class="flex-shrink-0 flex items-center gap-1.5 px-3 py-2.5 text-xs font-semibold text-purple-700 bg-purple-50 hover:bg-purple-100 rounded-xl transition-all disabled:opacity-40 disabled:cursor-not-allowed whitespace-nowrap"
+                >
+                  @if (isAnalyzingImage()) {
+                    <svg class="animate-spin h-3.5 w-3.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    <span>Analyzing...</span>
+                  } @else {
+                    <span>✨ AI Analyze</span>
+                  }
+                </button>
+              </div>
+              @if (imageFile) {
+                <p class="mt-2 text-xs text-green-600 flex items-center gap-1">
+                  <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                  {{ imageFile.name }}
+                </p>
+              }
             </div>
 
             <!-- Description -->
@@ -208,26 +248,7 @@ import Swal from 'sweetalert2';
               </div>
             </div>
 
-            <!-- Product Image -->
-            <div>
-              <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
-                Product Image
-              </label>
-              <div class="relative">
-                <input 
-                  type="file" 
-                  (change)="onFileSelected($event)"
-                  accept="image/*"
-                  class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-gray-800 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-indigo-50 file:text-indigo-600 hover:file:bg-indigo-100 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none"
-                >
-              </div>
-              @if (imageFile) {
-                <p class="mt-2 text-xs text-green-600 flex items-center gap-1">
-                  <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                  {{ imageFile.name }}
-                </p>
-              }
-            </div>
+
 
           </div>
         </form>
@@ -275,12 +296,14 @@ export class CreateProductDialogComponent implements OnInit {
   createForm: any;
   imageFile: File | null = null;
   isGenerating = signal(false);
+  isAnalyzingImage = signal(false);
   categories: Category[] = [];
 
   constructor(
     private fb: FormBuilder,
     private productService: CoreProductService,
     private aiService: AIService,
+    private http: HttpClient,
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialog: MatDialogRef<CreateProductDialogComponent>,
     private router: Router
@@ -343,6 +366,35 @@ export class CreateProductDialogComponent implements OnInit {
       const file = event.target.files[0];
       this.imageFile = file;
     }
+  }
+
+  analyzeImageWithAI(): void {
+    if (!this.imageFile) return;
+
+    this.isAnalyzingImage.set(true);
+    const formData = new FormData();
+    formData.append('image', this.imageFile);
+
+    this.http.post<any>('/api/ai/analyze-image', formData)
+      .pipe(finalize(() => this.isAnalyzingImage.set(false)))
+      .subscribe({
+        next: (result) => {
+          if (result.success && result.data) {
+            const d = result.data;
+            const patch: any = {};
+            if (d.productName && !this.createForm.get('title')?.value) patch.title = d.productName;
+            if (d.category) patch.productCategory = d.category;
+            if (d.description) patch.details = d.description;
+            if (d.wattage) patch.wattage = d.wattage;
+            if (d.voltage) patch.voltage = d.voltage;
+            if (d.batteryType) patch.batteryType = d.batteryType;
+            this.createForm.patchValue(patch);
+          }
+        },
+        error: () => {
+          Swal.fire({ icon: 'error', title: 'AI analysis failed', text: 'Could not analyze image. Please try again.', timer: 3000, showConfirmButton: false });
+        }
+      });
   }
 
   close() {
