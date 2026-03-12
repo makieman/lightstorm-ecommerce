@@ -1,4 +1,5 @@
 import { Component, Inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { CoreProductService } from '@app/core/services/core-product.service';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
@@ -9,7 +10,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-edit-product-dialog',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './edit-product-dialog.component.html',
   styleUrl: './edit-product-dialog.component.css',
 })
