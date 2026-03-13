@@ -16,6 +16,7 @@ import { Router } from '@angular/router';
 })
 export class EditProductDialogComponent {
   imageFile: File | null = null;
+  selectedImages: { file: File; preview: string }[] = [];
   productUpdated: any;
   editForm = new FormGroup({
     title: new FormControl(''),
@@ -50,10 +51,25 @@ export class EditProductDialogComponent {
   }
   onFileSelected(event: any) {
     if (event.target.files.length > 0) {
-      const file = event.target.files[0];
-      this.imageFile = file;
+      const files = Array.from(event.target.files as FileList).slice(0, 5); // Limit to 5 images
+      this.selectedImages = (files as File[]).map(file => ({
+        file,
+        preview: URL.createObjectURL(file)
+      }));
+      // Set first image as legacy single image for backward compatibility
+      if (this.selectedImages.length > 0) {
+        this.imageFile = this.selectedImages[0].file;
+      }
+    }
+  }
 
-      // Handle the file here. You can add it to a FormData object if you're sending it to a server.
+  removeImage(index: number): void {
+    URL.revokeObjectURL(this.selectedImages[index].preview);
+    this.selectedImages.splice(index, 1);
+    if (this.selectedImages.length === 0) {
+      this.imageFile = null;
+    } else if (index === 0) {
+      this.imageFile = this.selectedImages[0].file;
     }
   }
 
@@ -70,10 +86,16 @@ export class EditProductDialogComponent {
     this.productUpdated.append('wattage', this.editForm.value.wattage);
     this.productUpdated.append('voltage', this.editForm.value.voltage);
     this.productUpdated.append('batteryType', this.editForm.value.batteryType);
-    // this.productUpdated.append('reviews', this.product.reviews);
-    if (this.imageFile) {
+    
+    // Append all selected images (up to 5)
+    this.selectedImages.forEach((img, index) => {
+      this.productUpdated.append('images', img.file);
+    });
+    // For backward compatibility with single image field
+    if (this.imageFile && this.selectedImages.length === 0) {
       this.productUpdated.append('image', this.imageFile);
     }
+    
     this.productService.updateProduct(this.productUpdated).subscribe(
       (data: any) => {
         console.log(data);

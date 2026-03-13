@@ -103,15 +103,16 @@ import Swal from 'sweetalert2';
               </div>
             </div>
 
-            <!-- Product Image -->
+            <!-- Product Images (Multiple) -->
             <div>
               <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
-                Product Image
+                Product Images <span class="text-red-400">(up to 5)</span>
                 <span class="ml-1 text-gray-400 font-normal normal-case tracking-normal text-[10px]">— upload first, then let AI auto-fill the form</span>
               </label>
-              <div class="flex gap-2 items-center">
+              <div class="flex gap-2 items-center mb-3">
                 <input 
                   type="file" 
+                  multiple
                   (change)="onFileSelected($event)"
                   accept="image/*"
                   class="flex-1 px-4 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-gray-800 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-indigo-50 file:text-indigo-600 hover:file:bg-indigo-100 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none"
@@ -133,10 +134,28 @@ import Swal from 'sweetalert2';
                   }
                 </button>
               </div>
-              @if (imageFile) {
-                <p class="mt-2 text-xs text-green-600 flex items-center gap-1">
-                  <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                  {{ imageFile.name }}
+              
+              <!-- Image Preview Grid -->
+              @if (selectedImages.length > 0) {
+                <div class="image-preview-grid grid grid-cols-3 sm:grid-cols-4 gap-3 mb-3">
+                  @for (img of selectedImages; let i = $index; track i) {
+                    <div class="relative group rounded-lg overflow-hidden border-2 transition-all" [class.border-red-500]="i === 0" [class.border-gray-200]="i !== 0" [class.ring-2]="i === 0" [class.ring-red-500]="i === 0">
+                      <img [src]="img.preview" alt="Product image" class="w-full h-20 object-cover" />
+                      @if (i === 0) {
+                        <span class="absolute top-1 left-1 bg-red-500 text-white text-[9px] font-bold px-2 py-0.5 rounded">Main</span>
+                      }
+                      <button 
+                        type="button"
+                        (click)="removeImage(i)"
+                        class="absolute top-1 right-1 bg-red-600 hover:bg-red-700 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity"
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  }
+                </div>
+                <p class="text-xs text-gray-500">
+                  {{ selectedImages.length }} image(s) selected. First image = main thumbnail.
                 </p>
               }
             </div>
@@ -295,6 +314,7 @@ import Swal from 'sweetalert2';
 export class CreateProductDialogComponent implements OnInit {
   createForm: any;
   imageFile: File | null = null;
+  selectedImages: { file: File; preview: string }[] = [];
   isGenerating = signal(false);
   isAnalyzingImage = signal(false);
   categories: Category[] = [];
@@ -363,8 +383,25 @@ export class CreateProductDialogComponent implements OnInit {
 
   onFileSelected(event: any) {
     if (event.target.files.length > 0) {
-      const file = event.target.files[0];
-      this.imageFile = file;
+      const files = Array.from(event.target.files as FileList).slice(0, 5); // Limit to 5 images
+      this.selectedImages = (files as File[]).map(file => ({
+        file,
+        preview: URL.createObjectURL(file)
+      }));
+      // Set first image as legacy single image for backward compatibility
+      if (this.selectedImages.length > 0) {
+        this.imageFile = this.selectedImages[0].file;
+      }
+    }
+  }
+
+  removeImage(index: number): void {
+    URL.revokeObjectURL(this.selectedImages[index].preview);
+    this.selectedImages.splice(index, 1);
+    if (this.selectedImages.length === 0) {
+      this.imageFile = null;
+    } else if (index === 0) {
+      this.imageFile = this.selectedImages[0].file;
     }
   }
 
@@ -416,7 +453,13 @@ export class CreateProductDialogComponent implements OnInit {
     product.append('wattage', this.createForm.value.wattage || '');
     product.append('voltage', this.createForm.value.voltage || '');
     product.append('batteryType', this.createForm.value.batteryType || '');
-    if (this.imageFile) {
+    
+    // Append all selected images (up to 5)
+    this.selectedImages.forEach((img, index) => {
+      product.append('images', img.file);
+    });
+    // For backward compatibility with single image field
+    if (this.imageFile && this.selectedImages.length === 0) {
       product.append('image', this.imageFile);
     }
 

@@ -68,6 +68,7 @@ export class SingleProductDetailsComponent implements OnInit {
   reviewForm: FormGroup;
   submitted: boolean = false;
   ratingSelected: boolean = false;
+  currentImageIndex: number = 0; // NEW: for image gallery
 
   constructor(
     private route: ActivatedRoute,
@@ -88,6 +89,51 @@ export class SingleProductDetailsComponent implements OnInit {
       data: { imageSrc: imageSrc },
       panelClass: 'full-screen-dialog'
     });
+  }
+
+  /**
+   * Get array of product images with backward compatibility
+   * If images exist, return them; otherwise convert single image to array
+   */
+  get productImages(): string[] {
+    if (this.product?.images && this.product.images.length > 0) {
+      return this.product.images;
+    }
+    return this.product?.image ? [this.product.image] : [];
+  }
+
+  /**
+   * Get current image URL
+   */
+  get currentImage(): string {
+    const images = this.productImages;
+    if (!images.length) return '';
+    return images[this.currentImageIndex];
+  }
+
+  /**
+   * Navigate to next image
+   */
+  nextImage(): void {
+    const len = this.productImages.length;
+    if (len <= 1) return;
+    this.currentImageIndex = (this.currentImageIndex + 1) % len;
+  }
+
+  /**
+   * Navigate to previous image
+   */
+  prevImage(): void {
+    const len = this.productImages.length;
+    if (len <= 1) return;
+    this.currentImageIndex = (this.currentImageIndex - 1 + len) % len;
+  }
+
+  /**
+   * Set image by index (from thumbnail click)
+   */
+  setImage(index: number): void {
+    this.currentImageIndex = index;
   }
 
 
@@ -273,15 +319,32 @@ export class SingleProductDetailsComponent implements OnInit {
       return;
     }
 
-    const relatedProducts = this.allProducts.filter(
-      (product: any) => product.category === this.product.category && product._id !== this.product._id
-    );
+    // Get category identifier (handle both string and object cases)
+    const productCategoryId = typeof this.product.category === 'object' 
+      ? this.product.category?._id || this.product.category?.id 
+      : this.product.category;
 
-    const fallbackProducts = this.allProducts.filter((product: any) => product._id !== this.product._id);
+    // Filter by matching category (with flexible comparison)
+    const relatedProducts = this.allProducts.filter((product: any) => {
+      if (product._id === this.product._id) return false; // Skip current product
+      
+      const otherCategoryId = typeof product.category === 'object'
+        ? product.category?._id || product.category?.id
+        : product.category;
+      
+      return otherCategoryId && productCategoryId && 
+             otherCategoryId.toString() === productCategoryId.toString();
+    });
 
-    this.relatedProducts = (relatedProducts.length ? relatedProducts : fallbackProducts)
+    // Fallback: if no category matches, show latest products
+    const fallbackProducts = this.allProducts
+      .filter((product: any) => product._id !== this.product._id)
+      .slice(0, 4);
+
+    // Use category matches if available, otherwise use fallback (latest 4 products)
+    this.relatedProducts = (relatedProducts.length > 0 ? relatedProducts : fallbackProducts)
       .filter(Boolean)
-      .slice(0, 8);
+      .slice(0, 4); // Limit to 4 related products
 
     const matchedIndex = this.allProducts.findIndex((product: any) => product._id === this.product._id);
     this.currentProductIndex = matchedIndex >= 0 ? matchedIndex : 0;

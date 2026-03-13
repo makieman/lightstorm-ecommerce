@@ -10,6 +10,17 @@ const mongoose = require("mongoose");
 const cloudUpload = require("../services/cloudinary.service");
 
 /**
+ * Helper: Get images array with backward compatibility
+ * If images array exists, return it; otherwise convert old image field to array
+ */
+const getProductImages = (product) => {
+  if (product.images && product.images.length > 0) {
+    return product.images;
+  }
+  return product.image ? [product.image] : [];
+};
+
+/**
  * Get all Products with optional category filter
  */
 const getAllProducts = async (req, res) => {
@@ -64,7 +75,7 @@ const getAllProducts = async (req, res) => {
     const [totalItems, products] = await Promise.all([
       productModel.countDocuments(query),
       productModel.find(query)
-        .select('title price quantity type details image category lowStockThreshold wattage voltage batteryType createdAt updatedAt')
+        .select('title price quantity type details image images category lowStockThreshold wattage voltage batteryType createdAt updatedAt')
         .populate('category', 'name slug')
         .sort(sortOption)
         .skip(skip)
@@ -72,12 +83,18 @@ const getAllProducts = async (req, res) => {
         .lean()
     ]);
 
+    // Add backward compatibility: convert image to images array in response
+    const productsWithImages = products.map(product => ({
+      ...product,
+      images: getProductImages(product)
+    }));
+
     const totalPages = Math.ceil(totalItems / limit);
 
     res.set('Cache-Control', 'public, max-age=60, s-maxage=300, stale-while-revalidate=600');
 
     res.json({
-      products,
+      products: productsWithImages,
       pagination: {
         page,
         limit,
@@ -97,13 +114,19 @@ const getAllProducts = async (req, res) => {
 const getFeaturedProducts = async (req, res) => {
   try {
     const products = await productModel.find({})
-      .select('title price quantity type details image category lowStockThreshold wattage voltage batteryType createdAt updatedAt')
+      .select('title price quantity type details image images category lowStockThreshold wattage voltage batteryType createdAt updatedAt')
       .sort({ createdAt: -1 })
       .limit(4)
       .lean();
 
+    // Add backward compatibility
+    const productsWithImages = products.map(product => ({
+      ...product,
+      images: getProductImages(product)
+    }));
+
     res.set('Cache-Control', 'public, max-age=60, s-maxage=300, stale-while-revalidate=600');
-    res.json(products);
+    res.json(productsWithImages);
   } catch (err) {
     res.status(500).json({ message: "Internal Server Error", error: err.message });
   }
@@ -125,7 +148,10 @@ let getProductByID = async (req, res) => {
     if (!product) {
       return res.status(404).json({ message: "Product not found" });
     }
-    return res.json(product);
+    // Add backward compatibility: convert image to images array
+    const response = product.toObject();
+    response.images = getProductImages(response);
+    return res.json(response);
   } catch (error) {
     return res.status(500).json({ message: "Internal server error" });
   }
@@ -194,11 +220,30 @@ let createNewProduct = async (req, res) => {
       batteryType: req.body.batteryType
     };
 
+    // Handle multiple image uploads (up to 5)
     if (req.files && req.files.length > 0) {
-      let uploadedImage = await cloudUpload(req.files[0].path);
-      productData.image = uploadedImage.url;
-      // Clean up local file after Cloudinary upload
-      try { fs.unlinkSync(req.files[0].path); } catch (e) { /* ignore */ }
+      try {
+        const filesToUpload = req.files.slice(0, 5); // Limit to 5 images
+        const uploadPromises = filesToUpload.map(file => cloudUpload(file.path));
+        const uploadedImages = await Promise.all(uploadPromises);
+        
+        productData.images = uploadedImages.map(u => u.url);
+        // Also set first image as legacy 'image' field for backward compatibility
+        if (uploadedImages.length > 0) {
+          productData.image = uploadedImages[0].url;
+        }
+        
+        // Clean up local files after Cloudinary upload
+        filesToUpload.forEach(file => {
+          try { fs.unlinkSync(file.path); } catch (e) { /* ignore */ }
+        });
+      } catch (uploadError) {
+        console.error('Image upload error:', uploadError);
+        return res.status(500).json({
+          message: "Error uploading images",
+          error: uploadError.message
+        });
+      }
     }
 
     let product = new productModel(productData);
@@ -223,12 +268,30 @@ let updateProductByID = async (req, res) => {
       return res.status(404).json({ message: "Product not found" });
     }
 
-    // Update image if uploaded
-    if (req.files && req.files[0]) {
-      let uploadedImage = await cloudUpload(req.files[0].path);
-      product.image = uploadedImage.url;
-      // Clean up local file after Cloudinary upload
-      try { fs.unlinkSync(req.files[0].path); } catch (e) { /* ignore */ }
+    // Update images if uploaded (up to 5)
+    if (req.files && req.files.length > 0) {
+      try {
+        const filesToUpload = req.files.slice(0, 5); // Limit to 5 images
+        const uploadPromises = filesToUpload.map(file => cloudUpload(file.path));
+        const uploadedImages = await Promise.all(uploadPromises);
+        
+        product.images = uploadedImages.map(u => u.url);
+        // Also set first image as legacy 'image' field for backward compatibility
+        if (uploadedImages.length > 0) {
+          product.image = uploadedImages[0].url;
+        }
+        
+        // Clean up local files after Cloudinary upload
+        filesToUpload.forEach(file => {
+          try { fs.unlinkSync(file.path); } catch (e) { /* ignore */ }
+        });
+      } catch (uploadError) {
+        console.error('Image upload error:', uploadError);
+        return res.status(500).json({
+          message: "Error uploading images",
+          error: uploadError.message
+        });
+      }
     }
 
     // Standardize body fields

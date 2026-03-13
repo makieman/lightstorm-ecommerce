@@ -14,7 +14,8 @@ const productsSchema = new mongoose.Schema({
   quantity: { type: Number, min: 0, default: 0 },
   type: { type: String, enum: ['product', 'service'], default: 'product' },
   details: String,
-  image: String,
+  image: String, // DEPRECATED: kept for backward compatibility
+  images: [{ type: String }], // New: array of image URLs (up to 5)
   category: { type: mongoose.Schema.Types.ObjectId, ref: "categories" },
   lowStockThreshold: { type: Number, default: 5, min: 0 },
   createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "users" },
