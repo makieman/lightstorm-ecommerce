@@ -18,10 +18,29 @@ const adminRoutes = require('./Routes/admin.routes');
 const app = express();
 
 const rateLimit = require("express-rate-limit");
-const authLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 10 });
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: {
+    success: false,
+    error: 'Too many requests, please try again later.'
+  }
+});
+
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 20,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: {
+    success: false,
+    error: 'Too many login attempts, please try again later.'
+  }
+});
 app.use("/api/users/login", authLimiter);
-app.use("/api/users/register", authLimiter);
-app.use("/api/users/resend-verification", authLimiter);
+app.use("/api", limiter);
 const resetLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 5 });
 app.use("/api/users/forgot-password", resetLimiter);
 app.use("/api/users/reset-password", resetLimiter);

@@ -202,6 +202,12 @@ let RegisterUser = async (req, res) => {
         emailSent,
       });
   } catch (error) {
+    if (error && error.code === 11000) {
+      return res.status(400).json({
+        success: false,
+        error: 'Email already registered'
+      });
+    }
     return res.status(500).json({ message: error.message });
   }
 };
