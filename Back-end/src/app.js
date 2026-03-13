@@ -54,6 +54,8 @@ const allowedOrigins = [
   "http://localhost:4200",
   "http://localhost:7000",
   "https://lightstorm-ecommerce.vercel.app",
+  "https://lightstormtechnologies.com",
+  "https://www.lightstormtechnologies.com",
   process.env.FRONTEND_URL
 ].filter(Boolean);
 
