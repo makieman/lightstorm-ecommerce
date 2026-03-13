@@ -30,9 +30,15 @@ export class SearchService {
     { name: 'Solar Panel', slug: 'solar', icon: 'bi-sun' },
     { name: 'Inverter', slug: 'inverter', icon: 'bi-gear-wide-connected' },
     { name: 'Battery', slug: 'battery', icon: 'bi-battery-charging' },
+    { name: 'Lithium Battery', slug: 'lithium-battery', icon: 'bi-battery-full' },
+    { name: 'Gel Battery', slug: 'gel-battery', icon: 'bi-battery-half' },
     { name: 'Charge Controller', slug: 'charge-controller', icon: 'bi-cpu' },
     { name: 'Solar Lighting', slug: 'solar-lighting', icon: 'bi-lightbulb' },
+    { name: 'Flood Lights & Street Lights', slug: 'flood-lights-street-lights', icon: 'bi-lamp' },
+    { name: 'Garden Lights', slug: 'garden-lights', icon: 'bi-flower1' },
     { name: 'Mounting Systems', slug: 'mounting-systems', icon: 'bi-tools' },
+    { name: 'Water Heaters', slug: 'water-heaters', icon: 'bi-droplet-half' },
+    { name: 'Family Solar Packages', slug: 'family-solar-packages', icon: 'bi-house-heart' },
     { name: 'Borehole', slug: 'borehole', icon: 'bi-droplet' },
     { name: 'Electrical', slug: 'electrical', icon: 'bi-lightning' }
   ];

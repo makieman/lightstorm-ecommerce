@@ -618,13 +618,25 @@ const GetUserByToken = async (req, res) => {
 const userLogout = async (req, res) => {
   try {
     const cookie = req.cookies["jwt"];
+    const clearCookieOptions = {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+    };
+
     if (cookie) {
-      res.clearCookie("jwt").send("Logout successful");
+      return res
+        .clearCookie("jwt", clearCookieOptions)
+        .status(200)
+        .json({ success: true, message: "Logout successful" });
     } else {
-      res.send("No JWT cookie found");
+      return res
+        .clearCookie("jwt", clearCookieOptions)
+        .status(200)
+        .json({ success: true, message: "No JWT cookie found" });
     }
   } catch (error) {
-    res.status(500).json({ message: "Internal Server Error" });
+    return res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 };
 

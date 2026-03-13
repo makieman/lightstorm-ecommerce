@@ -53,7 +53,7 @@ const analyzeProductImage = async (req, res) => {
     const prompt = `Analyze this solar/energy product image and return a JSON object with these fields (use null if not visible/applicable):
 {
   "productName": "specific product name",
-  "category": "one of: Solar Panel, Inverter, Battery, Charge Controller, Solar Lighting, Mounting Systems",
+  "category": "one of: Solar Panel, Inverter, Battery, Lithium Battery, Gel Battery, Charge Controller, Solar Lighting, Flood Lights & Street Lights, Garden Lights, Mounting Systems, Water Heaters, Family Solar Packages",
   "description": "2-3 sentence product description for e-commerce",
   "wattage": "number and unit only, e.g. 450W, or null",
   "voltage": "number and unit only, e.g. 12V, or null",

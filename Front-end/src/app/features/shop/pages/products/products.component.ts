@@ -42,9 +42,15 @@ export class ProductsComponent implements OnInit {
     { label: 'Solar Panels', value: 'Solar Panel' },
     { label: 'Inverters', value: 'Inverter' },
     { label: 'Batteries', value: 'Battery' },
+    { label: 'Lithium Batteries', value: 'Lithium Battery' },
+    { label: 'Gel Batteries', value: 'Gel Battery' },
     { label: 'Charge Controllers', value: 'Charge Controller' },
     { label: 'Solar Lighting', value: 'Solar Lighting' },
-    { label: 'Mounting Systems', value: 'Mounting Systems' }
+    { label: 'Flood Lights & Street Lights', value: 'Flood Lights & Street Lights' },
+    { label: 'Garden Lights', value: 'Garden Lights' },
+    { label: 'Mounting Systems', value: 'Mounting Systems' },
+    { label: 'Water Heaters', value: 'Water Heaters' },
+    { label: 'Family Solar Packages', value: 'Family Solar Packages' }
   ];
 
   constructor(

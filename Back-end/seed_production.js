@@ -67,7 +67,16 @@ const initialData = [
                 image: 'https://images.unsplash.com/photo-1620288627223-53302f4e8c74?q=80&w=800&auto=format&fit=crop'
             }
         ]
-    }
+    },
+    { category: 'Charge Controller',       description: 'Solar charge regulation devices',                    products: [] },
+    { category: 'Solar Lighting',           description: 'Solar-powered indoor and outdoor lighting',           products: [] },
+    { category: 'Lithium Battery',          description: 'Lithium-ion and LiFePO4 deep-cycle batteries',        products: [] },
+    { category: 'Gel Battery',              description: 'Sealed gel lead-acid batteries',                      products: [] },
+    { category: 'Flood Lights & Street Lights', description: 'High-output solar flood and street lighting',    products: [] },
+    { category: 'Garden Lights',            description: 'Decorative and security garden solar lights',         products: [] },
+    { category: 'Mounting Systems',         description: 'Roof and ground-mount racking for solar panels',      products: [] },
+    { category: 'Water Heaters',            description: 'Solar and electric water heating systems',            products: [] },
+    { category: 'Family Solar Packages',    description: 'All-in-one solar kits for households',               products: [] },
 ];
 
 const seedDB = async () => {
