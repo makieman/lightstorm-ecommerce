@@ -65,13 +65,6 @@ export class LoginComponent implements OnInit {
         text: 'Invalid email!',
       });
       return;
-    } else if (user.password.length < 8) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: 'Password must be at least 8 characters long!',
-      });
-      return;
     }
 
     // Reset verification banner state
