@@ -38,6 +38,17 @@ body {
     -webkit-tap-highlight-color: transparent;
 }
 
+/* Fullscreen image preview dialog */
+.full-screen-dialog .mat-mdc-dialog-container {
+    padding: 0 !important;
+}
+
+.full-screen-dialog .mdc-dialog__surface {
+    background: transparent !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+}
+
 /* Custom Scrollbar */
 .no-scrollbar::-webkit-scrollbar {
     display: none;

@@ -1,10 +1,10 @@
 <div class="product-page">
     @if (product) {
-    <section class="mx-auto max-w-5xl px-4 pb-12 pt-4 md:px-6 md:pt-6">
-        <div class="product-hero grid gap-6 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:items-start">
+    <section class="mx-auto max-w-4xl px-4 pb-8 pt-3 md:px-5 md:pt-4">
+        <div class="product-hero grid gap-5 lg:grid-cols-[45%_55%] lg:items-start">
             <div class="product-media-card overflow-hidden rounded-[32px] border border-white/60 bg-white shadow-[0_18px_60px_rgba(15,23,42,0.08)]">
                 <!-- Main Image Gallery -->
-                <div class="product-media relative h-[20rem] sm:h-[28rem] lg:h-[38rem] cursor-zoom-in overflow-hidden bg-[radial-gradient(circle_at_top,#dbeafe_0%,#f8fafc_42%,#ffffff_100%)]">
+                <div class="product-media relative h-[18rem] sm:h-[22rem] lg:h-[26rem] max-h-[420px] cursor-zoom-in overflow-hidden bg-[radial-gradient(circle_at_top,#dbeafe_0%,#f8fafc_42%,#ffffff_100%)]">
                     <img [src]="currentImage" [alt]="product.title" class="product-img" loading="eager" fetchpriority="high" decoding="async" width="900" height="900" (mousemove)="moveImage($event)"
                         (click)="openImageDialog(currentImage)" (error)="onImageError($event)">
                     
@@ -35,12 +35,12 @@
                 </div>
 
                 <!-- Thumbnail Strip (show only if multiple images) -->
-                <div *ngIf="productImages.length > 1" class="flex gap-2 p-4 bg-slate-50 overflow-x-auto border-t border-slate-100">
+                <div *ngIf="productImages.length > 1" class="flex gap-2 p-3 bg-slate-50 overflow-x-auto border-t border-slate-100">
                     <button *ngFor="let img of productImages; let i = index" 
                         (click)="setImage(i)"
                         [class.ring-2]="i === currentImageIndex"
                         [class.ring-red-500]="i === currentImageIndex"
-                        class="flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-all"
+                        class="flex-shrink-0 w-14 h-14 rounded-lg overflow-hidden border-2 transition-all"
                         [class.border-slate-300]="i !== currentImageIndex"
                         [class.border-red-500]="i === currentImageIndex">
                         <img [src]="img" [alt]="'Thumbnail ' + (i+1)" class="w-full h-full object-cover">
@@ -48,40 +48,31 @@
                 </div>
             </div>
 
-            <div class="space-y-5 rounded-[24px] border border-slate-100 bg-white/85 p-5 shadow-[0_18px_60px_rgba(15,23,42,0.06)] backdrop-blur sm:p-6">
-                <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+            <div class="space-y-3 rounded-[24px] border border-slate-100 bg-white/85 p-4 shadow-[0_18px_60px_rgba(15,23,42,0.06)] backdrop-blur">
+                <div class="flex flex-col gap-3">
                     <div class="space-y-3">
                         <p class="text-[11px] font-bold uppercase tracking-[0.26em] text-slate-400">
                             <a class="nav-link" routerLink="/home">Home</a>
                             <span class="mx-2 text-slate-300">/</span>
-                            <span class="text-slate-500">{{ product.category }}</span>
+                            <a class="text-slate-500" [routerLink]="['/shop']" [queryParams]="{category: categoryDisplayName}">{{ categoryDisplayName }}</a>
+                            <span class="mx-2 text-slate-300">/</span>
+                            <span class="text-slate-500">{{ product?.title || product?.name }}</span>
                         </p>
                         <div>
                             <span class="inline-flex rounded-full bg-[var(--brand-lime)]/15 px-3 py-1 text-[11px] font-black uppercase tracking-[0.18em] text-[var(--brand-lime)]">
-                                {{ product.category }}
+                                {{ categoryDisplayName }}
                             </span>
-                            <h1 class="mt-3 text-2xl font-black leading-tight text-[var(--brand-navy)] sm:text-2xl">{{ product.title }}</h1>
+                            <h1 class="mt-2 text-xl font-semibold leading-tight text-[var(--brand-navy)]">{{ product.title }}</h1>
                         </div>
-                    </div>
-
-                    <div class="flex items-center gap-2 self-start rounded-full border border-slate-200 bg-slate-50 p-1">
-                        <button type="button" (click)="navigateToPreviousProduct()" class="nav-arrow"
-                            [class.disabled]="isFirstProduct" aria-label="Previous product">
-                            <span class="material-icons text-base">arrow_back</span>
-                        </button>
-                        <button type="button" (click)="navigateToNextProduct()" class="nav-arrow"
-                            [class.disabled]="isLastProduct" aria-label="Next product">
-                            <span class="material-icons text-base">arrow_forward</span>
-                        </button>
                     </div>
                 </div>
 
                 <div class="flex flex-wrap items-end gap-3">
-                    <p class="text-2xl font-black text-[var(--brand-coral)] sm:text-2xl">KSH {{ product.price | number }}</p>
-                    <p class="pb-1 text-sm font-semibold uppercase tracking-[0.18em] text-slate-400">Free nationwide shipping</p>
+                    <p class="text-xl font-bold text-[var(--brand-coral)]">KSH {{ product.price | number }}</p>
+                    <p class="pb-1 text-xs font-semibold uppercase tracking-wider text-slate-400">Free nationwide shipping</p>
                 </div>
 
-                <p class="text-base leading-7 text-slate-600">{{ product.details }}</p>
+                <p class="text-sm leading-relaxed text-slate-600">{{ product.details }}</p>
 
                 @if (product.wattage || product.voltage || product.batteryType) {
                 <div class="grid gap-3 rounded-[24px] bg-[var(--surface-page)] p-4 sm:grid-cols-3 sm:p-5">

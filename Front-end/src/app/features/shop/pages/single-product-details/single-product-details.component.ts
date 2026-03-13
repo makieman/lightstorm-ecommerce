@@ -87,7 +87,11 @@ export class SingleProductDetailsComponent implements OnInit {
   openImageDialog(imageSrc: string): void {
     this.dialog.open(ImageDialogComponent, {
       data: { imageSrc: imageSrc },
-      panelClass: 'full-screen-dialog'
+      panelClass: 'full-screen-dialog',
+      width: '100vw',
+      height: '100vh',
+      maxWidth: '100vw',
+      maxHeight: '100vh'
     });
   }
 
@@ -109,6 +113,12 @@ export class SingleProductDetailsComponent implements OnInit {
     const images = this.productImages;
     if (!images.length) return '';
     return images[this.currentImageIndex];
+  }
+
+  get categoryDisplayName(): string {
+    const category = this.product?.category;
+    if (!category) return '';
+    return typeof category === 'object' ? (category.name || category._id || '') : category;
   }
 
   /**
@@ -146,6 +156,7 @@ export class SingleProductDetailsComponent implements OnInit {
           this.router.navigate(['/']);
         }
         this.product = data;
+        this.currentImageIndex = 0;
         console.debug('[SingleProduct] product loaded:', this.ID, this.product);
         this.syncRelatedProducts();
 
@@ -157,8 +168,9 @@ export class SingleProductDetailsComponent implements OnInit {
 
     /********** get related products **********/
     this.productService.getAllProducts().subscribe({
-      next: (data: any[]) => {
-        this.allProducts = data;
+      next: (response: any) => {
+        // Supports both legacy array response and paginated object response.
+        this.allProducts = Array.isArray(response) ? response : (response?.products || []);
         this.syncRelatedProducts();
       },
       error: (err: any) => {
