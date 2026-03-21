@@ -10,8 +10,8 @@
       </div>
 
       <div class="grid grid-cols-2 gap-3 pb-6 md:grid-cols-3 md:gap-6 lg:grid-cols-4 w-full">
-        <div *ngFor="let card of skeletonCards" class="overflow-hidden rounded-2xl md:rounded-[32px] border border-slate-100 bg-white shadow-xl shadow-slate-200/30">
-          <div class="h-36 sm:h-48 md:h-64 animate-pulse bg-slate-200"></div>
+        <div *ngFor="let card of skeletonCards" class="overflow-hidden rounded-xl md:rounded-[20px] border border-slate-100 bg-white shadow-xl shadow-slate-200/30">
+          <div class="h-24 sm:h-32 md:h-40 animate-pulse bg-slate-200"></div>
           <div class="space-y-3 p-3 md:p-6">
             <div class="h-4 w-20 animate-pulse rounded bg-slate-200"></div>
             <div class="h-5 w-3/4 animate-pulse rounded bg-slate-200"></div>
@@ -40,69 +40,52 @@
 
     <!-- Mobile 2-Column Grid / Desktop Grid -->
     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6 pb-6 w-full">
-      <div *ngFor="let product of productsByCategory[category]"
-        class="bg-white rounded-2xl md:rounded-[32px] overflow-hidden shadow-xl shadow-slate-200/40 border border-slate-50 group hover:-translate-y-2 transition-transform duration-300 md:duration-500 flex flex-col h-full">
+      <article *ngFor="let product of productsByCategory[category]"
+        class="product-card"
+        (click)="navigateToProduct(product._id)">
 
-        <div class="relative h-36 sm:h-48 md:h-64 bg-slate-50 overflow-hidden shrink-0">
-          <img [src]="product.image" [alt]="product.title"
-            loading="lazy" decoding="async" width="320" height="320"
-            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-            (error)="onImageError($event)">
-
-          <!-- Badges -->
-          <div class="absolute top-2 left-2 md:top-4 md:left-4 flex flex-col gap-2">
-            <span
-              class="bg-[#84CC16] text-white text-[8px] md:text-[10px] font-black px-2 py-1 md:px-3 md:py-1.5 rounded-full shadow-lg shadow-green-500/20 uppercase tracking-widest">Premium</span>
-          </div>
-
-          <!-- Quick Actions Overlay -->
-          <div
-            class="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-2 md:gap-3">
-            <button (click)="openDialog(product._id)"
-              class="w-8 h-8 md:w-12 md:h-12 bg-white rounded-lg md:rounded-2xl flex items-center justify-center text-[#1E293B] hover:text-[#EF4444] transition-colors">
-              <i class="bi bi-eye-fill text-sm md:text-base"></i>
+        <div class="product-card-media">
+          <img
+            [src]="product.image"
+            [alt]="product.title"
+            loading="lazy"
+            decoding="async"
+            width="480"
+            height="320"
+            (error)="onImageError($event)"
+          />
+          <div class="product-card-actions">
+            <button
+              class="product-action-button"
+              type="button"
+              (click)="navigateToProduct(product._id); $event.stopPropagation()"
+              aria-label="View details">
+              <i class="bi bi-eye"></i>
             </button>
-            <button (click)="addToCart(product, $event)"
-              class="w-8 h-8 md:w-12 md:h-12 bg-[#EF4444] rounded-lg md:rounded-2xl flex items-center justify-center text-white hover:bg-rose-600 transition-colors shadow-lg shadow-red-500/30">
-              <i class="bi bi-cart-plus-fill text-sm md:text-base"></i>
-            </button>
-          </div>
-        </div>
-
-        <div class="p-3 md:p-6 flex flex-col flex-grow">
-          <div class="flex justify-between items-start mb-1 md:mb-2">
-            <div class="w-full">
-              <h4 class="font-black text-xs md:text-base text-[#1E293B] leading-tight truncate w-full">
-                <a [routerLink]="['/product', product._id]" class="hover:text-[#EF4444] transition-colors">
-                  {{product.title}}
-                </a>
-              </h4>
-            </div>
-          </div>
-
-          <div class="flex items-center gap-[2px] md:gap-1 mb-2 md:mb-4">
-            <i class="bi bi-star-fill text-[#84CC16] text-[8px] md:text-xs"></i>
-            <i class="bi bi-star-fill text-[#84CC16] text-[8px] md:text-xs"></i>
-            <i class="bi bi-star-fill text-[#84CC16] text-[8px] md:text-xs"></i>
-            <i class="bi bi-star-fill text-[#84CC16] text-[8px] md:text-xs"></i>
-            <i class="bi bi-star-half text-[#84CC16] text-[8px] md:text-xs"></i>
-            <span class="text-[8px] md:text-[10px] text-slate-400 font-bold ml-1 hidden sm:inline">(24)</span>
-          </div>
-
-          <div class="flex items-center justify-between mt-auto pt-2 md:pt-4 border-t border-slate-50">
-            <div class="flex flex-col">
-              <span
-                class="text-[8px] md:text-[10px] font-bold text-slate-400 uppercase tracking-tighter hidden sm:block">Retail
-                Price</span>
-              <span class="text-sm md:text-xl font-black text-[#EF4444]">KSh {{product.price | number}}</span>
-            </div>
-            <button (click)="addToCart(product, $event)"
-              class="w-7 h-7 md:w-10 md:h-10 bg-[#1E293B] text-white rounded-lg md:rounded-xl flex items-center justify-center hover:bg-[#EF4444] transition-all shrink-0">
-              <i class="bi bi-plus-lg text-xs md:text-base"></i>
+            <button
+              class="product-action-button"
+              type="button"
+              (click)="addToCart(product, $event); $event.stopPropagation()"
+              aria-label="Add to cart">
+              <i class="bi bi-cart-plus"></i>
             </button>
           </div>
         </div>
-      </div>
+
+        <div class="product-card-body">
+          <p class="product-category">
+            {{ product.category?.name || product.category }}
+          </p>
+          <h3 class="product-title">
+            <a [routerLink]="['/product', product._id]"
+               (click)="$event.stopPropagation()">
+              {{ product.title }}
+            </a>
+          </h3>
+          <p class="product-price">From KES {{ product.price | number }}</p>
+        </div>
+
+      </article>
     </div>
   </div>
   </ng-template>

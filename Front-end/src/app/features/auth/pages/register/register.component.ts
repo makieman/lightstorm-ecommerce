@@ -27,6 +27,10 @@ export class RegisterComponent implements OnInit {
   passwordError: string = '';
   confirmPasswordFocused = false;
   confirmPasswordError: string = '';
+  googleAuthUrl = `${window.location.origin.includes('localhost')
+    ? 'http://localhost:7000'
+    : 'https://lightstorm-ecommerce.onrender.com'
+    }/api/users/auth/google`;
 
   constructor(
     private http: HttpClient,

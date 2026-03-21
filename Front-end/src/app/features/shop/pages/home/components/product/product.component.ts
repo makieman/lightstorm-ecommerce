@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
@@ -36,7 +36,8 @@ export class ProductComponent implements OnInit {
     private cartService: CartService,
     private cartCountService: CartProductsCountService,
     public dialog: MatDialog,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private router: Router
   ) { }
   allProducts: any[] = [];
   categories: string[] = [];
@@ -93,6 +94,11 @@ export class ProductComponent implements OnInit {
       target.src = 'assets/images/placeholder-product.png';
     }
   }
+
+  navigateToProduct(id: string) {
+    this.router.navigate(['/product', id]);
+  }
+
   openDialog(productId: string) {
     this.productService.getProductById(productId).subscribe((product: any) => {
       const dialogRef = this.dialog.open(DialogContentExampleDialog, {

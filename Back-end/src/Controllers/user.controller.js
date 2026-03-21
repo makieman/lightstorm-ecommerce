@@ -408,7 +408,7 @@ let AddProductToOrder = async (req, res) => {
         totalPrice += product.price * item.quantity;
       }
     });
-    totalPrice += 300;
+    totalPrice += 1; // Add fixed shipping fee of 1
 
     const orderProducts = user.carts.map(item => item.product);
 

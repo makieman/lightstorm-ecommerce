@@ -7,6 +7,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const helmet = require('helmet');
+const session = require('express-session');
 require('dotenv').config();
 
 const userRoutes = require('./Routes/user.routes');
@@ -14,6 +15,8 @@ const productRoutes = require('./Routes/product.routes');
 const orderRoutes = require('./Routes/order.routes');
 const aiRoutes = require('./Routes/ai.routes');
 const adminRoutes = require('./Routes/admin.routes');
+const paymentRoutes = require('./Routes/payment.routes');
+const passport = require('./services/passport.service');
 
 const app = express();
 
@@ -75,6 +78,18 @@ app.use(cors({
 }));
 app.options('*', cors());
 app.use(cookieParser());
+app.use(session({
+  secret: process.env.JWT_SECRET,
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+    maxAge: 24 * 60 * 60 * 1000
+  }
+}));
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Database connection
 
@@ -94,6 +109,7 @@ app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/ai', aiRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/payments', paymentRoutes);
 
 app.get('/ping', (req, res) => {
   res.status(200).type('text/plain').send('ok');
@@ -101,6 +117,37 @@ app.get('/ping', (req, res) => {
 
 // Health check endpoint for deployment verification
 app.get('/health', (req, res) => res.json({ status: 'ok', timestamp: new Date().toISOString() }));
+
+// Development-only auth debug endpoint to verify passport session state.
+app.get('/api/auth/debug-session', (req, res) => {
+  if (process.env.NODE_ENV === 'production') {
+    return res.status(404).json({ message: 'Not found' });
+  }
+
+  const safeUser = req.user
+    ? {
+        _id: req.user._id,
+        email: req.user.email,
+        username: req.user.username,
+        googleId: req.user.googleId || null,
+        isVerified: Boolean(req.user.isVerified)
+      }
+    : null;
+
+  return res.status(200).json({
+    authenticated: typeof req.isAuthenticated === 'function' ? req.isAuthenticated() : false,
+    user: safeUser,
+    hasSession: Boolean(req.session),
+    sessionID: req.sessionID || null,
+    passportSession: req.session?.passport || null,
+    cookie: {
+      secure: req.session?.cookie?.secure,
+      sameSite: req.session?.cookie?.sameSite,
+      expires: req.session?.cookie?.expires || null,
+      maxAge: req.session?.cookie?.maxAge || null
+    }
+  });
+});
 
 // Serve static files ONLY if the dist folder exists (not needed when frontend is on Vercel)
 const frontendPath = path.join(__dirname, '../../Front-end/dist/lightstorm-ecommerce/browser');

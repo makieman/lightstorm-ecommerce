@@ -19,6 +19,11 @@ const UserSchema = new mongoose.Schema({
         unique: true,
         required: true,
     },
+    "googleId": {
+        type: String,
+        sparse: true,
+        default: null,
+    },
     "image": { type: String, default: "https://res.cloudinary.com/dh7osyxvl/image/upload/v1714489565/Users/pngwing.com_10_lnfy4w.png" },
     "isVerified": { type: Boolean, default: false },
     "verificationToken": { type: String, default: null },

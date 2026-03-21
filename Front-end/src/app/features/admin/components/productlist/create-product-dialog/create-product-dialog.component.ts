@@ -312,6 +312,21 @@ import Swal from 'sweetalert2';
   `]
 })
 export class CreateProductDialogComponent implements OnInit {
+  private readonly defaultCategoryNames: string[] = [
+    'Solar Panel',
+    'Inverter',
+    'Battery',
+    'Lithium Battery',
+    'Gel Battery',
+    'Charge Controller',
+    'Solar Lighting',
+    'Flood Lights & Street Lights',
+    'Garden Lights',
+    'Mounting Systems',
+    'Water Heaters',
+    'Family Solar Packages'
+  ];
+
   createForm: any;
   imageFile: File | null = null;
   selectedImages: { file: File; preview: string }[] = [];
@@ -342,8 +357,26 @@ export class CreateProductDialogComponent implements OnInit {
   }
 
   ngOnInit() {
+    // Keep a complete category list visible even if backend categories are missing/inactive.
+    this.categories = this.defaultCategoryNames.map((name, index) => ({
+      _id: `fallback-${index}`,
+      name
+    } as Category));
+
     this.productService.getCategories().subscribe({
-      next: (cats) => this.categories = cats,
+      next: (cats) => {
+        const merged = new Map<string, Category>();
+
+        this.categories.forEach((cat) => {
+          if (cat?.name) merged.set(cat.name.toLowerCase(), cat);
+        });
+
+        (cats || []).forEach((cat) => {
+          if (cat?.name) merged.set(cat.name.toLowerCase(), cat);
+        });
+
+        this.categories = Array.from(merged.values()).sort((a, b) => a.name.localeCompare(b.name));
+      },
       error: (err) => console.error('Failed to load categories:', err)
     });
   }

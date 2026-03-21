@@ -25,6 +25,10 @@ export class LoginComponent implements OnInit {
   resendSent = false;
   emailFocused = false;
   passwordFocused = false;
+  googleAuthUrl = `${window.location.origin.includes('localhost')
+    ? 'http://localhost:7000'
+    : 'https://lightstorm-ecommerce.onrender.com'
+    }/api/users/auth/google`;
 
   constructor(
     private http: HttpClient,
@@ -38,6 +42,22 @@ export class LoginComponent implements OnInit {
     this.form = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]]
+    });
+
+    this.route.queryParams.subscribe((params) => {
+      if (params['google'] === 'success') {
+        this.http.get<any>('/api/users/user/user', { withCredentials: true }).subscribe({
+          next: (res: any) => {
+            if (res?.data) {
+              this.router.navigate(['/home']);
+            }
+          }
+        });
+      }
+
+      if (params['error']) {
+        console.error('Google login failed:', params['error']);
+      }
     });
 
     // Check for ?verified=true query param
