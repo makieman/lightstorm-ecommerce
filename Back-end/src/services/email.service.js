@@ -5,7 +5,11 @@ const APP_URL = process.env.APP_URL || 'http://localhost:4200';
 const FROM_EMAIL = process.env.FROM_EMAIL || 'noreply@lightstormtechnologies.com';
 
 const sendVerificationEmail = async (email, token) => {
-  const verificationUrl = `${APP_URL}/api/users/verify-email/${token}`;
+  // Use Render's default URL env var or fallback to local
+  const BACKEND_URL = process.env.BACKEND_URL || process.env.RENDER_EXTERNAL_URL || `http://localhost:${process.env.PORT || 7000}`;
+  
+  // Directly hit the GET route on the backend which verifies and redirects
+  const verificationUrl = `${BACKEND_URL}/api/users/verify/${token}`;
   
   await resend.emails.send({
     from: FROM_EMAIL,

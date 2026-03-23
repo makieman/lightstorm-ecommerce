@@ -2,29 +2,38 @@
     @if (product) {
     <section class="mx-auto max-w-4xl px-4 pb-8 pt-3 md:px-5 md:pt-4">
         <div class="product-hero grid gap-5 lg:grid-cols-[45%_55%] lg:items-start">
-            <div class="product-media-card relative -mx-4 w-[calc(100%+2rem)] overflow-hidden rounded-none border-y border-white/60 bg-white shadow-[0_18px_60px_rgba(15,23,42,0.08)] sm:mx-0 sm:w-full sm:rounded-[32px] sm:border">
+            <div
+                class="product-media-card relative -mx-4 w-[calc(100%+2rem)] overflow-hidden rounded-none border-y border-white/60 bg-white shadow-[0_18px_60px_rgba(15,23,42,0.08)] sm:mx-0 sm:w-full sm:rounded-[32px] sm:border">
                 <!-- Main Image Gallery -->
-                <div class="product-media relative w-full aspect-square sm:aspect-auto sm:h-[22rem] lg:h-[26rem] max-h-[420px] cursor-zoom-in overflow-hidden bg-[radial-gradient(circle_at_top,#dbeafe_0%,#f8fafc_42%,#ffffff_100%)]">
-                    <img [src]="currentImage" [alt]="product.title" class="product-img" loading="eager" fetchpriority="high" decoding="async" width="900" height="900" (mousemove)="moveImage($event)"
+                <div
+                    class="product-media relative w-full aspect-square sm:aspect-auto sm:h-[22rem] lg:h-[26rem] max-h-[420px] cursor-zoom-in overflow-hidden bg-[radial-gradient(circle_at_top,#dbeafe_0%,#f8fafc_42%,#ffffff_100%)]">
+                    <img [src]="currentImage" [alt]="product.title" class="product-img" loading="eager"
+                        fetchpriority="high" decoding="async" width="900" height="900" (mousemove)="moveImage($event)"
                         (click)="openImageDialog(currentImage)" (error)="onImageError($event)">
-                    
+
                     <!-- Navigation Arrows (show only if multiple images) -->
-                    <button *ngIf="productImages.length > 1" type="button" (click)="$event.stopPropagation(); prevImage()"
+                    <button *ngIf="productImages.length > 1" type="button"
+                        (click)="$event.stopPropagation(); prevImage()"
                         class="absolute left-4 top-1/2 transform -translate-y-1/2 rounded-full bg-white/90 hover:bg-white p-2 shadow-lg transition-all z-10">
                         <svg class="w-6 h-6 text-slate-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7">
+                            </path>
                         </svg>
                     </button>
-                    <button *ngIf="productImages.length > 1" type="button" (click)="$event.stopPropagation(); nextImage()"
+                    <button *ngIf="productImages.length > 1" type="button"
+                        (click)="$event.stopPropagation(); nextImage()"
                         class="absolute right-4 top-1/2 transform -translate-y-1/2 rounded-full bg-white/90 hover:bg-white p-2 shadow-lg transition-all z-10">
                         <svg class="w-6 h-6 text-slate-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7">
+                            </path>
                         </svg>
                     </button>
-                    
-                    <div class="absolute inset-x-0 bottom-0 flex items-center justify-between bg-gradient-to-t from-slate-950/70 to-transparent px-5 py-5 text-white sm:px-8">
+
+                    <div
+                        class="absolute inset-x-0 bottom-0 flex items-center justify-between bg-gradient-to-t from-slate-950/70 to-transparent px-5 py-5 text-white sm:px-8">
                         <div>
-                            <p class="text-[10px] font-black uppercase tracking-[0.28em] text-[var(--brand-lime)]">Solar Ready</p>
+                            <p class="text-[10px] font-black uppercase tracking-[0.28em] text-[var(--brand-lime)]">Solar
+                                Ready</p>
                             <p class="mt-2 text-sm font-semibold text-white/90">Tap image to open full screen view</p>
                         </div>
                         <button type="button" (click)="openImageDialog(currentImage)"
@@ -35,11 +44,10 @@
                 </div>
 
                 <!-- Thumbnail Strip (show only if multiple images) -->
-                <div *ngIf="productImages.length > 1" class="flex gap-2 p-3 bg-slate-50 overflow-x-auto border-t border-slate-100">
-                    <button *ngFor="let img of productImages; let i = index" 
-                        (click)="setImage(i)"
-                        [class.ring-2]="i === currentImageIndex"
-                        [class.ring-red-500]="i === currentImageIndex"
+                <div *ngIf="productImages.length > 1"
+                    class="flex gap-2 p-3 bg-slate-50 overflow-x-auto border-t border-slate-100">
+                    <button *ngFor="let img of productImages; let i = index" (click)="setImage(i)"
+                        [class.ring-2]="i === currentImageIndex" [class.ring-red-500]="i === currentImageIndex"
                         class="flex-shrink-0 w-14 h-14 rounded-lg overflow-hidden border-2 transition-all"
                         [class.border-slate-300]="i !== currentImageIndex"
                         [class.border-red-500]="i === currentImageIndex">
@@ -48,28 +56,33 @@
                 </div>
             </div>
 
-            <div class="space-y-3 rounded-[24px] border border-slate-100 bg-white/85 p-4 shadow-[0_18px_60px_rgba(15,23,42,0.06)] backdrop-blur">
+            <div
+                class="space-y-3 rounded-[24px] border border-slate-100 bg-white/85 p-4 shadow-[0_18px_60px_rgba(15,23,42,0.06)] backdrop-blur">
                 <div class="flex flex-col gap-3">
                     <div class="space-y-3">
                         <p class="text-[11px] font-bold uppercase tracking-[0.26em] text-slate-400">
                             <a class="nav-link" routerLink="/home">Home</a>
                             <span class="mx-2 text-slate-300">/</span>
-                            <a class="text-slate-500" [routerLink]="['/shop']" [queryParams]="{category: categoryDisplayName}">{{ categoryDisplayName }}</a>
+                            <a class="text-slate-500" [routerLink]="['/shop']"
+                                [queryParams]="{category: categoryDisplayName}">{{ categoryDisplayName }}</a>
                             <span class="mx-2 text-slate-300">/</span>
                             <span class="text-slate-500">{{ product?.title || product?.name }}</span>
                         </p>
                         <div>
-                            <span class="inline-flex rounded-full bg-[var(--brand-lime)]/15 px-3 py-1 text-[11px] font-black uppercase tracking-[0.18em] text-[var(--brand-lime)]">
+                            <span
+                                class="inline-flex rounded-full bg-[var(--brand-lime)]/15 px-3 py-1 text-[11px] font-black uppercase tracking-[0.18em] text-[var(--brand-lime)]">
                                 {{ categoryDisplayName }}
                             </span>
-                            <h1 class="mt-2 text-xl font-semibold leading-tight text-[var(--brand-navy)]">{{ product.title }}</h1>
+                            <h1 class="mt-2 text-xl font-semibold leading-tight text-[var(--brand-navy)]">{{
+                                product.title }}</h1>
                         </div>
                     </div>
                 </div>
 
                 <div class="flex flex-wrap items-end gap-3">
                     <p class="text-xl font-bold text-[var(--brand-coral)]">KSH {{ product.price | number }}</p>
-                    <p class="pb-1 text-xs font-semibold uppercase tracking-wider text-slate-400">Free nationwide shipping</p>
+                    <p class="pb-1 text-xs font-semibold uppercase tracking-wider text-slate-400">Free nationwide
+                        shipping</p>
                 </div>
 
                 <p class="text-sm leading-relaxed text-slate-600">{{ product.details }}</p>
@@ -99,7 +112,8 @@
 
                 <div class="rounded-[24px] border border-slate-100 bg-slate-50 p-4 sm:p-5">
                     <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                        <div class="number-input flex h-12 w-fit items-center overflow-hidden rounded-2xl border border-slate-200 bg-white">
+                        <div
+                            class="number-input flex h-12 w-fit items-center overflow-hidden rounded-2xl border border-slate-200 bg-white">
                             <button type="button" (click)="decrementQuantity()">-</button>
                             <input type="number" [(ngModel)]="quantity" (ngModelChange)="onQuantityChange()">
                             <button type="button" (click)="incrementQuantity()">+</button>
@@ -112,11 +126,14 @@
                     </div>
                 </div>
 
-                <div class="rounded-[24px] bg-[var(--surface-summary)] p-5 text-white shadow-[0_14px_40px_rgba(15,23,42,0.14)]">
+                <div
+                    class="rounded-[24px] bg-[var(--surface-summary)] p-5 text-white shadow-[0_14px_40px_rgba(15,23,42,0.14)]">
                     <div class="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
                         <div>
-                            <p class="text-[10px] font-black uppercase tracking-[0.24em] text-[var(--brand-lime)]">Guaranteed Safe Checkout</p>
-                            <p class="mt-2 text-sm font-medium text-white/75">Protected payments, support-backed delivery, and verified product handling.</p>
+                            <p class="text-[10px] font-black uppercase tracking-[0.24em] text-[var(--brand-lime)]">
+                                Guaranteed Safe Checkout</p>
+                            <p class="mt-2 text-sm font-medium text-white/75">Protected payments, support-backed
+                                delivery, and verified product handling.</p>
                         </div>
                         <div class="flex flex-wrap gap-2 sm:justify-end">
                             <span class="payment-chip">Visa</span>
@@ -129,17 +146,21 @@
             </div>
         </div>
 
-        <section class="mt-6 rounded-[24px] border border-slate-100 bg-white p-4 shadow-[0_14px_40px_rgba(15,23,42,0.05)] sm:p-5">
-            <div class="flex flex-col gap-3 border-b border-slate-100 pb-4 sm:flex-row sm:items-center sm:justify-between">
+        <section
+            class="mt-6 rounded-[24px] border border-slate-100 bg-white p-4 shadow-[0_14px_40px_rgba(15,23,42,0.05)] sm:p-5">
+            <div
+                class="flex flex-col gap-3 border-b border-slate-100 pb-4 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                     <p class="text-[10px] font-black uppercase tracking-[0.26em] text-slate-400">Product Insights</p>
-                    <h2 class="mt-1 text-xl font-black text-[var(--brand-navy)]">Everything you need before checkout</h2>
+                    <h2 class="mt-1 text-xl font-black text-[var(--brand-navy)]">Everything you need before checkout
+                    </h2>
                 </div>
                 <div class="detail-tabs flex flex-wrap gap-2">
                     <button type="button" (click)="showDescription()" class="tab-trigger"
                         [ngClass]="{'active': selectedTab === 'description'}">Description</button>
                     <button type="button" (click)="showReviews()" class="tab-trigger"
-                        [ngClass]="{'active': selectedTab === 'reviews'}">Reviews ({{ product.reviews.length }})</button>
+                        [ngClass]="{'active': selectedTab === 'reviews'}">Reviews ({{ product.reviews.length
+                        }})</button>
                 </div>
             </div>
 
@@ -155,12 +176,16 @@
                             <p class="mt-1 text-base font-bold text-[var(--brand-navy)]">{{ categoryDisplayName }}</p>
                         </div>
                         <div>
-                            <p class="text-[10px] font-black uppercase tracking-[0.24em] text-slate-400">Availability</p>
-                            <p class="mt-1 text-base font-bold text-[var(--brand-teal)]">{{ product.quantity > 0 ? 'In stock' : 'Out of stock' }}</p>
+                            <p class="text-[10px] font-black uppercase tracking-[0.24em] text-slate-400">Availability
+                            </p>
+                            <p class="mt-1 text-base font-bold text-[var(--brand-teal)]">{{ product.quantity > 0 ? 'In
+                                stock' : 'Out of stock' }}</p>
                         </div>
                         <div>
-                            <p class="text-[10px] font-black uppercase tracking-[0.24em] text-slate-400">Review Count</p>
-                            <p class="mt-1 text-base font-bold text-[var(--brand-navy)]">{{ product.reviews.length }} submitted</p>
+                            <p class="text-[10px] font-black uppercase tracking-[0.24em] text-slate-400">Review Count
+                            </p>
+                            <p class="mt-1 text-base font-bold text-[var(--brand-navy)]">{{ product.reviews.length }}
+                                submitted</p>
                         </div>
                     </div>
                 </div>
@@ -169,22 +194,24 @@
                     <div class="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(18rem,24rem)]">
                         <div class="space-y-4">
                             @if (product.reviews.length === 0) {
-                            <div class="rounded-[24px] border border-dashed border-slate-200 bg-slate-50 p-8 text-center text-slate-500">
+                            <div
+                                class="rounded-[24px] border border-dashed border-slate-200 bg-slate-50 p-8 text-center text-slate-500">
                                 There are no reviews yet.
                             </div>
                             } @else {
-                            <div *ngFor="let review of product.reviews" class="rounded-[24px] border border-slate-100 bg-slate-50 p-5 sm:p-6">
+                            <div *ngFor="let review of product.reviews"
+                                class="rounded-[24px] border border-slate-100 bg-slate-50 p-5 sm:p-6">
                                 <div class="flex items-start gap-4">
                                     <img src="assets/images/single_product/img_avatar.png" alt="Avatar" class="avatar">
                                     <div class="space-y-2">
                                         <p class="text-lg font-bold text-[var(--brand-navy)]">{{ review.name }}</p>
                                         <div class="flex items-center gap-1">
                                             <ng-container *ngFor="let star of [1, 2, 3, 4, 5]">
-                                                @if (star <= review.rating) {
-                                                <mat-icon class="star-filled-review">star</mat-icon>
-                                                } @else {
-                                                <mat-icon class="star-empty">star_border</mat-icon>
-                                                }
+                                                @if (star <= review.rating) { <mat-icon class="star-filled-review">
+                                                    star</mat-icon>
+                                                    } @else {
+                                                    <mat-icon class="star-empty">star_border</mat-icon>
+                                                    }
                                             </ng-container>
                                         </div>
                                         <p class="text-sm leading-7 text-slate-600">{{ review.comment }}</p>
@@ -194,49 +221,73 @@
                             }
                         </div>
 
-                        <div class="review-panel rounded-[28px] border border-slate-100 bg-white p-6 shadow-[0_18px_60px_rgba(15,23,42,0.05)] sm:p-7">
-                            <p class="text-[10px] font-black uppercase tracking-[0.24em] text-slate-400">Share Your Experience</p>
-                            <h3 class="mt-3 text-2xl font-black text-[var(--brand-navy)]">Review {{ product.title }}</h3>
-                            <p class="mt-2 text-sm leading-6 text-slate-500">Your email address will not be published. Required fields are marked *</p>
+                        <div
+                            class="review-panel rounded-[28px] border border-slate-100 bg-white p-6 shadow-[0_18px_60px_rgba(15,23,42,0.05)] sm:p-7">
+                            <p class="text-[10px] font-black uppercase tracking-[0.24em] text-slate-400">Share Your
+                                Experience</p>
+                            <h3 class="mt-3 text-2xl font-black text-[var(--brand-navy)]">Review {{ product.title }}
+                            </h3>
+                            <p class="mt-2 text-sm leading-6 text-slate-500">Your email address will not be published.
+                                Required fields are marked *</p>
 
                             <form [formGroup]="reviewForm" class="mt-6 space-y-5">
                                 <div>
-                                    <p class="text-sm font-bold uppercase tracking-[0.18em] text-slate-400">Your rating *</p>
+                                    <p class="text-sm font-bold uppercase tracking-[0.18em] text-slate-400">Your rating
+                                        *</p>
                                     <div class="mt-3 flex items-center gap-1">
                                         <button type="button" class="star-button" (click)="toggleStar(1)">
-                                            <mat-icon [ngClass]="{'star-filled': isStarFilled(1), 'star-unfilled': !isStarFilled(1)}" class="star-icon">star</mat-icon>
+                                            <mat-icon
+                                                [ngClass]="{'star-filled': isStarFilled(1), 'star-unfilled': !isStarFilled(1)}"
+                                                class="star-icon">star</mat-icon>
                                         </button>
                                         <button type="button" class="star-button" (click)="toggleStar(2)">
-                                            <mat-icon [ngClass]="{'star-filled': isStarFilled(2), 'star-unfilled': !isStarFilled(2)}" class="star-icon">star</mat-icon>
+                                            <mat-icon
+                                                [ngClass]="{'star-filled': isStarFilled(2), 'star-unfilled': !isStarFilled(2)}"
+                                                class="star-icon">star</mat-icon>
                                         </button>
                                         <button type="button" class="star-button" (click)="toggleStar(3)">
-                                            <mat-icon [ngClass]="{'star-filled': isStarFilled(3), 'star-unfilled': !isStarFilled(3)}" class="star-icon">star</mat-icon>
+                                            <mat-icon
+                                                [ngClass]="{'star-filled': isStarFilled(3), 'star-unfilled': !isStarFilled(3)}"
+                                                class="star-icon">star</mat-icon>
                                         </button>
                                         <button type="button" class="star-button" (click)="toggleStar(4)">
-                                            <mat-icon [ngClass]="{'star-filled': isStarFilled(4), 'star-unfilled': !isStarFilled(4)}" class="star-icon">star</mat-icon>
+                                            <mat-icon
+                                                [ngClass]="{'star-filled': isStarFilled(4), 'star-unfilled': !isStarFilled(4)}"
+                                                class="star-icon">star</mat-icon>
                                         </button>
                                         <button type="button" class="star-button" (click)="toggleStar(5)">
-                                            <mat-icon [ngClass]="{'star-filled': isStarFilled(5), 'star-unfilled': !isStarFilled(5)}" class="star-icon">star</mat-icon>
+                                            <mat-icon
+                                                [ngClass]="{'star-filled': isStarFilled(5), 'star-unfilled': !isStarFilled(5)}"
+                                                class="star-icon">star</mat-icon>
                                         </button>
                                     </div>
-                                    <div *ngIf="submitted && f['rating'].errors" class="mt-2 text-sm text-red-500">Rating is required</div>
+                                    <div *ngIf="submitted && f['rating'].errors" class="mt-2 text-sm text-red-500">
+                                        Rating is required</div>
                                 </div>
 
                                 <div>
-                                    <label class="mb-2 block text-sm font-bold uppercase tracking-[0.18em] text-slate-400">Your review *</label>
+                                    <label
+                                        class="mb-2 block text-sm font-bold uppercase tracking-[0.18em] text-slate-400">Your
+                                        review *</label>
                                     <textarea class="review-text-area" rows="5" formControlName="comment"></textarea>
-                                    <div *ngIf="submitted && f['comment'].errors" class="mt-2 text-sm text-red-500">Comment is required</div>
+                                    <div *ngIf="submitted && f['comment'].errors" class="mt-2 text-sm text-red-500">
+                                        Comment is required</div>
                                 </div>
 
                                 <div class="grid gap-4 sm:grid-cols-2">
                                     <div>
-                                        <label class="mb-2 block text-sm font-bold uppercase tracking-[0.18em] text-slate-400">Name *</label>
+                                        <label
+                                            class="mb-2 block text-sm font-bold uppercase tracking-[0.18em] text-slate-400">Name
+                                            *</label>
                                         <input class="review-input" formControlName="name">
-                                        <div *ngIf="submitted && f['name'].errors" class="mt-2 text-sm text-red-500">Name is required</div>
+                                        <div *ngIf="submitted && f['name'].errors" class="mt-2 text-sm text-red-500">
+                                            Name is required</div>
                                     </div>
 
                                     <div>
-                                        <label class="mb-2 block text-sm font-bold uppercase tracking-[0.18em] text-slate-400">Email *</label>
+                                        <label
+                                            class="mb-2 block text-sm font-bold uppercase tracking-[0.18em] text-slate-400">Email
+                                            *</label>
                                         <input class="review-input" formControlName="email">
                                         <div *ngIf="submitted && f['email'].errors" class="mt-2 text-sm text-red-500">
                                             <div *ngIf="f['email'].errors['required']">Email is required</div>
@@ -259,7 +310,9 @@
                     <p class="text-[10px] font-black uppercase tracking-[0.24em] text-slate-400">More To Explore</p>
                     <h2 class="mt-2 text-3xl font-black text-[var(--brand-navy)]">Related Products</h2>
                 </div>
-                <a routerLink="/products" class="text-sm font-bold uppercase tracking-[0.16em] text-[var(--brand-lime)] hover:text-[var(--brand-navy)]">Browse Full Catalog</a>
+                <a routerLink="/products"
+                    class="text-sm font-bold uppercase tracking-[0.16em] text-[var(--brand-lime)] hover:text-[var(--brand-navy)]">Browse
+                    Full Catalog</a>
             </div>
 
             <div class="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
