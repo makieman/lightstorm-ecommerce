@@ -1,41 +1,30 @@
-<div class="card mt-3">
-  <div class="card-body">
-    <div class="row mb-3">
-      <div class="col-10 col-sm-6">
-        <h6 class="d-flex align-items-center mt-3" style="font-size:medium;">Pending Orders</h6>
-      </div>
-      <div class="col-2 col-sm-6 d-flex justify-content-end">
-        <img class="img-fluid" style="width:40px; height:30px; margin-top: 14px;" src="../../../../../assets/box.png">
-      </div>
-    </div>
-    <hr>
-    <div *ngIf="pendingOrders.length > 0; else noOrders">
-      @for (o of pendingOrders; track o._id ){
-        <div class="row mb-3">
-          <div class="col-lg-4 col-sm-6">
-              <span>Order Id:</span>
-          </div>
-          <div class="col-lg-7">
-            <span>{{o._id}}</span>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-12 col-sm-12 d-flex justify-content-end">
-            <mat-dialog-actions class="d-flex justify-content-center">
-              <button (click)="openDialog(o._id)" style="margin-right: 5px;" mat-raised-button color="primary">
-                <a style="margin-right: 2px; color: white;">view</a>
-              </button>
-            </mat-dialog-actions>
-            <button class="btn btn-danger" (click)="deleteOrder(o._id)">cancel</button>
-          </div>
-        </div>
-        <hr>
-      }
-    </div>
+<div class="flex items-center justify-between mb-4">
+  <h6 class="text-lg font-bold text-slate-800 m-0">Pending Orders</h6>
+  <span class="material-symbols-outlined text-amber-500 text-3xl">inventory_2</span>
+</div>
 
-    <ng-template #noOrders>
-      <div class="no-orders">
-        You don't have any pending orders.
+<div *ngIf="pendingOrders.length > 0; else noOrders" class="space-y-4">
+  @for (o of pendingOrders; track o._id) {
+    <div class="bg-slate-50 border border-slate-100 rounded-xl p-4 flex flex-col gap-3 transition-all hover:shadow-sm">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+        <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Order ID</span>
+        <span class="text-sm font-bold text-slate-700 font-mono break-all">{{o._id}}</span>
       </div>
-    </ng-template>
-    
+      
+      <div class="flex justify-end gap-2 pt-2 border-t border-slate-200/60 mt-2">
+        <button (click)="openDialog(o._id)" class="px-3 py-1.5 text-xs font-bold text-white bg-blue-500 hover:bg-blue-600 rounded-lg transition-colors border-0">
+          View
+        </button>
+        <button (click)="deleteOrder(o._id)" class="px-3 py-1.5 text-xs font-bold text-white bg-red-500 hover:bg-red-600 rounded-lg transition-colors border-0">
+          Cancel
+        </button>
+      </div>
+    </div>
+  }
+</div>
+
+<ng-template #noOrders>
+  <div class="text-sm text-slate-500 italic py-4 text-center bg-slate-50 rounded-xl border border-dashed border-slate-200">
+    You don't have any pending orders.
+  </div>
+</ng-template>

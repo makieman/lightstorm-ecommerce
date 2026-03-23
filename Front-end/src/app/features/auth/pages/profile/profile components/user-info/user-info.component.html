@@ -1,43 +1,29 @@
-<div class="card mb-3">
-  <div class="card-body">
-    <div class="row">
-      <div class="col-6 col-sm-6">
-        <h5 class="d-flex align-items-center mt-3 " style="font-size: larger;">Personal Info</h5>
-      </div>
-      <div class="col-6 col-sm-6 d-flex justify-content-end">
-        <img class="img-fluid" style="width:50px; height:50px;" src="../../../../../assets/resume.png">
-      </div>
-    </div>
-    <hr>
-    <div class="row">
-      <div class="col-sm-3">
-        <h6 class="mb-0" style="font-size: medium;">User Name</h6>
-      </div>
-      <div class="col-sm-9 text-secondary">
-        @if(userInfo){
-          {{userInfo.username}}
-        }
-      </div>
-    </div>
-    <hr>
-    <div class="row">
-      <div class="col-sm-3">
-        <h6 class="mb-0"style="font-size: medium;">Email</h6>
-      </div>
-      <div class="col-sm-9 text-secondary">
-        @if(userInfo){
-          {{userInfo.email}}
-        }
-      </div>
-    </div>
-    <hr>
-    <div class="row">
-      <div class="col-sm-12">
-        <mat-dialog-actions>
-          <button mat-raisen-button (click)="openDialog()" class="btn btn-warning ">Edit</button>
-        </mat-dialog-actions>
-      </div>
-    </div>
+<div class="flex items-center justify-between mb-4">
+  <h5 class="text-lg font-bold text-slate-800 m-0">Personal Info</h5>
+  <span class="material-symbols-outlined text-blue-500 text-3xl">badge</span>
+</div>
+
+<div class="space-y-4">
+  <div class="flex flex-col sm:flex-row sm:items-center py-2 border-b border-gray-100">
+    <span class="text-sm font-semibold text-slate-500 w-32">User Name</span>
+    <span class="text-sm text-slate-700 font-medium flex-1 truncate">
+      @if(userInfo){ {{userInfo.username}} }
+    </span>
+  </div>
+
+  <div class="flex flex-col sm:flex-row sm:items-center py-2 border-b border-gray-100">
+    <span class="text-sm font-semibold text-slate-500 w-32">Email</span>
+    <span class="text-sm text-slate-700 font-medium flex-1 truncate">
+      @if(userInfo){ {{userInfo.email}} }
+    </span>
+  </div>
+
+  <div class="pt-2">
+    <mat-dialog-actions class="p-0 m-0">
+      <button mat-raised-button (click)="openDialog()" color="accent" class="w-full sm:w-auto mt-2">
+        <span class="material-symbols-outlined text-sm mr-1">edit</span> Edit Profile
+      </button>
+    </mat-dialog-actions>
   </div>
 </div>
 

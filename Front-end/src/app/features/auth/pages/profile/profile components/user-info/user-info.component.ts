@@ -49,8 +49,11 @@ export class UserInfoComponent implements OnInit {
 
 
   openDialog() {
-    this.matDialog.open(InfoDialogComponent, { // Use the open method of MatDialog
-      width: '1200px', height: '650px'
+    this.matDialog.open(InfoDialogComponent, {
+      width: '100%',
+      maxWidth: '500px',
+      autoFocus: false,
+      panelClass: 'rounded-dialg' // you can add custom padding control here if needed
     });
   }
 

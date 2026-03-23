@@ -8,7 +8,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { UserServiceService } from '../../../../../../core/services/user-service.service';
 import { OrderServiceService } from '../../../../../../core/services/order-service.service';
 
@@ -17,7 +17,7 @@ import { OrderServiceService } from '../../../../../../core/services/order-servi
   templateUrl: './info-dialog.component.html',
   styleUrls: ['./info-dialog.component.css'],
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, MatDialogModule],
 })
 export class InfoDialogComponent implements OnInit {
   personalInfoForm!: FormGroup;

@@ -29,6 +29,14 @@ export const routes: Routes = [
     loadComponent: () => import('./features/auth/pages/verify-email/verify-email.component').then((m) => m.VerifyEmailComponent)
   },
   {
+    path: 'forgot-password',
+    loadComponent: () => import('./features/auth/pages/forgot-password/forgot-password.component').then((m) => m.ForgotPasswordComponent)
+  },
+  {
+    path: 'reset-password',
+    loadComponent: () => import('./features/auth/pages/reset-password/reset-password.component').then((m) => m.ResetPasswordComponent)
+  },
+  {
     path: 'cart',
     loadComponent: () => import('./features/shop/pages/cart/cart.component').then((m) => m.CartComponent)
   },

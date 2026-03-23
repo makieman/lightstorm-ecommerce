@@ -1,107 +1,71 @@
-<body>
-  <div class="row">
-    <div
-      class="col-4 col-lg-4 col-sm-11 d-flex align-items-center justify-content-center"
-    >
-      <img
-        class="img-fluid image"
-        src="https://i.pinimg.com/736x/d7/62/4b/d7624b3cc22ef6a437b0e43fdbf796ef--french-sofa-fine-furniture.jpg"
-        alt="User Image"
-      />
-    </div>
-    <div class="col-7 col-sm-11 col-lg-7">
-      <div class="row" style="margin-top: 80px; margin-left: 50px">
-        <form [formGroup]="personalInfoForm">
-          <div>
-            <label for="fullName">User Name:</label>
-            @if(userInfo){
-            <input
-              id="fullName"
-              type="text"
-              formControlName="fullName"
-              value="{{ userInfo.username }}"
-            />
-            }
-          </div>
-          <div>
-            <label for="email">Email:</label>
-            @if(userInfo){
-            <input
-              id="email"
-              type="email"
-              formControlName="email"
-              value="{{ userInfo.email }}"
-            />
-            }
-          </div>
-          <div>
-            <label for="password">Update Password:</label>
-            <div class="input-group">
-              <input
-                id="password"
-                [type]="hidePassword ? 'password' : 'text'"
-                formControlName="password"
-              />
-              <button
-                type="button"
-                class="toggle-password"
-                (click)="togglePasswordVisibility()"
-              >
-                <img
-                  src="{{ hidePassword ? hideIcon : showIcon }}"
-                  alt="Toggle Password"
-                  style="width: 20px; height: 20px"
-                />
-              </button>
-            </div>
-          </div>
-          <div>
-            <label for="confirmPassword">Confirm Password:</label>
-            <div class="input-group">
-              <input
-                id="confirmPassword"
-                [type]="hidePassword ? 'password' : 'text'"
-                formControlName="confirmPassword"
-                class="password-input"
-              />
-              <button
-                type="button"
-                class="toggle-password"
-                (click)="togglePasswordVisibility()"
-              >
-                <img
-                  src="{{ hidePassword ? hideIcon : showIcon }}"
-                  alt="Toggle Password"
-                  style="width: 20px; height: 20px"
-                />
-              </button>
-            </div>
-          </div>
-          <div
-            *ngIf="personalInfoForm.errors?.['mismatch'] && personalInfoForm.get('confirmPassword')?.touched"
-            style="color: red"
-          >
-            Passwords must match!
-          </div>
-          <!-- <div>
-          <label>Image:</label>
-          <input type="text" formControlName="image" value="{{userInfo.image}}">
-        </div> -->
+<!-- Header -->
+<div class="px-6 py-5 border-b border-slate-100 flex justify-between items-center sticky top-0 bg-white z-10 w-full mb-2">
+  <div>
+    <h2 class="text-xl font-black text-[var(--brand-navy)] tracking-tight m-0" mat-dialog-title>Edit Profile</h2>
+    <p class="text-sm text-slate-500 mt-1 mb-0">Update your personal account details</p>
+  </div>
+  <button mat-dialog-close class="w-8 h-8 flex items-center justify-center rounded-full bg-slate-50 text-slate-500 hover:bg-slate-200 transition-colors border-0 cursor-pointer p-0 m-0">
+    <span class="material-symbols-outlined text-sm">close</span>
+  </button>
+</div>
 
-          <div>
-            <label for="image">Personal Image:</label>
-            <input id="image" type="file" (change)="onFileSelected($event)" />
-          </div>
-          <button
-            (click)="updateUser()"
-            style="margin-right: 10px"
-            class="btn btn-warning"
-            type="submit"
-          >
-            Update Info
-          </button>
-        </form>
+<!-- Scrollable Content -->
+<mat-dialog-content class="px-6 pb-2 pt-0 w-full" style="max-height: 60vh;">
+  <form [formGroup]="personalInfoForm" id="profileForm" class="space-y-4 pt-2 w-full">
+    
+    <!-- Avatar / File input -->
+    <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-4 bg-slate-50 p-4 rounded-2xl border border-slate-100 w-full">
+      <img [src]="userInfo?.image ? userInfo.image : 'https://res.cloudinary.com/dh7osyxvl/image/upload/v1714489565/Users/pngwing.com_10_lnfy4w.png'" class="w-16 h-16 rounded-full object-cover shadow-sm bg-white border border-slate-200 shrink-0">
+      <div class="flex-1 w-full">
+        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2" for="image">Change Avatar Photo</label>
+        <input id="image" type="file" (change)="onFileSelected($event)" class="w-full text-sm text-slate-500 file:cursor-pointer file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-black file:bg-blue-50 file:text-blue-600 hover:file:bg-blue-100 transition-all outline-none" />
       </div>
     </div>
-  </div>
-</body>
+
+    <!-- User Name -->
+    <div class="w-full">
+      <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1" for="fullName">User Name</label>
+      <input id="fullName" type="text" formControlName="fullName" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-coral)] focus:border-transparent outline-none transition-all text-slate-700 font-medium" />
+    </div>
+
+    <!-- Email -->
+    <div class="w-full">
+      <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1" for="email">Email Address</label>
+      <input id="email" type="email" formControlName="email" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-coral)] focus:border-transparent outline-none transition-all text-slate-700 font-medium" />
+    </div>
+
+    <!-- Update Password -->
+    <div class="w-full">
+      <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">Update Password</label>
+      <div class="relative w-full">
+        <input [type]="hidePassword ? 'password' : 'text'" formControlName="password" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-coral)] focus:border-transparent outline-none transition-all text-slate-700 pr-12 font-medium" placeholder="Leave blank to keep current" />
+        <button type="button" class="absolute inset-y-0 right-0 px-3 flex items-center text-slate-400 hover:text-[var(--brand-coral)] transition-colors outline-none border-0 bg-transparent cursor-pointer" (click)="togglePasswordVisibility()">
+          <span class="material-symbols-outlined">{{ hidePassword ? 'visibility' : 'visibility_off' }}</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Confirm Password -->
+    <div class="w-full">
+      <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">Confirm Password</label>
+      <div class="relative w-full">
+        <input [type]="hidePassword ? 'password' : 'text'" formControlName="confirmPassword" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[var(--brand-coral)] focus:border-transparent outline-none transition-all text-slate-700 pr-12 font-medium" placeholder="Confirm new password" />
+      </div>
+      <div *ngIf="personalInfoForm.errors?.['mismatch'] && personalInfoForm.get('confirmPassword')?.touched" class="text-xs text-red-500 mt-1.5 font-bold flex items-center gap-1">
+        <span class="material-symbols-outlined text-[14px]">error</span>
+        Passwords do not match!
+      </div>
+    </div>
+    
+  </form>
+</mat-dialog-content>
+
+<!-- Footer Actions -->
+<mat-dialog-actions class="px-6 py-4 border-t border-slate-100 bg-slate-50 w-full flex justify-end gap-3 m-0 z-10 sticky bottom-0">
+  <button type="button" mat-dialog-close class="px-5 py-2.5 rounded-xl font-bold text-sm text-slate-600 bg-white border border-slate-200 hover:bg-slate-100 transition-colors outline-none cursor-pointer shadow-sm">
+    Cancel
+  </button>
+  <button type="submit" (click)="updateUser()" [disabled]="personalInfoForm.invalid" class="px-6 py-2.5 rounded-xl font-black text-sm text-white bg-red-500 hover:bg-[#d62828] shadow-[0_4px_14px_rgba(230,57,70,0.3)] hover:shadow-[0_6px_20px_rgba(230,57,70,0.4)] transition-all disabled:opacity-50 disabled:shadow-none outline-none border-0 cursor-pointer">
+    Save Changes
+  </button>
+</mat-dialog-actions>

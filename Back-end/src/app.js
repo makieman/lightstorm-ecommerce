@@ -78,6 +78,7 @@ app.use(cors({
 }));
 app.options('*', cors());
 app.use(cookieParser());
+app.set('trust proxy', 1);
 app.use(session({
   secret: process.env.JWT_SECRET,
   resave: false,
@@ -85,7 +86,8 @@ app.use(session({
   cookie: {
     secure: process.env.NODE_ENV === 'production',
     sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
-    maxAge: 24 * 60 * 60 * 1000
+    maxAge: 24 * 60 * 60 * 1000,
+    proxy: true
   }
 }));
 app.use(passport.initialize());
