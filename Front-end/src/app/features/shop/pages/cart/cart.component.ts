@@ -1,7 +1,6 @@
 import { CoreProductService } from '@app/core/services/core-product.service';
 import { CartService } from '@app/core/services/cart.service';
 import { CartProductsCountService } from '@app/core/services/cart-products-count.service';
-import { MpesaService } from '@app/core/services/mpesa.service';
 import { Component, OnInit, NgZone, ChangeDetectorRef } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { HttpClient } from '@angular/common/http'; // Import HttpClientModule
@@ -33,16 +32,11 @@ export class CartComponent implements OnInit {
   countries: string[] = ["Kenya", "Algeria", "Bahrain", "Djibouti", "Egypt", "Iraq", "Jordan", "Kuwait", "Lebanon", "Libya", "Mauritania", "Morocco", "Oman", "Palestine", "Qatar", "Saudi Arabia", "Somalia", "Sudan", "Syria", "Tunisia"];
 
   deletedProduct: { _id: string, title: string, image: string, quantity: number, price: number } | null = null;
-  isPaymentLoading = false;
-  paymentStep: 'idle' | 'sending' | 'waiting' | 'success' | 'failed' = 'idle';
-  paymentMessage = '';
-  phoneNumber = '';
 
   constructor(
     private userService: CartService,
     private productsService: CoreProductService,
     private cartCountService: CartProductsCountService,
-    private mpesaService: MpesaService,
     private http: HttpClient,
     private router: Router,
     private zone: NgZone,
@@ -182,70 +176,6 @@ export class CartComponent implements OnInit {
     } else {
       this.router.navigate(['/login'], { queryParams: { redirect: '/checkout' } });
     }
-  }
-
-  checkout() {
-    if (!this.phoneNumber || this.phoneNumber.length < 10) {
-      alert('Please enter a valid M-Pesa phone number');
-      return;
-    }
-
-    this.isPaymentLoading = true;
-    this.paymentStep = 'sending';
-    this.paymentMessage = 'Sending payment request...';
-
-    const orderId = `ORD-${Date.now()}`;
-    const amount = this.grandTotal;
-
-    this.mpesaService.initiateSTKPush(
-      this.phoneNumber,
-      amount,
-      orderId
-    ).subscribe({
-      next: (response) => {
-        if (response.success) {
-          this.paymentStep = 'waiting';
-          this.paymentMessage =
-            'Check your phone! Enter your M-Pesa PIN to complete payment.';
-
-          // Start polling for result
-          this.mpesaService
-            .pollPaymentStatus(response.checkoutRequestId)
-            .subscribe({
-              next: (statusRes) => {
-                if (statusRes.status === 'success') {
-                  this.paymentStep = 'success';
-                  this.paymentMessage =
-                    `Payment successful! Receipt: ${statusRes.mpesaReceiptNumber}`;
-                  this.isPaymentLoading = false;
-                } else if (
-                  statusRes.status === 'failed' ||
-                  statusRes.status === 'cancelled'
-                ) {
-                  this.paymentStep = 'failed';
-                  this.paymentMessage =
-                    statusRes.resultDesc || 'Payment failed. Please try again.';
-                  this.isPaymentLoading = false;
-                }
-              },
-              error: () => {
-                this.paymentStep = 'failed';
-                this.paymentMessage = 'Could not verify payment. Check M-Pesa messages.';
-                this.isPaymentLoading = false;
-              }
-            });
-        } else {
-          this.paymentStep = 'failed';
-          this.paymentMessage = response.message || 'Failed to send payment request.';
-          this.isPaymentLoading = false;
-        }
-      },
-      error: () => {
-        this.paymentStep = 'failed';
-        this.paymentMessage = 'Payment request failed. Please try again.';
-        this.isPaymentLoading = false;
-      }
-    });
   }
 
   ngOnInit() {
