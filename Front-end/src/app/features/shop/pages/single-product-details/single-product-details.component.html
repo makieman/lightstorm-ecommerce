@@ -2,9 +2,9 @@
     @if (product) {
     <section class="mx-auto max-w-4xl px-4 pb-8 pt-3 md:px-5 md:pt-4">
         <div class="product-hero grid gap-5 lg:grid-cols-[45%_55%] lg:items-start">
-            <div class="product-media-card overflow-hidden rounded-[32px] border border-white/60 bg-white shadow-[0_18px_60px_rgba(15,23,42,0.08)]">
+            <div class="product-media-card relative -mx-4 w-[calc(100%+2rem)] overflow-hidden rounded-none border-y border-white/60 bg-white shadow-[0_18px_60px_rgba(15,23,42,0.08)] sm:mx-0 sm:w-full sm:rounded-[32px] sm:border">
                 <!-- Main Image Gallery -->
-                <div class="product-media relative h-[18rem] sm:h-[22rem] lg:h-[26rem] max-h-[420px] cursor-zoom-in overflow-hidden bg-[radial-gradient(circle_at_top,#dbeafe_0%,#f8fafc_42%,#ffffff_100%)]">
+                <div class="product-media relative w-full aspect-square sm:aspect-auto sm:h-[22rem] lg:h-[26rem] max-h-[420px] cursor-zoom-in overflow-hidden bg-[radial-gradient(circle_at_top,#dbeafe_0%,#f8fafc_42%,#ffffff_100%)]">
                     <img [src]="currentImage" [alt]="product.title" class="product-img" loading="eager" fetchpriority="high" decoding="async" width="900" height="900" (mousemove)="moveImage($event)"
                         (click)="openImageDialog(currentImage)" (error)="onImageError($event)">
                     

@@ -234,6 +234,10 @@
 }
 
 @media (max-width: 640px) {
+    .product-img {
+        object-fit: cover;
+    }
+
     .payment-chip {
         flex: 1 1 calc(50% - 0.5rem);
     }
