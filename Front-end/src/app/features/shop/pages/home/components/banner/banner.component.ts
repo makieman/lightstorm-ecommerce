@@ -20,8 +20,8 @@ export class BannerComponent implements OnInit, OnDestroy {
       alt: 'Solar panels installation'
     },
     {
-      image: 'https://res.cloudinary.com/dh5hssddg/image/upload/v1774120819/619306649_1339528228190214_1471731446922929491_n_lcecza.jpg',
-      alt: 'Solar energy system'
+      image: 'https://res.cloudinary.com/dh5hssddg/image/upload/v1774274163/%CE%95%CF%85%CF%87%CE%B1%CF%81%CE%B9%CF%83%CF%84%CE%BF%CF%8D%CE%BC%CE%B5_%CF%80%CE%BF%CE%BB%CF%8D_%CE%B3%CE%B9%CE%B1_%CF%84%CE%B7%CE%BD_%CF%80%CF%81%CE%BF%CF%84%CE%AF%CE%BC%CE%B7%CF%83%CE%B7_%CF%83%CE%B1%CF%82_%CE%BA%CE%B1%CE%AF_%CF%84%CE%B7%CE%BD_%CE%B5%CE%BC%CF%80%CE%B9%CF%83%CF%84%CE%BF%CF%83%CF%8D%CE%BD%CE%B7_%CF%80%CE%BF%CF%85_%CE%BC%CE%B1%CF%82_%CE%B4%CE%B5%CE%AF%CF%87%CE%BD%CE%B5%CF%84%CE%B5____msolutiongreece_osmsecurity___security_securitysystem_security_system_homeprotection_shopprotection_homesecurity_shopsecurity_camera_adzwii.jpg',
+      alt: 'cctv installation'
     },
     {
       image: 'https://res.cloudinary.com/dh5hssddg/image/upload/v1774120812/solar-power-power-station_zb1quw.jpg',
