@@ -13,8 +13,9 @@ if (!JWT_SECRET) throw new Error("JWT_SECRET env var is required");
 const COOKIE_OPTIONS = ({
   httpOnly: true,
   secure: process.env.NODE_ENV === "production",
-  sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+  sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
   maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+  domain: '.lightstormtechnologies.com' // Allows cookie to be shared between www and non-www
 });
 
 function formatAjvErrors(errors) {
