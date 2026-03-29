@@ -10,6 +10,7 @@ export const routes: Routes = [
   },
   {
     path: 'product/:id',
+    runGuardsAndResolvers: 'always',
     loadComponent: () => import('./features/shop/pages/single-product-details/single-product-details.component').then((m) => m.SingleProductDetailsComponent),
   },
   {
@@ -65,6 +66,10 @@ export const routes: Routes = [
       {
         path: 'orders',
         loadComponent: () => import('./features/admin/components/orders/orders.component').then((m) => m.OrdersComponent)
+      },
+      {
+        path: 'banners',
+        loadComponent: () => import('./features/admin/components/banner-manager/banner-manager.component').then((m) => m.BannerManagerComponent)
       },
     ]
   },

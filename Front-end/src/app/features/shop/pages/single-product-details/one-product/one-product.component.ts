@@ -4,7 +4,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 import { Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -29,8 +29,20 @@ import Swal from 'sweetalert2';
 export class OneProductComponent {
   @Input() product: any;
 
-  constructor(public dialog: MatDialog) {
+  constructor(public dialog: MatDialog, private router: Router) {}
 
+  navigateToProduct() {
+    this.router.navigate(['/product', this.product._id]);
+  }
+
+  goToProduct(event: Event) {
+    event.stopPropagation();
+    this.router.navigate(['/product', this.product._id]);
+  }
+
+  addToCartQuick(event: Event) {
+    event.stopPropagation();
+    this.openDialog();
   }
 
   openDialog() {

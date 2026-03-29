@@ -87,6 +87,33 @@
 
                 <p class="text-sm leading-relaxed text-slate-600">{{ product.details }}</p>
 
+                <!-- Product Metadata Section -->
+                <div class="grid grid-cols-2 gap-4 rounded-[24px] bg-slate-50 p-4 border border-slate-100 mb-2">
+                    <div>
+                        <p class="text-[10px] font-black uppercase tracking-[0.24em] text-slate-400">Category</p>
+                        <p class="mt-1 text-sm font-bold text-[var(--brand-navy)]">{{ categoryDisplayName }}</p>
+                    </div>
+                    <div>
+                        <p class="text-[10px] font-black uppercase tracking-[0.24em] text-slate-400">Availability</p>
+                        <p class="mt-1 text-sm font-bold text-[var(--brand-teal)]">
+                            {{ product.quantity > 0 ? 'In Stock' : 'Out of Stock' }}
+                        </p>
+                    </div>
+                    <div>
+                        <p class="text-[10px] font-black uppercase tracking-[0.24em] text-slate-400">Review Count</p>
+                        <p class="mt-1 text-sm font-bold text-[var(--brand-navy)]">{{ product.reviews.length }} submitted</p>
+                    </div>
+                    <div class="flex items-end">
+                        <button
+                            type="button"
+                            (click)="showReviewForm = !showReviewForm"
+                            class="inline-flex items-center gap-2 rounded-2xl bg-[var(--brand-navy)] px-4 py-2.5 text-[11px] font-black uppercase tracking-[0.18em] text-white transition-all hover:bg-[var(--brand-coral)] active:scale-95">
+                            <span class="material-icons text-sm">rate_review</span>
+                            {{ showReviewForm ? 'Hide Form' : 'Write a Review' }}
+                        </button>
+                    </div>
+                </div>
+
                 @if (product.wattage || product.voltage || product.batteryType) {
                 <div class="grid gap-3 rounded-[24px] bg-[var(--surface-page)] p-4 sm:grid-cols-3 sm:p-5">
                     @if (product.wattage) {
@@ -126,23 +153,7 @@
                     </div>
                 </div>
 
-                <div
-                    class="rounded-[24px] bg-[var(--surface-summary)] p-5 text-white shadow-[0_14px_40px_rgba(15,23,42,0.14)]">
-                    <div class="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
-                        <div>
-                            <p class="text-[10px] font-black uppercase tracking-[0.24em] text-[var(--brand-lime)]">
-                                Guaranteed Safe Checkout</p>
-                            <p class="mt-2 text-sm font-medium text-white/75">Protected payments, support-backed
-                                delivery, and verified product handling.</p>
-                        </div>
-                        <div class="flex flex-wrap gap-2 sm:justify-end">
-                            <span class="payment-chip">Visa</span>
-                            <span class="payment-chip">Mastercard</span>
-                            <span class="payment-chip">PayPal</span>
-                            <span class="payment-chip">M-Pesa</span>
-                        </div>
-                    </div>
-                </div>
+
             </div>
         </div>
 
@@ -150,45 +161,16 @@
             class="mt-6 rounded-[24px] border border-slate-100 bg-white p-4 shadow-[0_14px_40px_rgba(15,23,42,0.05)] sm:p-5">
             <div
                 class="flex flex-col gap-3 border-b border-slate-100 pb-4 sm:flex-row sm:items-center sm:justify-between">
-                <div>
-                    <p class="text-[10px] font-black uppercase tracking-[0.26em] text-slate-400">Product Insights</p>
-                    <h2 class="mt-1 text-xl font-black text-[var(--brand-navy)]">Everything you need before checkout
-                    </h2>
+                    <h2 class="mt-1 text-xl font-black text-[var(--brand-navy)]">Customer Reviews</h2>
                 </div>
                 <div class="detail-tabs flex flex-wrap gap-2">
-                    <button type="button" (click)="showDescription()" class="tab-trigger"
-                        [ngClass]="{'active': selectedTab === 'description'}">Description</button>
                     <button type="button" (click)="showReviews()" class="tab-trigger"
                         [ngClass]="{'active': selectedTab === 'reviews'}">Reviews ({{ product.reviews.length
                         }})</button>
                 </div>
-            </div>
 
             <div class="pt-4" [ngSwitch]="selectedTab">
-                <div *ngSwitchCase="'description'" class="grid items-start gap-4 lg:grid-cols-[minmax(0,1fr)_18rem]">
-                    <div class="rounded-[16px] bg-[var(--surface-page)] p-4 text-sm leading-6 text-slate-600">
-                        {{ product.details }}
-                    </div>
 
-                    <div class="space-y-3 rounded-[16px] border border-slate-100 bg-slate-50 p-4">
-                        <div>
-                            <p class="text-[10px] font-black uppercase tracking-[0.24em] text-slate-400">Category</p>
-                            <p class="mt-1 text-base font-bold text-[var(--brand-navy)]">{{ categoryDisplayName }}</p>
-                        </div>
-                        <div>
-                            <p class="text-[10px] font-black uppercase tracking-[0.24em] text-slate-400">Availability
-                            </p>
-                            <p class="mt-1 text-base font-bold text-[var(--brand-teal)]">{{ product.quantity > 0 ? 'In
-                                stock' : 'Out of stock' }}</p>
-                        </div>
-                        <div>
-                            <p class="text-[10px] font-black uppercase tracking-[0.24em] text-slate-400">Review Count
-                            </p>
-                            <p class="mt-1 text-base font-bold text-[var(--brand-navy)]">{{ product.reviews.length }}
-                                submitted</p>
-                        </div>
-                    </div>
-                </div>
 
                 <div *ngSwitchCase="'reviews'" class="space-y-8">
                     <div class="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(18rem,24rem)]">
@@ -221,7 +203,7 @@
                             }
                         </div>
 
-                        <div
+                        <div *ngIf="showReviewForm"
                             class="review-panel rounded-[28px] border border-slate-100 bg-white p-6 shadow-[0_18px_60px_rgba(15,23,42,0.05)] sm:p-7">
                             <p class="text-[10px] font-black uppercase tracking-[0.24em] text-slate-400">Share Your
                                 Experience</p>

@@ -1,42 +1,94 @@
-.related-product-card {
+.product-card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 1rem;
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 35px rgba(15, 23, 42, 0.12);
+}
+
+.product-card-media {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #f8fafc 0%, #eef2f7 100%);
+}
+
+.product-card-media img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
   display: block;
 }
 
-.product-title-anchor {
-  color: var(--brand-navy);
-  text-decoration: none;
-  transition: color 0.2s ease;
+.product-card-actions {
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+  display: flex;
+  gap: 0.65rem;
 }
 
-.product-title-anchor:hover {
-  color: var(--brand-coral);
-}
-
-.product-image {
-  height: 100%;
-  width: 100%;
-  object-fit: cover;
-  transition: transform 0.45s ease;
-}
-
-.related-product-card:hover .product-image {
-  transform: scale(1.06);
-}
-
-.cart-icon {
+.product-action-button {
+  width: 2.75rem;
+  height: 2.75rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  height: 2.75rem;
-  width: 2.75rem;
-  min-width: 2.75rem;
-  border-radius: 1rem;
-  background: #f8fafc;
-  color: #64748b;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--brand-navy);
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.12);
+  border: 0;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
 }
 
-.cart-icon:hover {
+.product-action-button:hover {
   background: var(--brand-navy);
-  color: white;
+  color: #ffffff;
+}
+
+.product-card-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 0.55rem;
+  padding: 0.85rem;
+}
+
+.product-category {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: #84cc16;
+}
+
+.product-title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 800;
+  line-height: 1.35;
+  color: var(--brand-navy);
+}
+
+.product-price {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #0f766e;
+}
+
+@media (min-width: 1280px) {
+  .product-card-media img {
+    height: 140px;
+  }
 }

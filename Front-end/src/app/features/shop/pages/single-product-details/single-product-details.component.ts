@@ -53,7 +53,7 @@ export class SingleProductDetailsComponent implements OnInit {
   ID: any;
   product: Product | any;
   quantity: number = 1;
-  selectedTab: 'description' | 'reviews' = 'description';
+  selectedTab: 'description' | 'reviews' = 'reviews';
   review: string = '';
   name: any;
   rating: any;
@@ -69,6 +69,8 @@ export class SingleProductDetailsComponent implements OnInit {
   submitted: boolean = false;
   ratingSelected: boolean = false;
   currentImageIndex: number = 0; // NEW: for image gallery
+  showReviewForm: boolean = false; // Toggle review form visibility
+
 
   constructor(
     private route: ActivatedRoute,
@@ -79,8 +81,7 @@ export class SingleProductDetailsComponent implements OnInit {
     private cartService: CartService,
     private dialog: MatDialog
   ) {
-    this.ID = route.snapshot.params["id"];
-    console.debug('[SingleProduct] initialized, route id =', this.ID);
+    console.debug('[SingleProduct] initialized');
   }
 
   /************** Open dialog for image full screen ***************/
@@ -149,22 +150,13 @@ export class SingleProductDetailsComponent implements OnInit {
 
   ngOnInit(): void {
 
-    /******* get single product ********/
-    this.productService.getProductById(this.ID).subscribe({
-      next: (data: any) => {
-        if (data == null) {
-          this.router.navigate(['/']);
-        }
-        this.product = data;
-        this.currentImageIndex = 0;
-        console.debug('[SingleProduct] product loaded:', this.ID, this.product);
-        this.syncRelatedProducts();
-
-      },
-      error: (err: any) => {
-        console.error('[SingleProduct] cannot get the product !!', err);
+    // React to route parameter changes
+    this.route.params.subscribe(params => {
+      this.ID = params['id'];
+      if (this.ID) {
+        this.loadProduct(this.ID);
       }
-    })
+    });
 
     /********** get related products **********/
     this.productService.getAllProducts().subscribe({
@@ -200,6 +192,25 @@ export class SingleProductDetailsComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]]
     });
 
+  }
+
+  private loadProduct(id: string): void {
+    this.productService.getProductById(id).subscribe({
+      next: (data: any) => {
+        if (data == null) {
+          this.router.navigate(['/']);
+          return;
+        }
+        this.product = data;
+        this.currentImageIndex = 0;
+        this.quantity = 1; // Reset quantity when switching products
+        console.debug('[SingleProduct] product loaded:', id, this.product);
+        this.syncRelatedProducts();
+      },
+      error: (err: any) => {
+        console.error('[SingleProduct] cannot get the product !!', err);
+      }
+    });
   }
 
   /**************** Quantity input ****************/
@@ -332,20 +343,20 @@ export class SingleProductDetailsComponent implements OnInit {
     }
 
     // Get category identifier (handle both string and object cases)
-    const productCategoryId = typeof this.product.category === 'object' 
-      ? this.product.category?._id || this.product.category?.id 
+    const productCategoryId = typeof this.product.category === 'object'
+      ? this.product.category?._id || this.product.category?.id
       : this.product.category;
 
     // Filter by matching category (with flexible comparison)
     const relatedProducts = this.allProducts.filter((product: any) => {
       if (product._id === this.product._id) return false; // Skip current product
-      
+
       const otherCategoryId = typeof product.category === 'object'
         ? product.category?._id || product.category?.id
         : product.category;
-      
-      return otherCategoryId && productCategoryId && 
-             otherCategoryId.toString() === productCategoryId.toString();
+
+      return otherCategoryId && productCategoryId &&
+        otherCategoryId.toString() === productCategoryId.toString();
     });
 
     // Fallback: if no category matches, show latest products

@@ -16,6 +16,7 @@ const orderRoutes = require('./Routes/order.routes');
 const aiRoutes = require('./Routes/ai.routes');
 const adminRoutes = require('./Routes/admin.routes');
 const paymentRoutes = require('./Routes/payment.routes');
+const bannerRoutes = require('./Routes/banner.routes');
 const passport = require('./services/passport.service');
 
 const app = express();
@@ -112,6 +113,7 @@ app.use('/api/orders', orderRoutes);
 app.use('/api/ai', aiRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/payments', paymentRoutes);
+app.use('/api/banners', bannerRoutes);
 
 app.get('/ping', (req, res) => {
   res.status(200).type('text/plain').send('ok');

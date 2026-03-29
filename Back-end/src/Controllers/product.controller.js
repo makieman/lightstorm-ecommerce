@@ -144,7 +144,7 @@ let getProductByName = async (req, res) => {
  */
 let getProductByID = async (req, res) => {
   try {
-    let product = await productModel.findById(req.params.id);
+    let product = await productModel.findById(req.params.id).populate('category', 'name slug');
     if (!product) {
       return res.status(404).json({ message: "Product not found" });
     }

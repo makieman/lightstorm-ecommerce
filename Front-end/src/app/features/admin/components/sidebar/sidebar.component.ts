@@ -43,6 +43,10 @@ import { CommonModule } from '@angular/common';
           <i class="bi bi-cart-check-fill"></i>
           <span>Orders</span>
         </a>
+        <a routerLink="/admin/banners" routerLinkActive="active-link" class="nav-item" (click)="closeSidebar()">
+          <i class="bi bi-megaphone-fill"></i>
+          <span>Banners</span>
+        </a>
       </nav>
 
       <div class="p-4 mt-auto border-t border-slate-100 bg-white">

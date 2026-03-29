@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { BannerComponent } from './components/banner/banner.component';
 import { ProductComponent } from './components/product/product.component';
+import { PromoBannerComponent } from '../../../../shared/components/promo-banner/promo-banner.component';
 
 interface SolutionCategory {
   name: string;
@@ -19,6 +20,7 @@ interface SolutionCategory {
     CommonModule,
     BannerComponent,
     ProductComponent,
+    PromoBannerComponent,
     RouterModule
   ],
   templateUrl: './home.component.html',
