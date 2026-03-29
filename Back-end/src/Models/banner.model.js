@@ -14,7 +14,7 @@ const bannerSchema = new mongoose.Schema({
     type: String, 
     default: 'from-orange-500 via-yellow-400 to-green-500' 
   },
-  linkedProducts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Product' }],
+  linkedProducts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'products' }],
   createdAt: { type: Date, default: Date.now }
 });
 
