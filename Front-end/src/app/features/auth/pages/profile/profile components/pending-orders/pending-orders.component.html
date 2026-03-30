@@ -1,57 +1,30 @@
-<div class="flex justify-between items-center mb-6">
-  <h2 class="text-xl font-bold tracking-tight text-on-surface">Order Queue</h2>
-  <span class="bg-surface-container-high text-on-surface text-[10px] font-bold px-3 py-1 rounded-full">{{pendingOrders.length}} Pending</span>
+<div class="flex items-center justify-between mb-4">
+  <h6 class="text-lg font-bold text-slate-800 m-0">Pending Orders</h6>
+  <span class="material-symbols-outlined text-amber-500 text-3xl">inventory_2</span>
 </div>
 
-<div class="bg-surface-container-lowest rounded-xl shadow-sm border border-surface-container overflow-hidden">
-  <div class="overflow-x-auto no-scrollbar">
-    <table class="w-full text-left border-collapse min-w-[600px]">
-      <thead>
-        <tr class="bg-surface-container/50">
-          <th class="px-6 py-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest whitespace-nowrap">Order ID</th>
-          <th class="px-6 py-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest whitespace-nowrap">Date</th>
-          <th class="px-6 py-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest whitespace-nowrap">Status</th>
-          <th class="px-6 py-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest whitespace-nowrap text-right">Actions</th>
-        </tr>
-      </thead>
+<div *ngIf="pendingOrders.length > 0; else noOrders" class="space-y-4">
+  @for (o of pendingOrders; track o._id) {
+    <div class="bg-slate-50 border border-slate-100 rounded-xl p-4 flex flex-col gap-3 transition-all hover:shadow-sm">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+        <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Order ID</span>
+        <span class="text-sm font-bold text-slate-700 font-mono break-all">{{o._id}}</span>
+      </div>
       
-      <tbody *ngIf="pendingOrders.length > 0; else noOrders" class="divide-y divide-surface-container/60">
-        @for (o of pendingOrders; track o._id) {
-          <tr class="hover:bg-surface-container-low/50 transition-colors">
-            <td class="px-6 py-4 text-xs font-mono font-medium text-on-surface">{{o._id}}</td>
-            <td class="px-6 py-4 text-xs text-on-surface-variant whitespace-nowrap">Recently</td>
-            <td class="px-6 py-4">
-              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-secondary-fixed/20 text-on-secondary-fixed-variant whitespace-nowrap">
-                <span class="w-1.5 h-1.5 rounded-full bg-secondary"></span> Processing
-              </span>
-            </td>
-            <td class="px-6 py-4 text-right whitespace-nowrap">
-              <div class="flex items-center justify-end gap-2">
-                <button (click)="openDialog(o._id)" class="text-xs font-bold text-on-surface-variant hover:text-primary transition-colors flex items-center justify-center p-1.5 hover:bg-surface-container rounded-md gap-1">
-                  <!-- <span class="material-symbols-outlined text-sm">visibility</span> -->View
-                </button>
-                <div class="w-[1px] h-3 bg-surface-container mx-1"></div>
-                <button (click)="deleteOrder(o._id)" class="text-xs font-bold text-error/80 hover:text-error transition-colors flex items-center justify-center p-1.5 hover:bg-error-container/20 rounded-md gap-1">
-                  Cancel
-                </button>
-              </div>
-            </td>
-          </tr>
-        }
-      </tbody>
-    </table>
-  </div>
+      <div class="flex justify-end gap-2 pt-2 border-t border-slate-200/60 mt-2">
+        <button (click)="openDialog(o._id)" class="px-3 py-1.5 text-xs font-bold text-white bg-blue-500 hover:bg-blue-600 rounded-lg transition-colors border-0">
+          View
+        </button>
+        <button (click)="deleteOrder(o._id)" class="px-3 py-1.5 text-xs font-bold text-white bg-red-500 hover:bg-red-600 rounded-lg transition-colors border-0">
+          Cancel
+        </button>
+      </div>
+    </div>
+  }
 </div>
 
 <ng-template #noOrders>
-  <tbody>
-    <tr>
-      <td colspan="4" class="px-6 py-12 text-center text-sm text-on-surface-variant italic">
-        <div class="flex flex-col items-center justify-center opacity-50">
-          <span class="material-symbols-outlined text-4xl mb-2">package_2</span>
-          <p>You don't have any pending orders.</p>
-        </div>
-      </td>
-    </tr>
-  </tbody>
+  <div class="text-sm text-slate-500 italic py-4 text-center bg-slate-50 rounded-xl border border-dashed border-slate-200">
+    You don't have any pending orders.
+  </div>
 </ng-template>

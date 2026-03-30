@@ -1,35 +1,29 @@
-<div class="bg-surface-container-lowest rounded-xl p-6 sm:p-8 shadow-sm border border-surface-container">
-  <div class="flex flex-col sm:flex-row justify-between sm:items-center mb-6 sm:mb-8 gap-4 sm:gap-0">
-    <h2 class="text-xl font-bold tracking-tight text-on-surface">Personal Information</h2>
-    <button (click)="openDialog()" class="text-secondary font-bold text-xs uppercase tracking-widest hover:underline decoration-2 underline-offset-4 self-start sm:self-auto">
-      Update Details
-    </button>
+<div class="flex items-center justify-between mb-4">
+  <h5 class="text-lg font-bold text-slate-800 m-0">Personal Info</h5>
+  <span class="material-symbols-outlined text-blue-500 text-3xl">badge</span>
+</div>
+
+<div class="space-y-4">
+  <div class="flex flex-col sm:flex-row sm:items-center py-2 border-b border-gray-100">
+    <span class="text-sm font-semibold text-slate-500 w-32">User Name</span>
+    <span class="text-sm text-slate-700 font-medium flex-1 truncate">
+      @if(userInfo){ {{userInfo.username}} }
+    </span>
   </div>
-  
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6 sm:gap-y-8">
-    <div class="space-y-1.5">
-      <label class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">User Name</label>
-      <p class="text-on-surface font-medium border-b border-surface-container py-2">
-        @if(userInfo){ {{userInfo.username}} } @else { - }
-      </p>
-    </div>
-    <div class="space-y-1.5">
-      <label class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Email Address</label>
-      <p class="text-on-surface font-medium border-b border-surface-container py-2 break-all sm:break-normal">
-        @if(userInfo){ {{userInfo.email}} } @else { - }
-      </p>
-    </div>
-    <div class="space-y-1.5">
-      <label class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Primary Contact</label>
-      <p class="text-on-surface font-medium border-b border-surface-container py-2 text-on-surface-variant">
-        Add phone number
-      </p>
-    </div>
-    <div class="space-y-1.5">
-      <label class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Member Since</label>
-      <p class="text-on-surface font-medium border-b border-surface-container py-2 text-on-surface-variant">
-        Today
-      </p>
-    </div>
+
+  <div class="flex flex-col sm:flex-row sm:items-center py-2 border-b border-gray-100">
+    <span class="text-sm font-semibold text-slate-500 w-32">Email</span>
+    <span class="text-sm text-slate-700 font-medium flex-1 truncate">
+      @if(userInfo){ {{userInfo.email}} }
+    </span>
+  </div>
+
+  <div class="pt-2">
+    <mat-dialog-actions class="p-0 m-0">
+      <button mat-raised-button (click)="openDialog()" color="accent" class="w-full sm:w-auto mt-2">
+        <span class="material-symbols-outlined text-sm mr-1">edit</span> Edit Profile
+      </button>
+    </mat-dialog-actions>
   </div>
 </div>
+
