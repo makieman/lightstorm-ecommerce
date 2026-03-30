@@ -1,62 +1,121 @@
-<section class="profile-page min-h-screen px-4 py-6 sm:px-6 lg:px-8 lg:py-10">
-  <div class="mx-auto max-w-7xl space-y-6">
-    <div class="profile-hero overflow-hidden rounded-[32px] border border-white/60 p-6 shadow-[0_20px_60px_rgba(15,23,42,0.1)] sm:p-8 lg:p-10">
-      <div class="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
-        <div class="max-w-2xl">
-          <p class="text-xs font-black uppercase tracking-[0.32em] text-[var(--brand-lime)]">Account Center</p>
-          <h1 class="mt-3 text-3xl font-black tracking-tight text-[var(--brand-navy)] sm:text-4xl">Manage your Lightstorm profile</h1>
-          <p class="mt-3 text-sm leading-6 text-slate-600 sm:text-base">Review your account details, monitor pending work, and keep track of accepted or rejected orders from one responsive dashboard.</p>
+<div class="flex flex-col lg:flex-row min-h-screen bg-surface font-body text-on-surface relative">
+  <!-- SideNavBar -->
+  <aside class="w-full lg:w-72 flex flex-col lg:sticky lg:left-0 lg:top-0 lg:h-screen bg-surface p-6 gap-2 border-b lg:border-b-0 lg:border-r border-surface-container lg:overflow-y-auto z-10">
+    <app-user-picture></app-user-picture>
+    
+    <nav class="flex flex-col gap-1 sm:gap-2 flex-grow mt-6">
+      <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-on-surface-variant px-3 mb-2 hidden sm:block">Menu</p>
+      
+      <div class="flex lg:flex-col overflow-x-auto lg:overflow-visible gap-2 pb-2 lg:pb-0 no-scrollbar">
+        <a class="flex items-center gap-3 bg-surface-container-lowest text-primary font-bold rounded-xl p-3 shadow-sm transition-transform cursor-pointer whitespace-nowrap">
+          <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">grid_view</span>
+          <span class="text-sm tracking-wide">Dashboard</span>
+        </a>
+        <a class="flex items-center gap-3 text-on-surface-variant p-3 rounded-xl hover:bg-surface-container-low transition-all cursor-pointer whitespace-nowrap">
+          <span class="material-symbols-outlined">package_2</span>
+          <span class="text-sm tracking-wide">Order Queue</span>
+        </a>
+        <a class="flex items-center gap-3 text-on-surface-variant p-3 rounded-xl hover:bg-surface-container-low transition-all cursor-pointer whitespace-nowrap">
+          <span class="material-symbols-outlined">favorite</span>
+          <span class="text-sm tracking-wide">Wishlist</span>
+        </a>
+        <a class="flex items-center gap-3 text-on-surface-variant p-3 rounded-xl hover:bg-surface-container-low transition-all cursor-pointer whitespace-nowrap">
+          <span class="material-symbols-outlined">manage_accounts</span>
+          <span class="text-sm tracking-wide">Account Settings</span>
+        </a>
+      </div>
+      
+      <div class="mt-8 hidden lg:block">
+        <div class="p-4 bg-primary-container rounded-xl relative overflow-hidden group cursor-pointer">
+          <div class="relative z-10">
+            <p class="text-on-primary font-bold text-xs mb-1">Elite Concierge</p>
+            <p class="text-on-primary-container text-[10px] leading-relaxed mb-3">Unlock 24/7 personal shopping assistance.</p>
+            <button class="bg-secondary-container text-on-secondary-container text-[10px] font-bold px-3 py-1.5 rounded-full">Upgrade</button>
+          </div>
+          <div class="absolute -right-4 -bottom-4 w-20 h-20 bg-secondary-fixed/10 rounded-full blur-2xl group-hover:scale-150 transition-transform"></div>
         </div>
+      </div>
+    </nav>
+    
+    <div class="hidden lg:flex flex-col gap-2 pt-6 mt-4 border-t border-surface-container">
+      <a class="flex items-center gap-3 text-on-surface-variant p-3 rounded-xl hover:bg-surface-container-low transition-all cursor-pointer">
+        <span class="material-symbols-outlined">help</span>
+        <span class="text-sm tracking-wide">Help Center</span>
+      </a>
+      <a (click)="logout()" class="flex items-center gap-3 text-error p-3 rounded-xl hover:bg-error-container/50 transition-all cursor-pointer">
+        <span class="material-symbols-outlined">logout</span>
+        <span class="text-sm tracking-wide">Logout</span>
+      </a>
+    </div>
+  </aside>
 
-        <button
-          type="button"
-          class="inline-flex items-center justify-center gap-3 self-start rounded-full bg-[var(--brand-coral)] px-5 py-3 text-sm font-black uppercase tracking-[0.18em] text-white shadow-[0_14px_32px_rgba(239,68,68,0.22)] transition-transform hover:-translate-y-0.5"
-          (click)="logout()">
-          <i class="bi bi-box-arrow-right text-base"></i>
-          <span>Logout</span>
+  <!-- Main Content Canvas -->
+  <main class="flex-grow p-4 md:p-8 max-w-[1100px] mx-auto w-full">
+    <header class="mb-8 md:mb-10 flex flex-col sm:flex-row justify-between sm:items-end gap-4">
+      <div>
+        <h1 class="text-3xl md:text-4xl font-black tracking-tight text-on-surface mb-2">User Profile</h1>
+        <p class="text-on-surface-variant text-sm">Manage your personal information and track your curated collection.</p>
+      </div>
+      <div class="flex gap-3 self-start sm:self-auto">
+        <button class="flex items-center gap-2 px-5 py-2.5 bg-surface-container-lowest text-primary font-bold rounded-full shadow-sm hover:bg-surface-container transition-all" (click)="logout()">
+          <span class="material-symbols-outlined text-lg lg:hidden">logout</span>
+          <span class="material-symbols-outlined text-lg hidden lg:block">edit</span>
+          <span class="text-xs uppercase tracking-widest hidden sm:inline lg:hidden">Logout</span>
+          <span class="text-xs uppercase tracking-widest hidden lg:inline">Edit Layout</span>
         </button>
       </div>
-    </div>
+    </header>
 
-    <div class="grid gap-6 lg:grid-cols-[minmax(0,340px)_minmax(0,1fr)] xl:gap-8">
-      <div class="space-y-6">
-        <div class="profile-slot rounded-[28px] p-4 shadow-[0_18px_45px_rgba(15,23,42,0.08)] sm:p-5">
-          <app-user-picture></app-user-picture>
-        </div>
-        <div class="profile-slot rounded-[28px] p-4 shadow-[0_18px_45px_rgba(15,23,42,0.08)] sm:p-5">
-          <div class="mb-4 px-1">
-            <p class="text-xs font-black uppercase tracking-[0.26em] text-slate-400">Order Queue</p>
-            <h2 class="mt-2 text-xl font-black text-[var(--brand-navy)]">Pending activity</h2>
-          </div>
-          <app-pending-orders></app-pending-orders>
-        </div>
-      </div>
+    <div class="grid grid-cols-12 gap-6 md:gap-8">
+      <!-- Profile Information Card -->
+      <section class="col-span-12 lg:col-span-8">
+        <app-user-info></app-user-info>
+      </section>
 
-      <div class="space-y-6">
-        <div class="profile-slot rounded-[28px] p-4 shadow-[0_18px_45px_rgba(15,23,42,0.08)] sm:p-5">
-          <div class="mb-4 px-1">
-            <p class="text-xs font-black uppercase tracking-[0.26em] text-slate-400">Profile</p>
-            <h2 class="mt-2 text-xl font-black text-[var(--brand-navy)]">Your information</h2>
+      <!-- Stats/Bento Side -->
+      <aside class="col-span-12 lg:col-span-4 space-y-6">
+        <div class="bg-primary text-on-primary rounded-xl p-6 relative overflow-hidden">
+          <div class="relative z-10">
+            <div class="flex justify-between items-start mb-4">
+              <span class="material-symbols-outlined text-secondary-fixed text-3xl" style="font-variation-settings: 'FILL' 1;">bolt</span>
+              <span class="bg-secondary-fixed text-on-secondary-fixed text-[10px] font-black px-2 py-0.5 rounded uppercase tracking-tighter">Pro</span>
+            </div>
+            <h3 class="text-2xl font-black mb-1">1,240</h3>
+            <p class="text-on-primary-container text-xs font-medium uppercase tracking-widest">Reward Points</p>
           </div>
-          <app-user-info></app-user-info>
+          <div class="absolute -right-8 -bottom-8 w-32 h-32 bg-secondary/20 rounded-full blur-3xl"></div>
         </div>
 
-        <div class="profile-slot rounded-[28px] p-4 shadow-[0_18px_45px_rgba(15,23,42,0.08)] sm:p-5">
-          <div class="mb-4 px-1">
-            <p class="text-xs font-black uppercase tracking-[0.26em] text-slate-400">History</p>
-            <h2 class="mt-2 text-xl font-black text-[var(--brand-navy)]">Accepted orders</h2>
+        <div class="bg-surface-container rounded-xl p-6">
+          <h4 class="text-xs font-bold text-on-surface-variant uppercase tracking-[0.2em] mb-4">Active Wishlist</h4>
+          <div class="space-y-4">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-lg bg-surface-container-lowest flex items-center justify-center">
+                <span class="material-symbols-outlined text-on-surface-variant">solar_power</span>
+              </div>
+              <div class="flex-grow">
+                <p class="text-xs font-bold">5kW Hybrid Inverter</p>
+                <p class="text-[10px] text-on-surface-variant">Expected: Dec 12</p>
+              </div>
+              <span class="material-symbols-outlined text-error text-lg" style="font-variation-settings: 'FILL' 1;">favorite</span>
+            </div>
           </div>
+        </div>
+      </aside>
+
+      <!-- Order Queue Section -->
+      <section class="col-span-12">
+        <app-pending-orders></app-pending-orders>
+      </section>
+
+      <!-- Order History Section -->
+      <section class="col-span-12">
+        <h2 class="text-xl font-bold tracking-tight mb-6 text-on-surface">Order History</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <app-accepted-orders></app-accepted-orders>
-        </div>
-
-        <div class="profile-slot rounded-[28px] p-4 shadow-[0_18px_45px_rgba(15,23,42,0.08)] sm:p-5">
-          <div class="mb-4 px-1">
-            <p class="text-xs font-black uppercase tracking-[0.26em] text-slate-400">Exceptions</p>
-            <h2 class="mt-2 text-xl font-black text-[var(--brand-navy)]">Rejected orders</h2>
-          </div>
           <app-rejected-orders></app-rejected-orders>
         </div>
-      </div>
+      </section>
     </div>
-  </div>
-</section>
+  </main>
+</div>
