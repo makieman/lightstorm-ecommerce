@@ -65,13 +65,15 @@ export class ProfileComponent implements OnInit {
     ];
   }
 
-  isStepActive(status: string, stepKey: string): boolean {
+  isStepActive(status: string, stepKey: string | undefined): boolean {
+    if (!stepKey) return false;
     const progress = this.getOrderProgress(status);
     const stepProgress = this.getOrderProgress(stepKey);
     return progress >= stepProgress && progress >= 0;
   }
 
-  isStepCurrent(status: string, stepKey: string): boolean {
+  isStepCurrent(status: string, stepKey: string | undefined): boolean {
+    if (!stepKey) return false;
     return status === stepKey;
   }
 
