@@ -15,7 +15,7 @@
             </a>
             <span style=" margin-bottom: 10px;">{{product.title}}</span>
             <br>
-            <span style=" margin-top: 5px;">Price: ${{product.price}}</span>
+            <span style=" margin-top: 5px;">Price: KSH {{product.price | number:'1.0-0'}}</span>
           </div>
         </div>
         <br>
@@ -24,7 +24,7 @@
       <div class="col-12 " style="margin-left: 10px; margin-top: 10px;">
         <div class="row justify-content-center">
           <h2 class="d-flex justify-content-center">Date: {{ dialogData.order.date }}</h2>
-          <h2 class="d-flex justify-content-center">Total Price: ${{ dialogData.order.totalPrice }}</h2>
+          <h2 class="d-flex justify-content-center">Total Price: KSH {{ dialogData.order.totalPrice | number:'1.0-0' }}</h2>
           <h2 class="d-flex justify-content-center">Status: {{ dialogData.order.status }}</h2>
         </div>
       </div>

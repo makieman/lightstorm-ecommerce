@@ -1,62 +1,453 @@
-<section class="profile-page min-h-screen px-4 py-6 sm:px-6 lg:px-8 lg:py-10">
-  <div class="mx-auto max-w-7xl space-y-6">
-    <div class="profile-hero overflow-hidden rounded-[32px] border border-white/60 p-6 shadow-[0_20px_60px_rgba(15,23,42,0.1)] sm:p-8 lg:p-10">
-      <div class="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
-        <div class="max-w-2xl">
-          <p class="text-xs font-black uppercase tracking-[0.32em] text-[var(--brand-lime)]">Account Center</p>
-          <h1 class="mt-3 text-3xl font-black tracking-tight text-[var(--brand-navy)] sm:text-4xl">Manage your Lightstorm profile</h1>
-          <p class="mt-3 text-sm leading-6 text-slate-600 sm:text-base">Review your account details, monitor pending work, and keep track of accepted or rejected orders from one responsive dashboard.</p>
-        </div>
+<div class="profile-shell">
 
-        <button
-          type="button"
-          class="inline-flex items-center justify-center gap-3 self-start rounded-full bg-[var(--brand-coral)] px-5 py-3 text-sm font-black uppercase tracking-[0.18em] text-white shadow-[0_14px_32px_rgba(239,68,68,0.22)] transition-transform hover:-translate-y-0.5"
-          (click)="logout()">
-          <i class="bi bi-box-arrow-right text-base"></i>
-          <span>Logout</span>
+  <!-- ===== MOBILE HEADER ===== -->
+  <header class="mobile-header">
+    <button class="menu-toggle" (click)="mobileSidebarOpen = !mobileSidebarOpen">
+      <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+    </button>
+    <span class="brand-name">Lightstorm</span>
+    <div class="avatar-sm">
+      <img *ngIf="user?.image" [src]="user?.image" alt="avatar">
+      <span *ngIf="!user?.image">{{ user?.username?.charAt(0)?.toUpperCase() }}</span>
+    </div>
+  </header>
+
+  <!-- ===== SIDEBAR ===== -->
+  <aside class="sidebar" [class.sidebar--open]="mobileSidebarOpen">
+
+    <!-- Overlay (mobile) -->
+    <div class="sidebar-overlay" (click)="mobileSidebarOpen = false"></div>
+
+    <div class="sidebar-inner">
+      <!-- Brand -->
+      <div class="sidebar-brand">
+        <div class="brand-icon">⚡</div>
+        <span class="brand-text">Lightstorm</span>
+      </div>
+
+      <!-- User mini card -->
+      <div class="sidebar-user">
+        <div class="sidebar-avatar">
+          <img *ngIf="user?.image" [src]="user?.image" alt="avatar">
+          <span *ngIf="!user?.image">{{ user?.username?.charAt(0)?.toUpperCase() }}</span>
+        </div>
+        <div class="sidebar-user-info">
+          <p class="sidebar-username">{{ user?.username || 'Loading...' }}</p>
+          <p class="sidebar-email">{{ user?.email }}</p>
+        </div>
+      </div>
+
+      <!-- Nav -->
+      <nav class="sidebar-nav">
+        <button class="nav-item" [class.nav-item--active]="activeSection === 'dashboard'"
+                (click)="navigateTo('dashboard')">
+          <span class="nav-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+              <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
+            </svg>
+          </span>
+          <span>Dashboard</span>
+        </button>
+
+        <button class="nav-item" [class.nav-item--active]="activeSection === 'orders'"
+                (click)="navigateTo('orders')">
+          <span class="nav-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+              <line x1="3" y1="6" x2="21" y2="6"/>
+              <path d="M16 10a4 4 0 0 1-8 0"/>
+            </svg>
+          </span>
+          <span>My Orders</span>
+          <span class="nav-badge" *ngIf="activeOrdersCount > 0">{{ activeOrdersCount }}</span>
+        </button>
+
+        <button class="nav-item" [class.nav-item--active]="activeSection === 'profile'"
+                (click)="navigateTo('profile')">
+          <span class="nav-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+              <circle cx="12" cy="7" r="4"/>
+            </svg>
+          </span>
+          <span>Account</span>
+        </button>
+      </nav>
+
+      <!-- Logout -->
+      <div class="sidebar-footer">
+        <button class="logout-btn" (click)="logout()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+            <polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>
+          </svg>
+          Sign Out
         </button>
       </div>
     </div>
+  </aside>
 
-    <div class="grid gap-6 lg:grid-cols-[minmax(0,340px)_minmax(0,1fr)] xl:gap-8">
-      <div class="space-y-6">
-        <div class="profile-slot rounded-[28px] p-4 shadow-[0_18px_45px_rgba(15,23,42,0.08)] sm:p-5">
-          <app-user-picture></app-user-picture>
-        </div>
-        <div class="profile-slot rounded-[28px] p-4 shadow-[0_18px_45px_rgba(15,23,42,0.08)] sm:p-5">
-          <div class="mb-4 px-1">
-            <p class="text-xs font-black uppercase tracking-[0.26em] text-slate-400">Order Queue</p>
-            <h2 class="mt-2 text-xl font-black text-[var(--brand-navy)]">Pending activity</h2>
+  <!-- ===== MAIN CONTENT ===== -->
+  <main class="main-content">
+
+    <!-- ─── PAGE HEADER ─── -->
+    <div class="page-header">
+      <div class="page-header-left">
+        <p class="page-breadcrumb">
+          My Account &rsaquo; <strong>{{ activeSection === 'dashboard' ? 'Dashboard' : activeSection === 'orders' ? 'My Orders' : 'Account Settings' }}</strong>
+        </p>
+        <h1 class="page-title">
+          {{ activeSection === 'dashboard' ? 'Welcome back, ' + (user?.username || '') + ' 👋' : activeSection === 'orders' ? 'My Orders' : 'Account Settings' }}
+        </h1>
+      </div>
+      <button class="shop-btn" routerLink="/products">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15">
+          <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+        </svg>
+        Shop More
+      </button>
+    </div>
+
+    <!-- ─── DASHBOARD SECTION ─── -->
+    <div *ngIf="activeSection === 'dashboard'" class="section-body">
+
+      <!-- Stats Row -->
+      <div class="stats-grid">
+        <div class="stat-card stat-card--orange" (click)="navigateTo('orders')">
+          <div class="stat-card-top">
+            <div class="stat-icon">🚚</div>
+            <span class="stat-number">{{ activeOrdersCount }}</span>
           </div>
-          <app-pending-orders></app-pending-orders>
+          <p class="stat-label">Active Orders</p>
+          <div class="stat-arrow">→</div>
+        </div>
+
+        <div class="stat-card stat-card--blue" (click)="navigateTo('orders')">
+          <div class="stat-card-top">
+            <div class="stat-icon">📦</div>
+            <span class="stat-number">{{ orders.length }}</span>
+          </div>
+          <p class="stat-label">Total Orders</p>
+          <div class="stat-arrow">→</div>
+        </div>
+
+        <div class="stat-card stat-card--green">
+          <div class="stat-card-top">
+            <div class="stat-icon">💰</div>
+            <span class="stat-number stat-number--sm">KSH {{ totalSpent | number }}</span>
+          </div>
+          <p class="stat-label">Total Spent</p>
         </div>
       </div>
 
-      <div class="space-y-6">
-        <div class="profile-slot rounded-[28px] p-4 shadow-[0_18px_45px_rgba(15,23,42,0.08)] sm:p-5">
-          <div class="mb-4 px-1">
-            <p class="text-xs font-black uppercase tracking-[0.26em] text-slate-400">Profile</p>
-            <h2 class="mt-2 text-xl font-black text-[var(--brand-navy)]">Your information</h2>
-          </div>
-          <app-user-info></app-user-info>
+      <!-- Recent Orders -->
+      <div class="section-card">
+        <div class="section-card-header">
+          <h2 class="section-card-title">Recent Orders</h2>
+          <button class="view-all-btn" (click)="navigateTo('orders')">
+            View All <span>→</span>
+          </button>
         </div>
 
-        <div class="profile-slot rounded-[28px] p-4 shadow-[0_18px_45px_rgba(15,23,42,0.08)] sm:p-5">
-          <div class="mb-4 px-1">
-            <p class="text-xs font-black uppercase tracking-[0.26em] text-slate-400">History</p>
-            <h2 class="mt-2 text-xl font-black text-[var(--brand-navy)]">Accepted orders</h2>
-          </div>
-          <app-accepted-orders></app-accepted-orders>
+        <!-- Skeleton -->
+        <div *ngIf="isLoading" class="skeleton-list">
+          <div class="skeleton-item" *ngFor="let i of [1,2,3]"></div>
         </div>
 
-        <div class="profile-slot rounded-[28px] p-4 shadow-[0_18px_45px_rgba(15,23,42,0.08)] sm:p-5">
-          <div class="mb-4 px-1">
-            <p class="text-xs font-black uppercase tracking-[0.26em] text-slate-400">Exceptions</p>
-            <h2 class="mt-2 text-xl font-black text-[var(--brand-navy)]">Rejected orders</h2>
+        <!-- Orders -->
+        <div *ngIf="!isLoading && orders.length > 0" class="orders-list">
+          <div *ngFor="let order of orders.slice(0, 4)" class="order-row"
+               (click)="openOrderDetail(order)">
+            <div class="order-row-left">
+              <div class="order-icon-box">📦</div>
+              <div>
+                <div class="order-id">#{{ order._id?.slice(-8)?.toUpperCase() }}</div>
+                <div class="order-meta">{{ order.date | date:'MMM d, y' }} &bull; KSH {{ order.totalPrice | number:'1.0-0' }}</div>
+              </div>
+            </div>
+            <div class="order-row-right">
+              <span class="status-pill" [attr.data-status]="order.status">{{ order.status }}</span>
+              <span class="order-chevron">›</span>
+            </div>
           </div>
-          <app-rejected-orders></app-rejected-orders>
+        </div>
+
+        <!-- Empty -->
+        <div *ngIf="!isLoading && orders.length === 0" class="empty-state">
+          <div class="empty-icon">🛒</div>
+          <h3>No orders yet</h3>
+          <p>Start shopping to see your orders here</p>
+          <button class="primary-btn" routerLink="/products">Browse Products</button>
         </div>
       </div>
     </div>
+
+    <!-- ─── ORDERS SECTION ─── -->
+    <div *ngIf="activeSection === 'orders'" class="section-body">
+
+      <!-- Skeleton -->
+      <div *ngIf="isLoading" class="skeleton-list">
+        <div class="skeleton-item skeleton-item--tall" *ngFor="let i of [1,2,3]"></div>
+      </div>
+
+      <!-- Orders -->
+      <div *ngIf="!isLoading" class="orders-full-list">
+        <div *ngFor="let order of orders" class="order-card"
+             (click)="openOrderDetail(order)">
+          <div class="order-card-header">
+            <div class="order-card-head-left">
+              <span class="order-card-id">#{{ order._id?.slice(-8)?.toUpperCase() }}</span>
+              <span class="status-pill" [attr.data-status]="order.status">{{ order.status }}</span>
+            </div>
+            <div class="order-card-date">{{ order.date | date:'MMMM d, y' }}</div>
+          </div>
+
+          <div class="order-card-price">KSH {{ order.totalPrice | number:'1.0-0' }}</div>
+
+          <!-- 5-Step Progress Slider -->
+          <div *ngIf="order.status !== 'Cancelled'" class="progress-track-wrap">
+            <div class="progress-steps">
+              <ng-container *ngFor="let step of getProgressSteps(); let i = index; let last = last">
+                <div class="progress-step" [class.step--active]="isStepActive(order.status, step.key)"
+                     [class.step--current]="isStepCurrent(order.status, step.key)">
+                  <div class="step-dot">
+                    <span *ngIf="isStepActive(order.status, step.key) && !isStepCurrent(order.status, step.key)" class="step-check">✓</span>
+                    <span *ngIf="isStepCurrent(order.status, step.key)" class="step-pulse"></span>
+                    <span *ngIf="!isStepActive(order.status, step.key)" class="step-num">{{ i + 1 }}</span>
+                  </div>
+                  <div class="progress-line" *ngIf="!last"
+                       [class.line--active]="isStepActive(order.status, getProgressSteps()[i+1]?.key)">
+                  </div>
+                </div>
+              </ng-container>
+            </div>
+            <div class="progress-labels">
+              <span *ngFor="let step of getProgressSteps()"
+                    [class.label--active]="isStepActive(order.status, step.key)">
+                {{ step.label }}
+              </span>
+            </div>
+          </div>
+
+          <!-- Cancelled banner -->
+          <div *ngIf="order.status === 'Cancelled'" class="cancelled-banner">
+            Order was cancelled
+          </div>
+
+          <div class="order-card-footer">
+            <span class="order-products-count">{{ order.products?.length || 0 }} item(s)</span>
+            <button class="detail-btn">View Details →</button>
+          </div>
+        </div>
+
+        <!-- Empty -->
+        <div *ngIf="orders.length === 0" class="empty-state">
+          <div class="empty-icon">📦</div>
+          <h3>No orders found</h3>
+          <p>Your order history will appear here</p>
+          <button class="primary-btn" routerLink="/products">Start Shopping</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── PROFILE SETTINGS SECTION ─── -->
+    <div *ngIf="activeSection === 'profile'" class="section-body">
+      <div class="profile-card">
+        <!-- Avatar Row -->
+        <div class="profile-avatar-row">
+          <div class="profile-avatar-lg">
+            <img *ngIf="user?.image" [src]="user?.image" alt="avatar">
+            <span *ngIf="!user?.image">{{ user?.username?.charAt(0)?.toUpperCase() }}</span>
+            <div class="avatar-ring"></div>
+          </div>
+          <div>
+            <h2 class="profile-name">{{ user?.username }}</h2>
+            <p class="profile-email-sm">{{ user?.email }}</p>
+            <span class="verified-badge" *ngIf="user?.isVerified">✓ Verified</span>
+            <span class="unverified-badge" *ngIf="!user?.isVerified">⚠ Unverified</span>
+          </div>
+        </div>
+
+        <!-- Info Grid -->
+        <div class="profile-info-grid">
+          <div class="info-field">
+            <label>Username</label>
+            <div class="info-value">{{ user?.username || '—' }}</div>
+          </div>
+          <div class="info-field">
+            <label>Email Address</label>
+            <div class="info-value">{{ user?.email || '—' }}</div>
+          </div>
+          <div class="info-field">
+            <label>Account Status</label>
+            <div class="info-value info-value--verified" *ngIf="user?.isVerified">
+              <span class="dot dot--green"></span> Verified
+            </div>
+            <div class="info-value info-value--unverified" *ngIf="!user?.isVerified">
+              <span class="dot dot--red"></span> Unverified
+            </div>
+          </div>
+          <div class="info-field">
+            <label>Total Orders</label>
+            <div class="info-value">{{ orders.length }} order(s)</div>
+          </div>
+          <div class="info-field">
+            <label>Total Spent</label>
+            <div class="info-value">KSH {{ totalSpent | number:'1.0-0' }}</div>
+          </div>
+          <div class="info-field">
+            <label>Admin Access</label>
+            <div class="info-value">{{ user?.isAdmin ? 'Admin' : 'Customer' }}</div>
+          </div>
+        </div>
+
+        <!-- Change Password -->
+        <div class="profile-actions">
+          <button class="password-btn" routerLink="/forgot-password">
+            🔒 Change Password
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+
+<!-- ===== ORDER DETAIL DRAWER ===== -->
+<div class="drawer-backdrop" [class.drawer-backdrop--visible]="drawerOpen" (click)="closeDrawer()"></div>
+
+<aside class="order-drawer" [class.order-drawer--open]="drawerOpen">
+  <div class="drawer-inner">
+
+    <!-- Drawer Header -->
+    <div class="drawer-header">
+      <div>
+        <div class="drawer-label">Order Details</div>
+        <div class="drawer-id" *ngIf="selectedOrder">
+          #{{ selectedOrder._id?.slice(-8)?.toUpperCase() }}
+        </div>
+      </div>
+      <button class="drawer-close" (click)="closeDrawer()">✕</button>
+    </div>
+
+    <!-- Loading Skeleton -->
+    <div *ngIf="drawerLoading" class="drawer-skeleton">
+      <div class="dskeleton-block" *ngFor="let i of [1,2]"></div>
+    </div>
+
+    <!-- Content -->
+    <div *ngIf="!drawerLoading && selectedOrder" class="drawer-content">
+
+      <!-- Status + Meta Info -->
+      <div class="drawer-meta-row">
+        <div class="drawer-meta-item">
+          <span class="drawer-meta-label">Status</span>
+          <span class="status-pill status-pill--lg" [attr.data-status]="selectedOrder.status">
+            {{ selectedOrder.status }}
+          </span>
+        </div>
+        <div class="drawer-meta-item">
+          <span class="drawer-meta-label">Date Placed</span>
+          <span class="drawer-meta-value">{{ selectedOrder.date | date:'MMM d, y, h:mm a' }}</span>
+        </div>
+        <div class="drawer-meta-item">
+          <span class="drawer-meta-label">Total</span>
+          <span class="drawer-total-price">KSH {{ selectedOrder.totalPrice | number:'1.0-0' }}</span>
+        </div>
+      </div>
+
+      <!-- 5-Step Progress Slider (Drawer) -->
+      <div *ngIf="selectedOrder.status !== 'Cancelled'" class="drawer-progress-section">
+        <h3 class="drawer-section-title">Order Progress</h3>
+        <div class="drawer-steps">
+          <ng-container *ngFor="let step of getProgressSteps(); let i = index; let last = last">
+            <div class="drawer-step" [class.dstep--active]="isStepActive(selectedOrder.status, step.key)"
+                 [class.dstep--current]="isStepCurrent(selectedOrder.status, step.key)">
+              <!-- Connector line before each step (except first) -->
+              <div *ngIf="i > 0" class="dstep-line"
+                   [class.dstep-line--active]="isStepActive(selectedOrder.status, step.key)">
+              </div>
+              <!-- Dot -->
+              <div class="dstep-dot-wrap">
+                <div class="dstep-dot">
+                  <span *ngIf="isStepActive(selectedOrder.status, step.key) && !isStepCurrent(selectedOrder.status, step.key)">✓</span>
+                  <span *ngIf="isStepCurrent(selectedOrder.status, step.key)" class="dstep-pulse"></span>
+                  <span *ngIf="!isStepActive(selectedOrder.status, step.key)">{{ i + 1 }}</span>
+                </div>
+              </div>
+              <!-- Label -->
+              <div class="dstep-info">
+                <div class="dstep-emoji">{{ step.icon }}</div>
+                <div class="dstep-label">{{ step.label }}</div>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+
+      <!-- Cancelled notice -->
+      <div *ngIf="selectedOrder.status === 'Cancelled'" class="drawer-cancelled">
+        <span>❌</span>
+        <div>
+          <strong>Order Cancelled</strong>
+          <p>This order was cancelled and will not be processed.</p>
+        </div>
+      </div>
+
+      <!-- Products Section -->
+      <div class="drawer-products-section">
+        <h3 class="drawer-section-title">
+          Items in this Order
+          <span class="items-count">{{ selectedOrderProducts.length || selectedOrder.products?.length || 0 }}</span>
+        </h3>
+
+        <!-- Product cards -->
+        <div *ngIf="selectedOrderProducts.length > 0" class="drawer-products-grid">
+          <div *ngFor="let product of selectedOrderProducts" class="drawer-product-card"
+               [routerLink]="'/product/' + product._id" (click)="closeDrawer()">
+            <div class="product-card-img">
+              <img [src]="product.image || product.images?.[0]" [alt]="product.title" loading="lazy">
+            </div>
+            <div class="product-card-info">
+              <div class="product-card-name">{{ product.title }}</div>
+              <div class="product-card-price">KSH {{ product.price | number:'1.0-0' }}</div>
+              <div class="product-card-brand" *ngIf="product.brand">{{ product.brand }}</div>
+            </div>
+            <div class="product-card-arrow">›</div>
+          </div>
+        </div>
+
+        <!-- No product detail available  -->
+        <div *ngIf="selectedOrderProducts.length === 0 && (selectedOrder.products?.length || 0) > 0"
+             class="no-products-info">
+          <p>{{ selectedOrder.products?.length }} item(s) in this order</p>
+        </div>
+
+        <!-- No products at all -->
+        <div *ngIf="(selectedOrder.products?.length || 0) === 0" class="no-products-info">
+          <p>No product details available for this order.</p>
+        </div>
+      </div>
+
+      <!-- Summary Footer -->
+      <div class="drawer-summary">
+        <div class="summary-row">
+          <span>Subtotal</span>
+          <span>KSH {{ selectedOrder.totalPrice - 1 | number:'1.0-0' }}</span>
+        </div>
+        <div class="summary-row">
+          <span>Shipping</span>
+          <span>KSH 1</span>
+        </div>
+        <div class="summary-row summary-row--total">
+          <span>Total Paid</span>
+          <span>KSH {{ selectedOrder.totalPrice | number:'1.0-0' }}</span>
+        </div>
+      </div>
+
+    </div>
   </div>
-</section>
+</aside>

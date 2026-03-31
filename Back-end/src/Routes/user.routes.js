@@ -59,11 +59,11 @@ Router.get('/auth/google/callback',
           );
           res.cookie('jwt', token, {
             httpOnly: true,
-            secure: true,
-            sameSite: 'none',
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
             maxAge: 7 * 24 * 60 * 60 * 1000,
             path: '/',
-            domain: '.lightstormtechnologies.com' // Allows cookie to be shared between www and non-www
+            domain: process.env.NODE_ENV === "production" ? '.lightstormtechnologies.com' : undefined 
           });
           return res.redirect(`${process.env.APP_URL}/home?google=success`);
         } catch (error) {

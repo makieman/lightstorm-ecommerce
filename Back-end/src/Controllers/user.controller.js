@@ -15,7 +15,7 @@ const COOKIE_OPTIONS = ({
   secure: process.env.NODE_ENV === "production",
   sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
   maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-  domain: '.lightstormtechnologies.com' // Allows cookie to be shared between www and non-www
+  domain: process.env.NODE_ENV === "production" ? '.lightstormtechnologies.com' : undefined
 });
 
 function formatAjvErrors(errors) {
