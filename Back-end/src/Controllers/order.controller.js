@@ -1,49 +1,112 @@
 const OrderModel = require("../Models/order.model");
 const orderValidate = require("../Middlewares/order.validation");
+const { pickAllowedFields } = require("../Utils/sanitize");
+
+// Allowed fields for order update
+const ALLOWED_ORDER_FIELDS = [
+  'status',
+  'totalPrice',
+  'date',
+  'products'
+];
 
 /**
  * Get all orders
+ * Returns all orders for admin, or only user's orders for non-admin
  */
 let getAllOrders = async (req, res) => {
-  // ==> for testing routes
-  let pipeline = [
-    {
-      $project: {
-        userId: 1,
-        username: 1,
-        totalPrice: 1,
-        status: 1,
-        products: 1,
-        date: 1,
-        daysDifference: {
-          $floor: {
-            $divide: [
-              { $subtract: [new Date(), "$date"] },
-              1000 * 60 * 60 * 24,
-            ],
+  try {
+    const user = req.user;
+    if (!user) {
+      return res.status(401).json({ message: "Unauthorized: User not found" });
+    }
+
+    let matchStage = {};
+    // If user is not admin, only return their own orders
+    if (!user.isAdmin) {
+      matchStage = { userId: user._id };
+    }
+
+    let pipeline = [
+      { $match: matchStage },
+      {
+        $project: {
+          userId: 1,
+          username: 1,
+          totalPrice: 1,
+          status: 1,
+          products: 1,
+          date: 1,
+          daysDifference: {
+            $floor: {
+              $divide: [
+                { $subtract: [new Date(), "$date"] },
+                1000 * 60 * 60 * 24,
+              ],
+            },
           },
         },
       },
-    },
-  ];
-  let orders = await OrderModel.aggregate(pipeline);
-  return res.json(orders);
+    ];
+    let orders = await OrderModel.aggregate(pipeline);
+    return res.json(orders);
+  } catch (error) {
+    return res.status(500).json({ message: "Internal server error", error: error.message });
+  }
 };
 
 /**
  * Get order by status
  */
-let getOrderByStatus = (req, res) => {
-  //
+let getOrderByStatus = async (req, res) => {
+  try {
+    const { status } = req.params;
+    const allowedStatuses = ['Pending', 'Accepted', 'Rejected'];
+
+    // Case-insensitive match against allowed values
+    const matched = allowedStatuses.find(
+      s => s.toLowerCase() === status.toLowerCase()
+    );
+    if (!matched) {
+      return res.status(400).json({
+        message: `Invalid status. Allowed: ${allowedStatuses.join(', ')}`
+      });
+    }
+
+    // Only return the current user's orders with this status
+    const orders = await OrderModel.find({
+      userId: req.user._id,
+      status: matched
+    });
+
+    return res.json(orders);
+  } catch (error) {
+    return res.status(500).json({
+      message: 'Internal server error',
+      error: error.message
+    });
+  }
 };
 
 /**
  * Get order by ID
  */
 let getOrderById = async (req, res) => {
-  let orderId = req.params.id;
-  let order = await OrderModel.findById(orderId);
-  return res.json(order);
+  try {
+    let orderId = req.params.id;
+    let order = await OrderModel.findById(orderId);
+    if (!order) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+    // Ownership check: users can only view their own orders, admins can view any
+    if (order.userId.toString() !== req.user._id.toString() && !req.user.isAdmin) {
+      return res.status(403).json({ message: "Forbidden: You can only view your own orders" });
+    }
+
+    return res.json(order);
+  } catch (error) {
+    return res.status(500).json({ message: "Internal server error", error: error.message });
+  }
 };
 
 /**
@@ -58,7 +121,9 @@ let createNewOrder = (req, res) => {
  */
 let updateOrderByID = async (req, res) => {
   try {
-    let order = await OrderModel.findByIdAndUpdate(req.params.id, req.body, {
+    // Sanitize input - only allow expected fields to prevent mass assignment
+    const sanitizedData = pickAllowedFields(req.body, ALLOWED_ORDER_FIELDS);
+    let order = await OrderModel.findByIdAndUpdate(req.params.id, sanitizedData, {
       new: true,
     });
 

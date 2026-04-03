@@ -1,4 +1,20 @@
 const Banner = require('../Models/banner.model');
+const { pickAllowedFields } = require('../Utils/sanitize');
+
+// Allowed fields for banner creation/update
+const ALLOWED_BANNER_FIELDS = [
+  'title',
+  'subtitle',
+  'discount',
+  'imageUrl',
+  'ctaText',
+  'ctaLink',
+  'isActive',
+  'startDate',
+  'endDate',
+  'bgColor',
+  'linkedProducts'
+];
 
 // GET active banner (public)
 const getActiveBanner = async (req, res) => {
@@ -59,16 +75,18 @@ const getAllBanners = async (req, res) => {
 // POST create banner (admin)
 const createBanner = async (req, res) => {
   try {
-    const banner = await Banner.create(req.body);
-    return res.status(201).json({ 
-      success: true, 
-      banner 
+    // Sanitize input - only allow expected fields to prevent mass assignment
+    const sanitizedData = pickAllowedFields(req.body, ALLOWED_BANNER_FIELDS);
+    const banner = await Banner.create(sanitizedData);
+    return res.status(201).json({
+      success: true,
+      banner
     });
   } catch (error) {
     console.error('Create banner error:', error);
-    return res.status(500).json({ 
-      success: false, 
-      message: 'Failed to create banner' 
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to create banner'
     });
   }
 };
@@ -76,25 +94,27 @@ const createBanner = async (req, res) => {
 // PUT update banner (admin)
 const updateBanner = async (req, res) => {
   try {
+    // Sanitize input - only allow expected fields to prevent mass assignment
+    const sanitizedData = pickAllowedFields(req.body, ALLOWED_BANNER_FIELDS);
     const banner = await Banner.findByIdAndUpdate(
       req.params.id,
-      req.body,
+      sanitizedData,
       { new: true }
     );
     if (!banner) {
-      return res.status(404).json({ 
-        success: false, 
-        message: 'Banner not found' 
+      return res.status(404).json({
+        success: false,
+        message: 'Banner not found'
       });
     }
-    return res.status(200).json({ 
-      success: true, 
-      banner 
+    return res.status(200).json({
+      success: true,
+      banner
     });
   } catch (error) {
-    return res.status(500).json({ 
-      success: false, 
-      message: 'Failed to update banner' 
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to update banner'
     });
   }
 };

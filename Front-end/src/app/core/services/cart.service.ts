@@ -19,20 +19,20 @@ export class CartService {
   private readonly URL_DB = '/api/users';
 
   getUsers() {
-    return this.http.get(this.URL_DB);
+    return this.http.get(this.URL_DB, { withCredentials: true });
   }
 
   getUserById(id: any) {
-    return this.http.get(`${this.URL_DB}/${id}`);
+    return this.http.get(`${this.URL_DB}/${id}`, { withCredentials: true });
   }
   increaseProductQuantity(userid: any, productid: any) {
-    return this.http.put(`${this.URL_DB}/cart/increase`, { userid, productid });
+    return this.http.put(`${this.URL_DB}/cart/increase`, { userid, productid }, { withCredentials: true });
   }
   decreaseProductQuantity(userid: any, productid: any) {
-    return this.http.put(`${this.URL_DB}/cart/decrease`, { userid, productid });
+    return this.http.put(`${this.URL_DB}/cart/decrease`, { userid, productid }, { withCredentials: true });
   }
   removeProductFromCart(userid: string, productid: string) {
-    return this.http.delete(`${this.URL_DB}/cart/remove`, { body: { userid, productid } });
+    return this.http.delete(`${this.URL_DB}/cart/remove`, { body: { userid, productid }, withCredentials: true });
   }
 
   // Guest Cart Methods
@@ -100,7 +100,7 @@ export class CartService {
         user_id: userId,
         product: item.product,
         quantity: item.quantity
-      })
+      }, { withCredentials: true })
     );
 
     return forkJoin(syncRequests).pipe(

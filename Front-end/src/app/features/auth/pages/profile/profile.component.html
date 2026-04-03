@@ -5,7 +5,7 @@
     <button class="menu-toggle" (click)="mobileSidebarOpen = !mobileSidebarOpen">
       <span class="bar"></span><span class="bar"></span><span class="bar"></span>
     </button>
-    <span class="brand-name">Lightstorm</span>
+    <img src="assets/lightstorm logo.png" alt="Lightstorm" class="brand-logo-img">
     <div class="avatar-sm">
       <img *ngIf="user?.image" [src]="user?.image" alt="avatar">
       <span *ngIf="!user?.image">{{ user?.username?.charAt(0)?.toUpperCase() }}</span>
@@ -19,10 +19,8 @@
     <div class="sidebar-overlay" (click)="mobileSidebarOpen = false"></div>
 
     <div class="sidebar-inner">
-      <!-- Brand -->
       <div class="sidebar-brand">
-        <div class="brand-icon">⚡</div>
-        <span class="brand-text">Lightstorm</span>
+        <img src="assets/lightstorm logo.png" alt="Lightstorm" class="sidebar-logo-img">
       </div>
 
       <!-- User mini card -->

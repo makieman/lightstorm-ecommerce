@@ -44,11 +44,11 @@
   background: #fff;
   border-radius: 2px;
 }
-.brand-name {
-  color: #fff;
-  font-size: 17px;
-  font-weight: 800;
-  letter-spacing: -0.4px;
+.brand-logo-img {
+  height: 28px;
+  width: auto;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
 }
 .avatar-sm {
   width: 34px;
@@ -99,18 +99,11 @@
   padding: 24px 24px 20px;
   border-bottom: 1px solid rgba(255,255,255,0.06);
 }
-.brand-icon {
-  width: 34px; height: 34px;
-  background: linear-gradient(135deg, #6366f1, #8b5cf6);
-  border-radius: 8px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 16px;
-}
-.brand-text {
-  font-size: 18px;
-  font-weight: 900;
-  color: #fff;
-  letter-spacing: -0.5px;
+.sidebar-logo-img {
+  height: 32px;
+  width: auto;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
 }
 
 /* User Mini Card */

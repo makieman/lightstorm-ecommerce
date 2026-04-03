@@ -1,4 +1,5 @@
 const CategoryModel = require("../Models/category.model");
+const { escapeRegex } = require("../Utils/sanitize");
 
 /**
  * Get all active categories
@@ -26,7 +27,7 @@ const createCategory = async (req, res) => {
 
         // Check for duplicate
         const existing = await CategoryModel.findOne({
-            name: { $regex: new RegExp(`^${name.trim()}$`, "i") }
+            name: { $regex: new RegExp(`^${escapeRegex(name.trim())}$`, "i") }
         });
         if (existing) {
             return res.status(409).json({ message: "Category already exists" });

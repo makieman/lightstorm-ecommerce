@@ -21,6 +21,10 @@ const passport = require('./services/passport.service');
 
 const app = express();
 
+// Keep-alive ping — must be FIRST, before all middleware
+// to guarantee minimal response size (cron-job.org has 64KB limit)
+app.get('/ping', (req, res) => res.status(200).type('text/plain').send('ok'));
+
 const rateLimit = require("express-rate-limit");
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -49,10 +53,24 @@ const resetLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 5 });
 app.use("/api/users/forgot-password", resetLimiter);
 app.use("/api/users/reset-password", resetLimiter);
 
+const paymentLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 10,
+  message: { success: false, error: 'Too many payment attempts, please try again later.' }
+});
+app.use("/api/payments/stkpush", paymentLimiter);
+
+const registerLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 5,
+  message: { success: false, error: 'Too many registration attempts, please try again later.' }
+});
+app.use("/api/users/register", registerLimiter);
+
 // Middleware
 app.use(helmet());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' }));
+app.use(bodyParser.json({ limit: '10mb' }));
 
 const allowedOrigins = [
   "http://localhost:4200",
@@ -81,7 +99,7 @@ app.options('*', cors());
 app.use(cookieParser());
 app.set('trust proxy', 1);
 app.use(session({
-  secret: process.env.JWT_SECRET,
+  secret: process.env.SESSION_SECRET || process.env.JWT_SECRET,
   resave: false,
   saveUninitialized: false,
   cookie: {
@@ -115,9 +133,7 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/banners', bannerRoutes);
 
-app.get('/ping', (req, res) => {
-  res.status(200).type('text/plain').send('ok');
-});
+// /ping is defined at top of file before all middleware
 
 // Health check endpoint for deployment verification
 app.get('/health', (req, res) => res.json({ status: 'ok', timestamp: new Date().toISOString() }));
@@ -164,15 +180,24 @@ if (fs.existsSync(frontendPath)) {
 
 
 
+// 404 handler for unknown routes
+app.use((req, res) => {
+  res.status(404).json({
+    success: false,
+    message: `Route ${req.originalUrl} not found`
+  });
+});
+
 // Error handling
 app.use((err, req, res, next) => {
-  console.error('API ERROR:', err);
+  console.error('API ERROR:', err.message);
 
   if (req.originalUrl && req.originalUrl.startsWith('/api')) {
     return res.status(500).json({
-      message: 'Internal Server Error',
-      error: err.message,
-      stack: process.env.NODE_ENV === 'production' ? undefined : err.stack
+      success: false,
+      message: process.env.NODE_ENV === 'production'
+        ? 'Something went wrong'
+        : err.message
     });
   }
 

@@ -12,13 +12,13 @@ export class UserServiceService {
 
   getUserById(id: string) {
     const url = `${this.URL_API}/${id}`;
-    return this.myClient.get<any>(url);
+    return this.myClient.get<any>(url, { withCredentials: true });
   }
 
   updateUser(id: string, userData: any){
     const url = `${this.URL_API}/${id}`;
     console.log(userData);
-    return this.myClient.put(url, userData);
+    return this.myClient.put(url, userData, { withCredentials: true });
   }
 
   forgotPassword(email: string) {

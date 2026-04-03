@@ -27,17 +27,21 @@ function formatAjvErrors(errors) {
 let GetAllUsers = async (req, res) => {
   // => for testing routes
   try {
-    let users = await UserModel.find({});
+    let users = await UserModel.find({}).select('-password -verificationToken -passwordResetToken -verificationTokenExpiry -passwordResetTokenExpiry');
     if (!users) return res.json({ message: "No Users Found" });
     return res.json(users);
   } catch (err) {
-    return res.json(err);
+    return res.status(500).json({ message: "Internal server error" });
   }
 };
 // ---------------------------------- Get User By ID  -----------------------------------
 let GetUserById = async (req, res) => {
   try {
-    let user = await UserModel.findById(req.params.id);
+    // Ownership check: users can only view their own profile, admins can view any
+    if (req.user._id.toString() !== req.params.id && !req.user.isAdmin) {
+      return res.status(403).json({ message: "Forbidden: You can only view your own profile" });
+    }
+    let user = await UserModel.findById(req.params.id).select('-password -verificationToken -passwordResetToken -verificationTokenExpiry -passwordResetTokenExpiry');
     if (!user) return res.json({ message: "No User Found" });
     return res.json(user);
   } catch (err) {
@@ -76,6 +80,10 @@ let AddNewUser = async (req, res) => {
 // ---------------------------------- Update User By ID  --------------------------------
 const UpdateUser = async (req, res) => {
   const id = req.params.id;
+  // Ownership check: users can only edit their own profile, admins can edit any
+  if (req.user._id.toString() !== id && !req.user.isAdmin) {
+    return res.status(403).json({ message: "Forbidden: You can only update your own profile" });
+  }
   const user = await UserModel.findById(id);
   if (!user) {
     return res.status(404).json({ message: "User not found." });
@@ -96,16 +104,12 @@ const UpdateUser = async (req, res) => {
     user.image = uploadedImage.url;
   }
 
-  if (req.body.orders) {
-    user.orders = req.body.orders
-  }
-
   try {
     const updatedUser = await UserModel.findByIdAndUpdate(
       id,
       { $set: user },
       { new: true }
-    );
+    ).select('-password -verificationToken -passwordResetToken -verificationTokenExpiry -passwordResetTokenExpiry');
 
     if (user.username !== req.body.username) {
       const updateResult = await OrderModel.updateMany(
@@ -134,7 +138,7 @@ let DeleteUser = async (req, res) => {
 };
 // ---------------------------------- Login User  ---------------------------------------
 let LoginUser = async (req, res) => {
-  const user = await UserModel.findOne({ email: req.body.email });
+  const user = await UserModel.findOne({ email: req.body.email }).select('+password');
   if (!user) {
     return res.status(400).send({ message: "Invalid Email or Password" });
   }
@@ -151,7 +155,7 @@ let LoginUser = async (req, res) => {
   res.cookie("jwt", token, COOKIE_OPTIONS);
   return res
     .status(200)
-    .json({ message: "User Logged In Successfully", user: user });
+    .json({ message: "User Logged In Successfully", user: { id: user._id, email: user.email, username: user.username, isAdmin: user.isAdmin } });
 };
 // ---------------------------------- Register User  ------------------------------------
 let RegisterUser = async (req, res) => {
@@ -345,6 +349,11 @@ const ResetPassword = async (req, res) => {
 let AddProductToCart = async (req, res) => {
   const { user_id, product, quantity } = req.body;
 
+  // Ownership check: users can only add to their own cart
+  if (req.user._id.toString() !== req.params.id) {
+    return res.status(403).json({ message: "Forbidden: You can only modify your own cart" });
+  }
+
   try {
     const user = await UserModel.findById(user_id);
     const productt = await ProductModel.findById(product);
@@ -391,6 +400,11 @@ let AddProductToCart = async (req, res) => {
  */
 let AddProductToOrder = async (req, res) => {
   const userId = req.params.id;
+
+  // Ownership check: users can only place their own orders
+  if (req.user._id.toString() !== userId) {
+    return res.status(403).json({ message: "Forbidden: You can only create orders for your own account" });
+  }
 
   try {
     const user = await UserModel.findById(userId);
@@ -557,6 +571,11 @@ let DecreaseProductQuantity = async (req, res) => {
 let GetCartByUserId = async (req, res) => {
   const userId = req.params.id;
 
+  // Ownership check: users can only view their own cart
+  if (req.user._id.toString() !== userId) {
+    return res.status(403).json({ message: "Forbidden: You can only view your own cart" });
+  }
+
   try {
     const user = await UserModel.findById(userId);
 
@@ -572,6 +591,11 @@ let GetCartByUserId = async (req, res) => {
 
 let GetOrdersByUserId = async (req, res) => {
   const userId = req.params.id;
+
+  // Ownership check: users can only view their own orders, admins can view any
+  if (req.user._id.toString() !== userId && !req.user.isAdmin) {
+    return res.status(403).json({ message: "Forbidden: You can only view your own orders" });
+  }
 
   try {
     const user = await UserModel.findById(userId).populate("orders");

@@ -13,15 +13,15 @@ export class UserService {
   constructor(private http: HttpClient) { }
   
   getUserById(userId: string): Observable<User> {
-    return this.http.get<User>(this.apiUrl + userId);
+    return this.http.get<User>(this.apiUrl + userId, { withCredentials: true });
   }
 
   getCartByUserId(userId: string): Observable<any> {
-    return this.http.get<any>(this.apiUrl + userId + '/cart');
+    return this.http.get<any>(this.apiUrl + userId + '/cart', { withCredentials: true });
   }
 
   addProductToOrder(userId: string): Observable<any> {
-    return this.http.post<any>(this.apiUrl + userId + '/order', {});
+    return this.http.post<any>(this.apiUrl + userId + '/order', {}, { withCredentials: true });
   }
 
   addProductToCart(userId: string, productId: string, quantity: number): Observable<any> {
@@ -30,6 +30,6 @@ export class UserService {
       product: productId,
       quantity: quantity
     };
-    return this.http.post<any>(`${this.apiUrl}${userId}/cart`, body);
+    return this.http.post<any>(`${this.apiUrl}${userId}/cart`, body, { withCredentials: true });
   }
 }

@@ -8,6 +8,7 @@ const JWT_SECRET = process.env.JWT_SECRET;
 if (!JWT_SECRET) throw new Error("JWT_SECRET env var is required");
 const mongoose = require("mongoose");
 const cloudUpload = require("../services/cloudinary.service");
+const { escapeRegex } = require("../Utils/sanitize");
 
 /**
  * Helper: Get images array with backward compatibility
@@ -45,7 +46,7 @@ const getAllProducts = async (req, res) => {
         query.category = new mongoose.Types.ObjectId(category);
       } else {
         // Lookup category by name
-        const cat = await categoryModel.findOne({ name: { $regex: new RegExp(`^${category}$`, 'i') } });
+        const cat = await categoryModel.findOne({ name: { $regex: new RegExp(`^${escapeRegex(category)}$`, 'i') } });
         if (cat) {
           query.category = cat._id;
         } else {
@@ -197,7 +198,7 @@ let createNewProduct = async (req, res) => {
     // Resolve category: accept ObjectId or name string
     let categoryId = req.body.category;
     if (categoryId && !mongoose.Types.ObjectId.isValid(categoryId)) {
-      const cat = await categoryModel.findOne({ name: { $regex: new RegExp(`^${categoryId}$`, 'i') } });
+      const cat = await categoryModel.findOne({ name: { $regex: new RegExp(`^${escapeRegex(categoryId)}$`, 'i') } });
       if (cat) {
         categoryId = cat._id;
       } else {
@@ -311,7 +312,7 @@ let updateProductByID = async (req, res) => {
       if (mongoose.Types.ObjectId.isValid(rawCategory)) {
         product.category = rawCategory;
       } else {
-        const cat = await categoryModel.findOne({ name: { $regex: new RegExp(`^${rawCategory}$`, 'i') } });
+        const cat = await categoryModel.findOne({ name: { $regex: new RegExp(`^${escapeRegex(rawCategory)}$`, 'i') } });
         if (cat) {
           product.category = cat._id;
         } else {
@@ -350,10 +351,19 @@ let deleteProductByID = async (req, res) => {
 };
 /**
  * Add Review Method
+ * Uses authenticated user's ID from token instead of accepting user_id from body
  */
 let addReview = async (req, res) => {
-  const { user_id, name, comment, rating } = req.body;
+  const { comment, rating } = req.body;
   const { id } = req.params;
+
+  // Get user identity from authenticated user (set by requireAuth middleware)
+  const user_id = req.user ? req.user._id.toString() : null;
+  const reviewerName = req.user ? req.user.username : null;
+  if (!user_id) {
+    return res.status(401).json({ message: "Unauthorized: User not authenticated" });
+  }
+
   try {
     const product = await productModel.findById(id).exec();
     if (!product) {
@@ -369,7 +379,7 @@ let addReview = async (req, res) => {
     }
     const review = {
       user_id,
-      name,
+      name: reviewerName,
       comment,
       rating,
       date: new Date(),

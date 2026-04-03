@@ -4,9 +4,11 @@ const jwt = require('jsonwebtoken');
 const UserController = require("../Controllers/user.controller");
 const multerConfig = require("../Middlewares/multer");
 const passport = require('../services/passport.service');
+const requireAuth = require("../Middlewares/auth.middleware");
+const adminAuthenticate = require("../Middlewares/admin.middleware");
 
 // ─── Specific named routes FIRST (before /:id wildcards) ───────────────
-Router.get("/", UserController.GetAllUsers);
+Router.get("/", adminAuthenticate, UserController.GetAllUsers);
 Router.post("/login", UserController.LoginUser);
 Router.post("/register", UserController.RegisterUser);
 Router.post("/verify-email", UserController.VerifyEmail);
@@ -16,9 +18,9 @@ Router.post("/forgot-password", UserController.ForgotPassword);
 Router.post("/reset-password", UserController.ResetPassword);
 Router.get("/user/user", UserController.GetUserByToken);
 Router.post("/user/logout", UserController.userLogout);
-Router.put("/cart/decrease", UserController.DecreaseProductQuantity);
-Router.put("/cart/increase", UserController.IncreaseProductQuantity);
-Router.delete("/cart/remove", UserController.RemoveProductFromCart);
+Router.put("/cart/decrease", requireAuth, UserController.DecreaseProductQuantity);
+Router.put("/cart/increase", requireAuth, UserController.IncreaseProductQuantity);
+Router.delete("/cart/remove", requireAuth, UserController.RemoveProductFromCart);
 
 // Step 1 - redirect user to Google login
 Router.get('/auth/google',
@@ -78,13 +80,15 @@ Router.get('/auth/google/callback',
 );
 
 // ─── Parameterized routes LAST ──────────────────────────────────────────
-Router.post("/", multerConfig, UserController.AddNewUser);
-Router.get("/:id", UserController.GetUserById);
-Router.put("/:id", multerConfig, UserController.UpdateUser);
-Router.delete("/:id", UserController.DeleteUser);
-Router.get("/:id/cart", UserController.GetCartByUserId);
-Router.get("/:id/orders", UserController.GetOrdersByUserId);
-Router.post("/:id/cart", UserController.AddProductToCart);
-Router.post("/:id/order", UserController.AddProductToOrder);
+Router.post("/", adminAuthenticate, multerConfig, UserController.AddNewUser);
+
+// Protected user routes - require authentication
+Router.get("/:id", requireAuth, UserController.GetUserById);
+Router.put("/:id", requireAuth, multerConfig, UserController.UpdateUser);
+Router.delete("/:id", adminAuthenticate, UserController.DeleteUser);
+Router.get("/:id/cart", requireAuth, UserController.GetCartByUserId);
+Router.get("/:id/orders", requireAuth, UserController.GetOrdersByUserId);
+Router.post("/:id/cart", requireAuth, UserController.AddProductToCart);
+Router.post("/:id/order", requireAuth, UserController.AddProductToOrder);
 
 module.exports = Router;

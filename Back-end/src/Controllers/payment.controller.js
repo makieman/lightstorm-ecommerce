@@ -13,17 +13,49 @@ const initiatePay = async (req, res) => {
       });
     }
 
+    // Validate amount server-side
+    const parsedAmount = Number(amount);
+    if (!parsedAmount || parsedAmount < 1 || parsedAmount > 500000 || isNaN(parsedAmount)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid payment amount'
+      });
+    }
+
+    // Validate and sanitize phone number
+    const phoneRegex = /^(07|01|2547|2541)\d{8}$/;
+    const cleanPhone = String(phone).replace(/\s/g, '');
+    if (!phoneRegex.test(cleanPhone)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid M-Pesa phone number format'
+      });
+    }
+
+    // Prevent duplicate payments — check for recent pending payment
+    const existingPending = await Payment.findOne({
+      orderId,
+      status: 'pending',
+      createdAt: { $gte: new Date(Date.now() - 5 * 60 * 1000) }
+    });
+    if (existingPending) {
+      return res.status(400).json({
+        success: false,
+        message: 'A payment for this order is already pending'
+      });
+    }
+
     // Create pending payment record
     const payment = await Payment.create({
       orderId,
-      phone,
-      amount,
+      phone: cleanPhone,
+      amount: parsedAmount,
       status: 'pending',
       userId: req.body.userId
     });
 
     // Initiate STK push
-    const mpesaResponse = await initiateSTKPush({ phone, amount, orderId });
+    const mpesaResponse = await initiateSTKPush({ phone: cleanPhone, amount: parsedAmount, orderId });
 
     if (mpesaResponse.ResponseCode === '0') {
       // Update payment with Safaricom reference IDs
@@ -72,17 +104,17 @@ const mpesaCallback = async (req, res) => {
     } = stkCallback;
     const numericResultCode = Number(ResultCode);
 
-    console.log('M-Pesa Callback received:', {
-      CheckoutRequestID,
-      ResultCode: numericResultCode,
-      ResultDesc
-    });
-
     // Find the payment record
     const payment = await Payment.findOne({ checkoutRequestId: CheckoutRequestID });
 
     if (!payment) {
       console.warn('Payment not found for:', CheckoutRequestID);
+      return res.status(200).json({ ResultCode: 0, ResultDesc: 'Accepted' });
+    }
+
+    // Prevent double-processing: if already in a terminal state, accept but don't re-process
+    if (payment.status === 'success') {
+      console.log('Payment already processed:', CheckoutRequestID);
       return res.status(200).json({ ResultCode: 0, ResultDesc: 'Accepted' });
     }
 
@@ -104,7 +136,10 @@ const mpesaCallback = async (req, res) => {
 
       console.log('Payment SUCCESS:', getMeta('MpesaReceiptNumber'));
     } else {
-      // Payment failed or cancelled
+      // Payment failed or cancelled — only update if still pending
+      if (payment.status !== 'pending') {
+        return res.status(200).json({ ResultCode: 0, ResultDesc: 'Accepted' });
+      }
       await Payment.findByIdAndUpdate(payment._id, {
         status: numericResultCode === 1032 ? 'cancelled' : 'failed',
         resultCode: numericResultCode,

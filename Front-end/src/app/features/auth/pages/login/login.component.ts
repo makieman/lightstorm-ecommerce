@@ -25,6 +25,7 @@ export class LoginComponent implements OnInit {
   resendSent = false;
   emailFocused = false;
   passwordFocused = false;
+  loginLoading = false;
   googleAuthUrl = `${window.location.origin.includes('localhost')
     ? 'http://localhost:7000'
     : 'https://lightstorm-ecommerce.onrender.com'
@@ -91,9 +92,12 @@ export class LoginComponent implements OnInit {
     this.showVerificationBanner = false;
     this.resendSent = false;
 
+    this.loginLoading = true;
+
     this.http.post<any>('/api/users/login', user, { withCredentials: true })
       .subscribe({
         next: (response) => {
+          this.loginLoading = false;
           let loggedInUser = response.user;
           if (loggedInUser && loggedInUser.isAdmin == true) {
             Swal.fire({
@@ -111,7 +115,7 @@ export class LoginComponent implements OnInit {
             });
 
             // Sync guest cart with backend
-            this.cartService.syncCartWithBackend(loggedInUser._id).subscribe({
+            this.cartService.syncCartWithBackend(loggedInUser.id || loggedInUser._id).subscribe({
               next: () => {
                 const redirect = this.route.snapshot.queryParamMap.get('redirect');
                 this.router.navigateByUrl(redirect || '/home');
@@ -126,6 +130,7 @@ export class LoginComponent implements OnInit {
 
         },
         error: (error) => {
+          this.loginLoading = false;
           const message = error?.error?.message || error?.message || "Login failed. Please try again.";
 
           // Check if it's an unverified email error

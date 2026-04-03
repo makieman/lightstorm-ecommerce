@@ -4,7 +4,7 @@ const paymentSchema = new mongoose.Schema({
   orderId: { type: String, required: true },
   phone: { type: String, required: true },
   amount: { type: Number, required: true },
-  checkoutRequestId: { type: String },
+  checkoutRequestId: { type: String, index: true },
   merchantRequestId: { type: String },
   mpesaReceiptNumber: { type: String },
   status: {

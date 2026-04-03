@@ -1,14 +1,14 @@
 <div class="app-layout min-h-screen bg-white dark:bg-slate-950">
-  <app-header></app-header>
+  <app-header *ngIf="!hideShell"></app-header>
 
   <main class="main-content w-full">
     <router-outlet></router-outlet>
   </main>
 
-  <app-footer></app-footer>
+  <app-footer *ngIf="!hideShell"></app-footer>
 
   <!-- Floating WhatsApp Button -->
-  <a href="https://wa.me/254700250499" class="whatsapp-float shadow" target="_blank">
+  <a *ngIf="!hideShell" href="https://wa.me/254700250499" class="whatsapp-float shadow" target="_blank">
     <i class="fab fa-whatsapp"></i>
     <span class="d-none d-md-inline ms-2">Can we send you a Free Quote?</span>
   </a>
