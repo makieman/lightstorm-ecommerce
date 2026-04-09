@@ -73,9 +73,6 @@
         </div>
 
         <div class="product-card-body">
-          <p class="product-category">
-            {{ product.category?.name || product.category }}
-          </p>
           <h3 class="product-title">
             <a [routerLink]="['/product', product._id]"
                (click)="$event.stopPropagation()">
