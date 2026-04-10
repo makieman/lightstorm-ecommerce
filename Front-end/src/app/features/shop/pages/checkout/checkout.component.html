@@ -1,9 +1,9 @@
 <div class="dark-form-elements bg-[var(--surface-page)] text-[var(--brand-navy)] min-h-screen font-sans">
-  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 pb-28 w-full overflow-hidden lg:pb-10">
+  <main class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 py-10 pb-28 w-full overflow-hidden lg:pb-10">
     <div class="flex flex-col lg:flex-row gap-8">
 
       <!-- Checkout Form Column (Left) -->
-      <div class="flex-1 space-y-6 order-2 lg:order-1">
+      <div class="flex-1 space-y-6 order-1 lg:order-1">
         <div class="rounded-[28px] border border-slate-100 bg-white/80 p-5 shadow-[0_10px_30px_rgba(15,23,42,0.06)] sm:p-6 lg:hidden">
           <div class="flex items-start justify-between gap-4">
             <div>
@@ -85,49 +85,92 @@
               </div>
 
               <div class="pt-8 mt-4 border-t border-gray-100">
-                <h3 class="font-semibold text-lg text-[var(--brand-navy)] mb-6">Payment Method</h3>
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+                <p class="text-[10px] font-black uppercase tracking-[0.24em] text-slate-400">Step 2 of 2</p>
+                <h3 class="mt-2 font-semibold text-lg text-[var(--brand-navy)] mb-2">Choose Payment Method</h3>
+                <p class="text-sm text-slate-500 mb-6">Select how you want to pay, then tap the button below to complete checkout.</p>
+                <p class="-mt-3 mb-3 text-[11px] font-semibold text-slate-400 sm:hidden">Swipe left or right to choose payment</p>
+                <div class="flex gap-3 overflow-x-auto pb-1 pr-1 sm:grid sm:grid-cols-3 sm:gap-5 sm:overflow-visible">
                   <label
-                    class="relative flex cursor-pointer items-center justify-center rounded-xl border-2 border-transparent bg-gray-50 p-5 hover:border-teal-500 hover:bg-teal-50 transition-all has-[:checked]:border-teal-500 has-[:checked]:bg-teal-50 shadow-sm border-gray-200">
+                    class="relative min-w-[132px] flex cursor-pointer items-center justify-center rounded-xl border-2 border-transparent bg-gray-50 p-3 sm:p-5 hover:border-teal-500 hover:bg-teal-50 transition-all has-[:checked]:border-teal-500 has-[:checked]:bg-teal-50 shadow-sm border-gray-200">
                     <input type="radio" formControlName="paymentMethod" value="cash" class="peer sr-only" />
                     <div class="text-center group">
                       <span
-                        class="material-icons mb-3 text-gray-400 peer-checked:text-[var(--brand-teal)] block text-3xl transition-transform group-hover:scale-110">payments</span>
+                        class="material-icons mb-1 sm:mb-3 text-gray-400 peer-checked:text-[var(--brand-teal)] block text-xl sm:text-3xl transition-transform group-hover:scale-110">payments</span>
                       <span
-                        class="font-semibold text-sm text-[var(--brand-navy)] peer-checked:text-[var(--brand-teal)]">Cash
+                        class="font-semibold text-xs sm:text-sm text-[var(--brand-navy)] peer-checked:text-[var(--brand-teal)]">Cash
                         on Delivery</span>
                     </div>
                     <div
-                      class="absolute right-4 top-4 h-5 w-5 rounded-full border border-gray-300 before:absolute before:left-1/2 before:top-1/2 before:h-2.5 before:w-2.5 before:-translate-x-1/2 before:-translate-y-1/2 before:rounded-full before:bg-[var(--brand-teal)] before:opacity-0 peer-checked:border-[var(--brand-teal)] before:peer-checked:opacity-100 transition-all">
+                      class="absolute right-2.5 top-2.5 sm:right-4 sm:top-4 h-4 w-4 sm:h-5 sm:w-5 rounded-full border border-gray-300 before:absolute before:left-1/2 before:top-1/2 before:h-2 before:w-2 sm:before:h-2.5 sm:before:w-2.5 before:-translate-x-1/2 before:-translate-y-1/2 before:rounded-full before:bg-[var(--brand-teal)] before:opacity-0 peer-checked:border-[var(--brand-teal)] before:peer-checked:opacity-100 transition-all">
                     </div>
                   </label>
 
                   <label
-                    class="relative flex cursor-not-allowed items-center justify-center rounded-xl border-2 border-transparent bg-gray-50 p-5 opacity-60 shadow-sm border-gray-200">
-                    <input type="radio" formControlName="paymentMethod" value="credit" class="peer sr-only" [disabled]="true" />
-                    <div class="text-center group">
-                      <span
-                        class="material-icons mb-3 text-gray-400 block text-3xl">credit_card</span>
-                      <span
-                        class="font-semibold text-sm text-[var(--brand-navy)]">Cloud
-                        Card Pay</span>
-                      <span class="block text-[10px] text-[var(--brand-teal)] font-bold mt-1 uppercase tracking-wider bg-[var(--brand-teal)]/10 py-1 px-2 rounded-md">Coming Soon</span>
-                    </div>
-                  </label>
-
-                  <label
-                    class="relative flex cursor-pointer items-center justify-center rounded-xl border-2 border-transparent bg-gray-50 p-5 hover:border-[#00B44A] hover:bg-[#00B44A]/10 transition-all has-[:checked]:border-[#00B44A] has-[:checked]:bg-[#00B44A]/10 shadow-sm border-gray-200">
+                    class="relative min-w-[132px] flex cursor-pointer items-center justify-center rounded-xl border-2 border-transparent bg-gray-50 p-3 sm:p-5 hover:border-[#00B44A] hover:bg-[#00B44A]/10 transition-all has-[:checked]:border-[#00B44A] has-[:checked]:bg-[#00B44A]/10 shadow-sm border-gray-200">
                     <input type="radio" formControlName="paymentMethod" value="mpesa" class="peer sr-only" />
                     <div class="text-center group">
                       <span
-                        class="material-icons mb-3 text-gray-400 peer-checked:text-[#00B44A] block text-3xl transition-transform group-hover:scale-110">phone_iphone</span>
+                        class="material-icons mb-1 sm:mb-3 text-gray-400 peer-checked:text-[#00B44A] block text-xl sm:text-3xl transition-transform group-hover:scale-110">phone_iphone</span>
                       <span
-                        class="font-semibold text-sm text-[var(--brand-navy)] peer-checked:text-[#00B44A]">M-PESA</span>
+                        class="font-semibold text-xs sm:text-sm text-[var(--brand-navy)] peer-checked:text-[#00B44A]">M-PESA</span>
                     </div>
                     <div
-                      class="absolute right-4 top-4 h-5 w-5 rounded-full border border-gray-300 before:absolute before:left-1/2 before:top-1/2 before:h-2.5 before:w-2.5 before:-translate-x-1/2 before:-translate-y-1/2 before:rounded-full before:bg-[#00B44A] before:opacity-0 peer-checked:border-[#00B44A] before:peer-checked:opacity-100 transition-all">
+                      class="absolute right-2.5 top-2.5 sm:right-4 sm:top-4 h-4 w-4 sm:h-5 sm:w-5 rounded-full border border-gray-300 before:absolute before:left-1/2 before:top-1/2 before:h-2 before:w-2 sm:before:h-2.5 sm:before:w-2.5 before:-translate-x-1/2 before:-translate-y-1/2 before:rounded-full before:bg-[#00B44A] before:opacity-0 peer-checked:border-[#00B44A] before:peer-checked:opacity-100 transition-all">
                     </div>
                   </label>
+
+                  <label
+                    class="relative min-w-[132px] flex cursor-not-allowed items-center justify-center rounded-xl border-2 border-transparent bg-gray-50 p-3 sm:p-5 opacity-60 shadow-sm border-gray-200">
+                    <input type="radio" formControlName="paymentMethod" value="credit" class="peer sr-only" [disabled]="true" />
+                    <div class="text-center group">
+                      <span
+                        class="material-icons mb-1 sm:mb-3 text-gray-400 block text-xl sm:text-3xl">credit_card</span>
+                      <span
+                        class="font-semibold text-xs sm:text-sm text-[var(--brand-navy)]">Cloud
+                        Card Pay</span>
+                      <span class="block text-[9px] sm:text-[10px] text-[var(--brand-teal)] font-bold mt-1 uppercase tracking-wider bg-[var(--brand-teal)]/10 py-1 px-2 rounded-md">Coming Soon</span>
+                    </div>
+                  </label>
+                </div>
+
+                <div *ngIf="userForm.get('paymentMethod')?.value === 'mpesa'" class="mt-5 rounded-2xl border border-[#00B44A]/30 bg-[#00B44A]/5 p-4 sm:p-5">
+                  <p class="text-xs font-black uppercase tracking-[0.2em] text-[#00B44A]">M-PESA Details</p>
+
+                  <!-- Phone input -->
+                  <div *ngIf="paymentStep === 'idle' || paymentStep === 'failed'" class="mt-3 space-y-2">
+                    <label class="block text-xs font-semibold text-slate-500 uppercase tracking-widest">Phone Number</label>
+                    <input
+                      type="tel"
+                      [(ngModel)]="phoneNumber"
+                      [ngModelOptions]="{standalone: true}"
+                      placeholder="e.g. 0712345678"
+                      class="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-[var(--brand-navy)] outline-none transition-all focus:border-[#00B44A] focus:ring-4 focus:ring-[#00B44A]/10"
+                    />
+                    <p class="text-xs text-slate-500">We will send a payment prompt to this phone.</p>
+                  </div>
+
+                  <!-- Waiting state -->
+                  <div *ngIf="paymentStep === 'sending' || paymentStep === 'waiting'" class="text-center py-4 space-y-3">
+                    <div class="flex justify-center">
+                      <svg class="animate-spin h-8 w-8 text-[#00B44A]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                      </svg>
+                    </div>
+                    <p class="text-sm font-semibold text-[var(--brand-navy)]">{{ paymentMessage }}</p>
+                    <p *ngIf="paymentStep === 'waiting'" class="text-xs text-slate-500">Waiting for confirmation... (up to 30 seconds)</p>
+                  </div>
+
+                  <!-- Success state -->
+                  <div *ngIf="paymentStep === 'success'" class="py-3 text-center space-y-2">
+                    <p class="text-[#00B44A] font-bold text-base">Payment Complete!</p>
+                    <p class="text-sm text-slate-600">{{ paymentMessage }}</p>
+                  </div>
+
+                  <!-- Failed state -->
+                  <div *ngIf="paymentStep === 'failed'" class="pt-2">
+                    <p class="text-red-500 font-semibold text-sm">{{ paymentMessage }}</p>
+                  </div>
                 </div>
 
               </div>
@@ -137,7 +180,7 @@
       </div>
 
       <!-- Order Summary Column (Right, Sticky) -->
-      <div class="w-full lg:w-[400px] order-1 lg:order-2">
+      <div class="w-full lg:w-[400px] order-2 lg:order-2">
         <div class="bg-[var(--surface-summary)] text-white rounded-2xl shadow-xl overflow-hidden lg:sticky lg:top-24">
           <div class="p-6 border-b border-white/10">
             <h2 class="text-xl font-bold tracking-wide uppercase">Order Summary</h2>
@@ -200,51 +243,6 @@
               </button>
             </div>
 
-            <!-- M-Pesa Details (in summary panel) -->
-            <div *ngIf="userForm.get('paymentMethod')?.value === 'mpesa'" class="rounded-xl border border-white/15 bg-white/5 p-4">
-
-              <!-- Phone input -->
-              <div *ngIf="paymentStep === 'idle' || paymentStep === 'failed'" class="space-y-3">
-                <label class="text-xs font-bold text-gray-300 uppercase tracking-wider">
-                  M-Pesa Phone Number
-                </label>
-                <input
-                  type="tel"
-                  [(ngModel)]="phoneNumber"
-                  [ngModelOptions]="{standalone: true}"
-                  placeholder="e.g. 0712345678"
-                  class="w-full px-4 py-3 rounded-xl border border-white/20 bg-white/10 text-white placeholder-white/50 focus:border-green-400 focus:ring-2 focus:ring-green-500/20 outline-none"
-                />
-              </div>
-
-              <!-- Waiting state -->
-              <div *ngIf="paymentStep === 'sending' || paymentStep === 'waiting'" class="text-center py-6 space-y-3">
-                <div class="flex justify-center">
-                  <svg class="animate-spin h-10 w-10 text-green-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
-                  </svg>
-                </div>
-                <p class="text-gray-200 font-semibold text-sm">{{ paymentMessage }}</p>
-                <p *ngIf="paymentStep === 'waiting'" class="text-xs text-gray-400">
-                  Waiting for confirmation... (up to 30 seconds)
-                </p>
-              </div>
-
-              <!-- Success state -->
-              <div *ngIf="paymentStep === 'success'" class="text-center py-6 space-y-3">
-                <p class="text-green-400 font-bold text-lg">Payment Complete!</p>
-                <p class="text-gray-300 text-sm">{{ paymentMessage }}</p>
-              </div>
-
-              <!-- Failed state -->
-              <div *ngIf="paymentStep === 'failed'" class="space-y-3">
-                <div class="text-center py-2">
-                  <p class="text-red-400 font-bold text-sm mt-2">{{ paymentMessage }}</p>
-                </div>
-              </div>
-            </div>
-
             <button (click)="placeOrder()" type="button" [disabled]="cart.cart.length === 0 || isPaymentLoading"
               [ngClass]="{'opacity-50 cursor-not-allowed grayscale': cart.cart.length === 0 || isPaymentLoading, 'bg-[#00B44A] hover:bg-[#009b40]': userForm.get('paymentMethod')?.value === 'mpesa'}"
               class="w-full bg-[var(--brand-teal)] hover:bg-[var(--brand-teal-soft)] text-white py-4 rounded-xl font-bold text-lg shadow-lg shadow-black/20 transition-all flex items-center justify-center gap-3">
@@ -272,7 +270,7 @@
     </div>
   </main>
 
-  <div class="fixed inset-x-0 bottom-0 z-40 border-t border-slate-200 bg-white/95 px-4 py-3 shadow-[0_-12px_28px_rgba(15,23,42,0.12)] backdrop-blur lg:hidden">
+  <div class="fixed inset-x-0 bottom-0 z-40 border-t border-slate-200 bg-white/95 px-2 py-3 shadow-[0_-12px_28px_rgba(15,23,42,0.12)] backdrop-blur lg:hidden">
     <div class="mx-auto flex max-w-7xl items-center justify-between gap-4">
       <div class="min-w-0">
         <p class="text-[10px] font-bold uppercase tracking-[0.24em] text-slate-400">Pay Today</p>

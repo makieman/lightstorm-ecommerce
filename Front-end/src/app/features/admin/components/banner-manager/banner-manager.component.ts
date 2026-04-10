@@ -162,7 +162,7 @@ import { CoreProductService } from '../../../../core/services/core-product.servi
                       <p class="text-xs text-slate-500 mt-0.5 truncate max-w-[200px]">{{ banner.subtitle }}</p>
                       <div class="mt-1 flex gap-1 items-center">
                         <span class="bg-blue-100 text-blue-700 py-0.5 px-2 rounded-full text-[10px] font-bold">
-                          <i class="bi bi-box-seam me-1"></i> {{ banner.linkedProducts?.length || 0 }} Items
+                          <i class="bi bi-box-seam me-1"></i> {{ banner.linkedProducts.length || 0 }} Items
                         </span>
                       </div>
                     </div>

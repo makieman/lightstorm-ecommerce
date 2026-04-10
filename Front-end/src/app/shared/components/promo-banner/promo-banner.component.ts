@@ -47,7 +47,7 @@ import { BannerService, Banner } from '../../../core/services/banner.service';
       </div>
 
       <!-- Linked Products Row -->
-      <div *ngIf="banner.linkedProducts?.length" class="p-3 md:p-4 bg-[var(--brand-sage-light)]/20 flex overflow-x-auto snap-x gap-3 md:gap-4 scrollbar-hide">
+      <div *ngIf="banner.linkedProducts.length" class="p-3 md:p-4 bg-[var(--brand-sage-light)]/20 flex overflow-x-auto snap-x gap-3 md:gap-4 scrollbar-hide">
         
         <a *ngFor="let product of banner.linkedProducts" [routerLink]="['/product', product._id]" 
            class="snap-start shrink-0 w-36 md:w-[190px] bg-white rounded relative p-3 pb-4 border border-transparent hover:border-orange-500 hover:shadow-lg transition-all group flex flex-col">
@@ -90,7 +90,7 @@ import { BannerService, Banner } from '../../../core/services/banner.service';
       </div>
 
       <!-- Fallback empty body if no products linked -->
-      <div *ngIf="!banner.linkedProducts?.length" class="p-8 text-center bg-slate-50">
+      <div *ngIf="!banner.linkedProducts.length" class="p-8 text-center bg-slate-50">
         <p class="text-slate-600 mb-2 font-medium">{{ banner.subtitle }}</p>
         <span *ngIf="banner.discount > 0" class="inline-block bg-orange-100 text-orange-700 font-black text-2xl px-4 py-2 rounded-lg">
           {{ banner.discount }}% OFF
