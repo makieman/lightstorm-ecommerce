@@ -1,8 +1,12 @@
 <article class="product-card" (click)="navigateToProduct()">
   <div class="product-card-media">
-    <img [src]="product.image" [alt]="product.title" loading="lazy" decoding="async" width="480" height="320" (error)="onImageError($event)" />
+    <img [src]="product.image" [alt]="product.title" loading="lazy" decoding="async" width="480" height="320" (error)="onImageError($event)" [class.out-of-stock-img]="product.quantity <= 0" />
+    <!-- OUT OF STOCK overlay -->
+    <div *ngIf="product.quantity <= 0" class="oos-overlay">
+      <span class="oos-text">OUT OF STOCK</span>
+    </div>
     <div class="product-card-actions">
-      <button class="product-action-button" type="button" (click)="addToCartQuick($event)" aria-label="Add to cart">
+      <button class="product-action-button" type="button" [disabled]="product.quantity <= 0" [class.oos-btn-disabled]="product.quantity <= 0" (click)="addToCartQuick($event)" aria-label="Add to cart">
         <i class="bi bi-cart-plus"></i>
       </button>
       <button class="product-action-button" type="button" (click)="goToProduct($event)" aria-label="View details">

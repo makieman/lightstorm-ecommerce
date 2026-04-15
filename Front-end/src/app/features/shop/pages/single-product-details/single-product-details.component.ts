@@ -70,6 +70,7 @@ export class SingleProductDetailsComponent implements OnInit {
   ratingSelected: boolean = false;
   currentImageIndex: number = 0; // NEW: for image gallery
   showReviewForm: boolean = false; // Toggle review form visibility
+  reviewsExpanded: boolean = false; // Toggle reviews section visibility
 
 
   constructor(
@@ -236,6 +237,10 @@ export class SingleProductDetailsComponent implements OnInit {
 
   showReviews() {
     this.selectedTab = 'reviews';
+  }
+
+  toggleReviews() {
+    this.reviewsExpanded = !this.reviewsExpanded;
   }
 
 

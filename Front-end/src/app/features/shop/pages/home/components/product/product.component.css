@@ -112,3 +112,35 @@
   }
 }
 
+/* Out of Stock card styles */
+.out-of-stock-img {
+  filter: grayscale(100%);
+  opacity: 0.4;
+}
+
+.oos-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.25);
+  pointer-events: none;
+}
+
+.oos-text {
+  font-size: clamp(0.75rem, 3vw, 1.25rem);
+  font-weight: 900;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  transform: rotate(-18deg);
+}
+
+.oos-btn-disabled {
+  opacity: 0.4;
+  cursor: not-allowed !important;
+  pointer-events: none;
+}

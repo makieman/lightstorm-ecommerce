@@ -160,9 +160,13 @@
             <div [ngClass]="viewMode === 'grid' ? 'products-grid' : 'products-list'">
               <article *ngFor="let product of filteredProducts; trackBy: trackByProduct" class="product-card" [class.product-card-large]="viewMode === 'large'" (click)="navigateToProductDetails(product._id)">
                 <div class="product-card-media">
-                  <img [src]="product.image" [alt]="product.title" loading="lazy" decoding="async" width="480" height="320" (error)="onImageError($event)" />
+                  <img [src]="product.image" [alt]="product.title" loading="lazy" decoding="async" width="480" height="320" (error)="onImageError($event)" [class.out-of-stock-img]="product.quantity <= 0" />
+                  <!-- OUT OF STOCK overlay -->
+                  <div *ngIf="product.quantity <= 0" class="oos-overlay">
+                    <span class="oos-text">OUT OF STOCK</span>
+                  </div>
                   <div class="product-card-actions">
-                    <button class="product-action-button" type="button" (click)="addToCart(product); $event.stopPropagation()" aria-label="Add to cart">
+                    <button class="product-action-button" type="button" [disabled]="product.quantity <= 0" [class.oos-btn-disabled]="product.quantity <= 0" (click)="addToCart(product); $event.stopPropagation()" aria-label="Add to cart">
                       <i class="bi bi-cart-plus"></i>
                     </button>
                     <button class="product-action-button" type="button" (click)="navigateToProductDetails(product._id); $event.stopPropagation()" aria-label="View details">
