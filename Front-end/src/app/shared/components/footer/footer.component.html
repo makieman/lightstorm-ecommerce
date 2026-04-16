@@ -108,29 +108,33 @@
 </footer>
 
 <!-- Mobile Quick Navigation -->
-<div class="md:hidden fixed bottom-4 left-4 right-4 z-[100] bg-[#0f172a]/85 backdrop-blur-xl border border-white/10 rounded-3xl px-6 py-3.5 flex justify-between items-center shadow-[0_20px_40px_rgba(0,0,0,0.5)]">
+<div class="md:hidden fixed bottom-3 left-2 right-2 z-[100] bg-[#0f172a]/85 backdrop-blur-xl border border-white/10 rounded-2xl px-3 py-2 flex justify-between items-center shadow-[0_20px_40px_rgba(0,0,0,0.5)]">
     <a [routerLink]="['/home']" routerLinkActive="text-[#84CC16]" [routerLinkActiveOptions]="{exact: true}"
         class="flex flex-col items-center gap-1.5 text-slate-400 hover:text-white transition-colors">
         <i class="bi bi-house-door-fill text-lg"></i>
-        <span class="text-[9px] font-bold uppercase tracking-widest">Home</span>
+        <span class="text-[9px] font-bold uppercase tracking-widest mt-[-2px]">Home</span>
     </a>
     <a [routerLink]="['/products']" routerLinkActive="text-[#84CC16]"
         class="flex flex-col items-center gap-1.5 text-slate-400 hover:text-white transition-colors">
         <i class="bi bi-grid-fill text-lg"></i>
-        <span class="text-[9px] font-bold uppercase tracking-widest">Shop</span>
+        <span class="text-[9px] font-bold uppercase tracking-widest mt-[-2px]">Shop</span>
     </a>
     <a [routerLink]="['/cart']" routerLinkActive="text-[#84CC16]"
-        class="flex flex-col items-center gap-1.5 text-slate-400 hover:text-white transition-colors">
+        class="relative flex flex-col items-center gap-1.5 text-slate-400 hover:text-white transition-colors px-1">
         <i class="bi bi-bag-fill text-lg"></i>
-        <span class="text-[9px] font-bold uppercase tracking-widest">Cart</span>
+        <span class="text-[9px] font-bold uppercase tracking-widest mt-[-2px]">Cart</span>
+        <span *ngIf="cartCount > 0"
+            class="absolute -top-1 -right-1 bg-[#EF4444] text-white text-[9px] font-black w-4 h-4 flex items-center justify-center rounded-full border border-[#0f172a]">
+            {{cartCount}}
+        </span>
     </a>
     <a [routerLink]="['/profile']" routerLinkActive="text-[#84CC16]"
         class="flex flex-col items-center gap-1.5 text-slate-400 hover:text-white transition-colors">
         <i class="bi bi-person-fill text-lg"></i>
-        <span class="text-[9px] font-bold uppercase tracking-widest">Account</span>
+        <span class="text-[9px] font-bold uppercase tracking-widest mt-[-2px]">Account</span>
     </a>
-    <button class="flex flex-col items-center gap-1.5 text-slate-400 hover:text-white transition-colors">
-        <i class="bi bi-grid-3x3-gap-fill text-lg"></i>
-        <span class="text-[9px] font-bold uppercase tracking-widest">Menu</span>
-    </button>
+    <a href="https://wa.me/254700250499" target="_blank"
+        class="flex items-center justify-center w-11 h-11 bg-[#25D366] text-white rounded-full shadow-lg hover:scale-105 transition-transform ml-2">
+        <i class="bi bi-whatsapp text-2xl"></i>
+    </a>
 </div>
