@@ -1,188 +1,125 @@
-<section class="bg-[var(--surface-page)] min-h-screen">
-  <main class="w-full overflow-hidden p-4 pb-28 md:p-8 lg:mx-auto lg:max-w-6xl lg:grid lg:grid-cols-3 lg:gap-10 lg:space-y-0 lg:pt-12 lg:pb-12">
-    <section class="space-y-8 lg:col-span-2">
-      <div class="mb-4">
-        <h1 class="text-3xl font-black text-slate-900 dark:text-white tracking-tight leading-none">Shopping Cart</h1>
-        <p class="text-slate-500 font-bold text-sm mt-3 uppercase tracking-widest">You have {{ cart.length }} items
-          reserved</p>
-      </div>
+<section class="bg-gray-50 min-h-screen pb-32 pt-8 lg:pt-12">
+  <main class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    
+    <div class="mb-8">
+      <h1 class="text-3xl font-bold text-gray-900">Shopping Cart</h1>
+      <p class="text-gray-500 mt-1">{{ cart.length }} items in your cart</p>
+    </div>
 
-      <div *ngFor="let item of cart; let i = index"
-        class="bg-[var(--surface-card-dark)] p-6 rounded-[16px] shadow-[0_8px_24px_rgba(0,0,0,0.15)] transition-all hover:shadow-[0_12px_32px_rgba(0,0,0,0.25)] group">
-        <div class="flex flex-col gap-5 sm:flex-row sm:gap-7">
-          <div
-            class="w-full h-52 sm:w-36 sm:h-36 bg-white rounded-xl overflow-hidden flex-shrink-0 shadow-inner p-1 transition-transform group-hover:scale-105 duration-300">
-            <img [src]="item.product.image" alt="Product Image" class="w-full h-full object-cover rounded-lg" />
-          </div>
-          <div class="flex-grow flex flex-col justify-between min-w-0">
-            <div>
-              <div class="flex justify-between items-start gap-3">
-                <h3 class="font-bold text-lg sm:text-[1.2rem] leading-tight text-white truncate">{{
-                  item.product.title }}</h3>
-                <button (click)="deleteProduct(item.product._id)"
-                  class="text-[#9ca3af] hover:text-white hover:bg-red-500/80 transition-all p-2 bg-[#374151] rounded-xl flex-shrink-0">
-                  <span class="material-icons text-sm">close</span>
-                </button>
+    <!-- Layout -->
+    <div class="flex flex-col lg:flex-row gap-6 lg:gap-8">
+      
+      <!-- Cart Items (70%) -->
+      <div class="flex-1 space-y-4">
+        <ng-container *ngIf="cart.length > 0">
+          <!-- Item -->
+          <div *ngFor="let item of cart; let i = index" class="bg-white rounded-2xl shadow-sm hover:shadow-md transition-all duration-200 p-4 sm:p-5 flex gap-4 sm:gap-6 items-start sm:items-center relative group border border-gray-100">
+            
+            <!-- Image -->
+            <img [src]="item.product.image" class="w-20 h-20 sm:w-28 sm:h-28 rounded-lg object-cover flex-shrink-0 bg-gray-50" />
+
+            <!-- Info -->
+            <div class="flex-1 min-w-0 pr-8">
+              <div class="flex justify-between items-start">
+                <div>
+                    <h3 class="font-semibold text-gray-900 text-base sm:text-lg leading-tight">{{ item.product.title }}</h3>
+                    <p class="text-xs text-gray-400 mt-1">
+                      Qty: {{ item.quantity }} • Subtotal: KSH {{ (item.quantity * item.product.price).toLocaleString() }}
+                    </p>
+                    <p class="text-sm text-emerald-600 font-medium mt-1">In Stock</p>
+                    <p class="font-bold text-gray-900 mt-1 text-lg sm:text-xl">KSH {{ item.product.price.toLocaleString() }}</p>
+                </div>
               </div>
-              <div class="flex items-center gap-2 mt-2">
-                <span
-                  class="px-2 py-0.5 bg-emerald-400/20 text-[var(--brand-teal-soft)] text-[10px] font-bold uppercase tracking-widest rounded-md border border-emerald-400/30">In
-                  Stock</span>
-                <p class="text-[var(--brand-teal-soft)] font-bold text-[1.1rem]">KSH {{
-                  item.product.price.toLocaleString() }}</p>
+
+              <!-- Quantity -->
+              <div class="border-t border-gray-100 mt-3 pt-3 sm:mt-4 sm:pt-4">
+                <div class="flex items-center gap-3">
+                  <button (click)="decreaseProductQuantity(item.product._id)" class="w-10 h-10 rounded-full bg-gray-100 border border-gray-200 hover:bg-emerald-50 hover:text-emerald-600 active:scale-95 transition-all duration-200 text-gray-600 font-medium text-lg flex items-center justify-center">-</button>
+                  <span class="font-medium text-gray-900 w-6 text-center select-none">{{ item.quantity }}</span>
+                  <button (click)="increaseProductQuantity(item.product._id)" class="w-10 h-10 rounded-full bg-gray-100 border border-gray-200 hover:bg-emerald-50 hover:text-emerald-600 active:scale-95 transition-all duration-200 text-gray-600 font-medium text-lg flex items-center justify-center">+</button>
+                </div>
               </div>
             </div>
 
-            <div class="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between mt-6">
-              <div class="flex items-center bg-[#374151] rounded-xl overflow-hidden h-11 w-fit">
-                <button (click)="decreaseProductQuantity(item.product._id)"
-                  class="px-4 h-full flex items-center justify-center hover:bg-[#4b5563] text-white transition-all font-bold text-lg">-</button>
-                <span class="px-5 h-full flex items-center justify-center text-sm font-bold text-white min-w-[40px]">{{
-                  item.quantity }}</span>
-                <button (click)="increaseProductQuantity(item.product._id)"
-                  class="px-4 h-full flex items-center justify-center hover:bg-[#4b5563] text-white transition-all font-bold text-lg">+</button>
-              </div>
-              <div class="text-left sm:text-right">
-                <span class="text-[0.8rem] text-[#a4b0be] block uppercase font-bold tracking-[1px] mb-1">Row
-                  Subtotal</span>
-                <span class="font-bold text-[1rem] sm:text-lg text-white">KSH {{
-                  (item.product.price * item.quantity).toLocaleString() }}</span>
-              </div>
-            </div>
+            <!-- Remove Button -->
+            <button (click)="deleteProduct(item.product._id)" class="text-gray-400 hover:text-red-500 hover:bg-red-50 transition-all duration-200 p-2 rounded-full absolute top-3 right-3 flex items-center justify-center z-10">✕</button>
           </div>
+        </ng-container>
+
+        <!-- Empty State -->
+        <div *ngIf="cart.length === 0" class="text-center py-20 bg-white rounded-2xl border border-gray-100 shadow-sm">
+          <div class="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-5">
+            <span class="material-icons text-gray-400 text-4xl">shopping_cart</span>
+          </div>
+          <h3 class="text-xl font-bold text-gray-900">Your cart is empty</h3>
+          <p class="text-gray-500 mt-2 text-sm font-medium">Looks like you haven't added anything yet.</p>
+          <button routerLink="/shop" class="mt-6 bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-3 rounded-xl text-sm font-semibold shadow-md active:scale-95 transition-all">Start Shopping</button>
         </div>
       </div>
 
-      <div *ngIf="cart.length === 0"
-        class="text-center py-24 bg-white rounded-[3rem] shadow-[0_10px_30px_rgba(0,0,0,0.05)] border border-slate-100">
-        <div
-          class="w-24 h-24 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner">
-          <span class="material-icons text-[var(--brand-teal-soft)] text-5xl">shopping_cart</span>
-        </div>
-        <h3 class="text-2xl font-bold text-slate-900">Your cart is empty</h3>
-        <p class="text-slate-500 mt-3 max-w-xs mx-auto font-medium">Power up your journey by adding
-          our premium solar solutions to your cart.</p>
-        <button routerLink="/shop"
-          class="mt-10 bg-[var(--brand-teal-soft)] hover:bg-[var(--brand-teal)] text-white font-bold px-10 py-4 rounded-xl transition-all shadow-[0_8px_20px_rgba(0,200,150,0.3)] hover:-translate-y-1 active:scale-95 uppercase tracking-wide text-sm">Start
-          Shopping</button>
-      </div>
-    </section>
+      <!-- Order Summary (30%) - sticky -->
+      <div class="lg:w-[380px] flex-shrink-0" *ngIf="cart.length > 0">
+        <div class="bg-white rounded-2xl shadow-md border border-gray-100 p-6 sticky top-6">
+          <h2 class="text-lg font-semibold mb-6 text-gray-900">Order Summary</h2>
 
-    <aside class="w-full lg:col-span-1 lg:pl-4">
-      <div class="bg-[var(--surface-summary)] text-white rounded-[20px] shadow-[0_10px_30px_rgba(0,0,0,0.15)] overflow-hidden lg:sticky lg:top-12 w-full">
-        <div class="px-8 py-7 border-b border-white/10">
-          <h2 class="font-bold text-white text-xl tracking-wide uppercase">Order Summary</h2>
-          <div class="h-1 w-12 bg-[var(--brand-teal)] mt-3 rounded-full"></div>
-        </div>
-
-        <div class="p-8 space-y-7">
-          <!-- Itemized List -->
-          <div *ngIf="cart.length > 0" class="space-y-4 max-h-60 overflow-y-auto pr-2 custom-scrollbar">
-            <div *ngFor="let item of cart" class="flex gap-4 items-center group">
-              <div class="w-12 h-12 bg-white/10 rounded-lg overflow-hidden flex-shrink-0">
-                <img [src]="item.product.image" class="w-full h-full object-cover">
-              </div>
-              <div class="flex-grow min-w-0">
-                <p class="text-xs font-bold text-white truncate">{{item.product.title}}</p>
-                <p class="text-[0.75rem] font-bold text-teal-300 uppercase tracking-wide mt-0.5">{{item.quantity}} ×
-                  <span class="text-white">KSH {{item.product.price.toLocaleString()}}</span>
-                </p>
-              </div>
-            </div>
+          <div class="flex justify-between text-sm text-gray-600 mb-3">
+            <span>Subtotal</span>
+            <span class="font-medium text-gray-900">KSH {{ cartState.totalprice.toLocaleString() }}</span>
           </div>
 
-          <div
-            class="flex justify-between items-center text-sm font-bold uppercase tracking-widest text-gray-200 border-t border-white/10 pt-7">
-            <span>Market Subtotal</span>
-            <span class="text-white text-base">KSH {{ cartState.totalprice.toLocaleString() }}</span>
-          </div>
-
-          <div
-            class="flex justify-between items-start text-sm border-t border-white/10 pt-7 text-gray-200 font-bold tracking-widest uppercase">
+          <div class="flex justify-between text-sm text-gray-600 mb-2">
             <span>Shipping</span>
-            <div class="text-right normal-case tracking-normal">
-              <p class="text-white font-bold text-base">Flat rate: {{ shippingFee === 0 ? 0 : 'KSH 200' }}</p>
-              <div class="flex items-center justify-end gap-1 mt-2 text-teal-300">
-                <span class="material-icons text-[14px]">location_on</span>
-                <p class="text-[11px] font-bold uppercase tracking-wider">{{ selectedCountry }}</p>
-              </div>
-              <button (click)="toggleAddressForm()"
-                class="text-[var(--brand-lime)] text-xs font-bold mt-3 hover:text-white underline underline-offset-4 decoration-2 transition-colors">Modify
-                Location</button>
+            <span class="font-medium text-gray-900">{{ shippingFee === 0 ? 'Calculated later' : 'KSH 200' }}</span>
+          </div>
+          
+          <div class="flex items-center justify-between mb-5 text-xs">
+            <div class="flex items-center gap-1 text-gray-500">
+               <span class="material-icons text-[14px]">location_on</span>
+               <span>{{ selectedCountry }}</span>
             </div>
+            <button (click)="toggleAddressForm()" class="text-emerald-600 font-medium hover:text-emerald-700 transition-colors duration-200">Change</button>
           </div>
 
           <!-- Collapsible Address -->
-          <div *ngIf="showAddressForm"
-            class="bg-white/10 p-5 rounded-2xl border border-white/10 mt-4 space-y-5 animate-scale-in">
-            <div>
-              <label for="country"
-                class="block text-[10px] font-bold text-gray-200 uppercase tracking-[1px] mb-3">Select Delivery
-                Zone</label>
-              <select id="country" [(ngModel)]="selectedCountry"
-                class="w-full bg-[var(--surface-summary)] border-2 border-white/20 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500 text-sm font-bold text-white transition-all cursor-pointer">
-                <option *ngFor="let country of countries" [value]="country">{{ country }}</option>
-              </select>
+          <div *ngIf="showAddressForm" class="mb-5 animate-scale-in">
+               <select [(ngModel)]="selectedCountry" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm font-medium text-gray-800 outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 transition-all mb-2 appearance-none">
+                 <option *ngFor="let country of countries" [value]="country">{{ country }}</option>
+               </select>
+               <button (click)="onUpdateCountry()" class="w-full bg-gray-100 text-gray-800 rounded-xl py-2.5 text-xs font-semibold hover:bg-gray-200 active:scale-95 transition-all duration-200">Update Location</button>
+          </div>
+
+           <!-- Promo block -->
+            <div class="border-t border-gray-100 pt-4 mb-4">
+              <button (click)="toggleCouponForm()" class="text-xs font-medium text-gray-500 hover:text-gray-800 flex items-center gap-1.5 transition-colors duration-200">
+                <span class="material-icons text-[14px]">local_offer</span> Have a promo code?
+              </button>
+              <div *ngIf="showCouponForm" class="mt-3 flex gap-2 animate-scale-in">
+                <input type="text" placeholder="Promo code" class="w-0 flex-grow bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-medium outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500">
+                <button class="bg-gray-900 text-white rounded-xl px-5 py-2.5 text-xs font-semibold hover:bg-gray-800 hover:scale-[1.02] active:scale-95 transition-all duration-200">Apply</button>
+              </div>
             </div>
-            <button (click)="onUpdateCountry()"
-              class="w-full bg-[var(--brand-teal)] hover:bg-[var(--brand-teal-soft)] text-white font-bold py-3 rounded-xl text-xs uppercase tracking-widest shadow-md transition-all">Update
-              Price</button>
+
+          <div class="border-t border-gray-200 pt-5 flex justify-between items-center font-bold text-xl text-gray-900">
+            <span>Total</span>
+            <span>KSH {{ grandTotal.toLocaleString() }}</span>
           </div>
 
-          <div class="flex justify-between items-center text-xl font-bold border-t border-white/20 pt-7 mt-4">
-            <span class="text-white uppercase tracking-wide">Grand Total</span>
-            <span class="text-[var(--brand-teal-soft)] text-2xl font-black">KSH {{ grandTotal.toLocaleString() }}</span>
-          </div>
-
-
-
-          <div class="pt-2">
-            <button (click)="toggleCouponForm()"
-              class="text-[var(--brand-lime)] text-[11px] font-bold uppercase tracking-wide hover:text-white flex items-center gap-2 group transition-all">
-              <span class="material-icons text-base group-hover:animate-bounce">local_offer</span> Have a promo code?
-            </button>
-            <div *ngIf="showCouponForm" class="mt-4 flex gap-2 animate-scale-in">
-              <input type="text" placeholder="CODE123"
-                class="w-0 flex-grow bg-white/10 border border-white/20 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500 text-sm font-bold text-white uppercase tracking-widest placeholder-white/40">
-              <button
-                class="bg-[var(--brand-teal)] hover:bg-[var(--brand-teal-soft)] text-white font-bold px-6 py-3 rounded-xl text-xs uppercase tracking-wide transition-all">Apply</button>
-            </div>
-          </div>
-
-          <div class="pt-6">
-            <button (click)="goToCheckout()" [disabled]="cart.length === 0"
-              [ngClass]="{'opacity-50 cursor-not-allowed grayscale': cart.length === 0}"
-              class="w-full bg-[var(--brand-teal)] hover:bg-[var(--brand-teal-soft)] text-white font-bold py-4 rounded-xl shadow-lg shadow-black/20 transition-all text-lg flex items-center justify-center gap-3 group uppercase tracking-widest">
-              <span>Secure Checkout</span>
-              <span class="material-icons text-xl group-hover:translate-x-1 transition-transform">arrow_forward</span>
-            </button>
-          </div>
+          <button (click)="goToCheckout()" class="w-full mt-6 bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded-xl shadow-lg shadow-emerald-600/20 active:scale-95 hover:scale-[1.02] transition-all duration-200 font-semibold flex items-center justify-center gap-2">
+            Proceed to Checkout
+          </button>
         </div>
       </div>
 
-      <div class="flex flex-col items-center gap-4 pt-4">
-        <div class="flex items-center gap-4 opacity-30">
-          <i class="bi bi-shield-check text-2xl"></i>
-          <i class="bi bi-credit-card text-2xl"></i>
-          <i class="bi bi-patch-check text-2xl"></i>
-        </div>
-        <p class="text-[10px] text-center text-slate-500 font-bold uppercase tracking-widest">Encrypted Payments •
-          Worldwide Warranty</p>
-      </div>
-    </aside>
+    </div>
   </main>
 
-  <div class="lg:hidden fixed inset-x-0 bottom-0 z-40 border-t border-slate-200 bg-white/95 backdrop-blur px-4 py-3 shadow-[0_-12px_28px_rgba(15,23,42,0.12)]">
-    <div class="mx-auto flex max-w-6xl items-center justify-between gap-4">
-      <div class="min-w-0">
-        <p class="text-[10px] font-bold uppercase tracking-[0.24em] text-slate-400">Estimated Total</p>
-        <p class="truncate text-lg font-black text-[var(--brand-navy)]">KSH {{ grandTotal.toLocaleString() }}</p>
-      </div>
-      <button (click)="goToCheckout()" [disabled]="cart.length === 0"
-        [ngClass]="{'opacity-50 cursor-not-allowed grayscale': cart.length === 0}"
-        class="min-w-[11rem] rounded-2xl bg-[var(--brand-teal)] px-5 py-3 text-sm font-bold uppercase tracking-[0.16em] text-white transition-all">
-        Checkout
-      </button>
-    </div>
+  <!-- Mobile Stacked Footer CTA -->
+  <div class="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-md p-4 shadow-[0_-4px_20px_rgba(0,0,0,0.08)] lg:hidden z-40 border-t border-gray-100">
+     <div class="max-w-7xl mx-auto">
+       <button (click)="goToCheckout()" [disabled]="cart.length === 0" [ngClass]="{'opacity-50 cursor-not-allowed hover:scale-100 active:scale-100 shadow-none': cart.length === 0}" class="w-full bg-emerald-600 text-white py-4 rounded-xl text-[15px] font-semibold hover:scale-[1.02] active:scale-95 transition-all duration-200 hover:bg-emerald-700 shadow-lg flex justify-between px-6 items-center">
+         <span>Checkout</span>
+         <span>KSH {{ grandTotal.toLocaleString() }}</span>
+       </button>
+     </div>
   </div>
 </section>
