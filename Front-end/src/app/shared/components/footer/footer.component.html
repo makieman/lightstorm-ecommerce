@@ -108,33 +108,34 @@
 </footer>
 
 <!-- Mobile Quick Navigation -->
-<div class="md:hidden fixed bottom-3 left-2 right-2 z-[100] bg-[#0f172a]/85 backdrop-blur-xl border border-white/10 rounded-2xl px-3 py-2 flex justify-between items-center shadow-[0_20px_40px_rgba(0,0,0,0.5)]">
-    <a [routerLink]="['/home']" routerLinkActive="text-[#84CC16]" [routerLinkActiveOptions]="{exact: true}"
-        class="flex flex-col items-center gap-1.5 text-slate-400 hover:text-white transition-colors">
-        <i class="bi bi-house-door-fill text-lg"></i>
-        <span class="text-[9px] font-bold uppercase tracking-widest mt-[-2px]">Home</span>
+<div class="md:hidden fixed bottom-6 left-4 right-4 z-[100] bg-[#0f172a]/90 backdrop-blur-2xl border border-white/10 rounded-[28px] px-6 py-3 flex justify-between items-center shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)]">
+    <a [routerLink]="['/home']" routerLinkActive="text-[var(--brand-lime)]" [routerLinkActiveOptions]="{exact: true}"
+        class="flex flex-col items-center gap-1.5 text-slate-400 hover:text-white transition-all transform active:scale-90">
+        <i class="bi bi-house-door-fill text-xl"></i>
+        <span class="text-[8px] font-black uppercase tracking-[0.2em]">Home</span>
     </a>
-    <a [routerLink]="['/products']" routerLinkActive="text-[#84CC16]"
-        class="flex flex-col items-center gap-1.5 text-slate-400 hover:text-white transition-colors">
-        <i class="bi bi-grid-fill text-lg"></i>
-        <span class="text-[9px] font-bold uppercase tracking-widest mt-[-2px]">Shop</span>
+    <a [routerLink]="['/products']" routerLinkActive="text-[var(--brand-lime)]"
+        class="flex flex-col items-center gap-1.5 text-slate-400 hover:text-white transition-all transform active:scale-90">
+        <i class="bi bi-grid-fill text-xl"></i>
+        <span class="text-[8px] font-black uppercase tracking-[0.2em]">Shop</span>
     </a>
-    <a [routerLink]="['/cart']" routerLinkActive="text-[#84CC16]"
-        class="relative flex flex-col items-center gap-1.5 text-slate-400 hover:text-white transition-colors px-1">
-        <i class="bi bi-bag-fill text-lg"></i>
-        <span class="text-[9px] font-bold uppercase tracking-widest mt-[-2px]">Cart</span>
+    <a [routerLink]="['/cart']" routerLinkActive="text-[var(--brand-lime)]"
+        class="relative flex flex-col items-center gap-1.5 text-slate-400 hover:text-white transition-all transform active:scale-90 px-1">
+        <i class="bi bi-bag-fill text-xl"></i>
+        <span class="text-[8px] font-black uppercase tracking-[0.2em]">Cart</span>
         <span *ngIf="cartCount > 0"
-            class="absolute -top-1 -right-1 bg-[#EF4444] text-white text-[9px] font-black w-4 h-4 flex items-center justify-center rounded-full border border-[#0f172a]">
+            class="absolute -top-1.5 -right-1 bg-[var(--brand-coral)] text-white text-[9px] font-black w-4.5 h-4.5 flex items-center justify-center rounded-full border-2 border-[#0f172a] shadow-sm">
             {{cartCount}}
         </span>
     </a>
-    <a [routerLink]="['/profile']" routerLinkActive="text-[#84CC16]"
-        class="flex flex-col items-center gap-1.5 text-slate-400 hover:text-white transition-colors">
-        <i class="bi bi-person-fill text-lg"></i>
-        <span class="text-[9px] font-bold uppercase tracking-widest mt-[-2px]">Account</span>
+    <a [routerLink]="['/profile']" routerLinkActive="text-[var(--brand-lime)]"
+        class="flex flex-col items-center gap-1.5 text-slate-400 hover:text-white transition-all transform active:scale-90">
+        <i class="bi bi-person-fill text-xl"></i>
+        <span class="text-[8px] font-black uppercase tracking-[0.2em]">Account</span>
     </a>
+    <div class="w-px h-6 bg-white/10 mx-1"></div>
     <a href="https://wa.me/254700250499" target="_blank"
-        class="flex items-center justify-center w-11 h-11 bg-[#25D366] text-white rounded-full shadow-lg hover:scale-105 transition-transform ml-2">
+        class="flex items-center justify-center w-12 h-12 bg-[#25D366] text-white rounded-2xl shadow-lg shadow-emerald-500/20 hover:scale-110 active:scale-95 transition-all">
         <i class="bi bi-whatsapp text-2xl"></i>
     </a>
 </div>

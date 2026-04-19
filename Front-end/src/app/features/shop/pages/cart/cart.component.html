@@ -68,53 +68,55 @@
 
       <!-- Order Summary (30%) - sticky -->
       <div class="lg:w-[380px] flex-shrink-0" *ngIf="cart.length > 0">
-        <div class="bg-white rounded-2xl shadow-md border border-gray-100 p-6 sticky top-6">
-          <h2 class="text-lg font-semibold mb-6 text-gray-900">Order Summary</h2>
-
-          <div class="flex justify-between text-sm text-gray-600 mb-3">
-            <span>Subtotal</span>
-            <span class="font-medium text-gray-900">KSH {{ cartState.totalprice.toLocaleString() }}</span>
-          </div>
-
-          <div class="flex justify-between text-sm text-gray-600 mb-2">
-            <span>Shipping</span>
-            <span class="font-medium text-gray-900">{{ shippingFee === 0 ? 'Calculated later' : 'KSH 200' }}</span>
-          </div>
+        <div class="bg-white/90 backdrop-blur-md rounded-[32px] shadow-[0_20px_50px_rgba(0,0,0,0.1)] border border-white/50 p-6 lg:p-8 sticky top-10">
+          <h2 class="text-xl font-black mb-8 text-[var(--brand-navy)] tracking-tight">Order Summary</h2>
           
-          <div class="flex items-center justify-between mb-5 text-xs">
-            <div class="flex items-center gap-1 text-gray-500">
-               <span class="material-icons text-[14px]">location_on</span>
-               <span>{{ selectedCountry }}</span>
+          <div class="space-y-4 mb-8">
+            <div class="flex justify-between text-sm text-slate-500">
+              <span class="font-medium uppercase tracking-wider text-[10px]">Subtotal</span>
+              <span class="font-black text-slate-900">KSH {{ cartState.totalprice.toLocaleString() }}</span>
             </div>
-            <button (click)="toggleAddressForm()" class="text-emerald-600 font-medium hover:text-emerald-700 transition-colors duration-200">Change</button>
+
+            <div class="flex justify-between text-sm text-slate-500">
+              <span class="font-medium uppercase tracking-wider text-[10px]">Shipping</span>
+              <span class="font-black text-slate-900">{{ shippingFee === 0 ? 'Calculated' : 'KSH 200' }}</span>
+            </div>
+            
+            <div class="flex items-center justify-between pt-4 border-t border-slate-100">
+              <div class="flex items-center gap-2 text-slate-500">
+                 <i class="bi bi-geo-alt-fill text-[var(--brand-coral)]"></i>
+                 <span class="text-[11px] font-bold uppercase tracking-widest">{{ selectedCountry }}</span>
+              </div>
+              <button (click)="toggleAddressForm()" class="text-[var(--brand-lime)] font-black text-[10px] uppercase tracking-widest hover:opacity-80 transition-all">Change</button>
+            </div>
           </div>
 
           <!-- Collapsible Address -->
-          <div *ngIf="showAddressForm" class="mb-5 animate-scale-in">
-               <select [(ngModel)]="selectedCountry" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm font-medium text-gray-800 outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 transition-all mb-2 appearance-none">
+          <div *ngIf="showAddressForm" class="mb-8 animate-fade-in bg-slate-50 p-4 rounded-2xl border border-slate-100">
+               <select [(ngModel)]="selectedCountry" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm font-bold text-slate-800 outline-none focus:ring-2 focus:ring-[var(--brand-lime)]/20 focus:border-[var(--brand-lime)] transition-all mb-3 appearance-none">
                  <option *ngFor="let country of countries" [value]="country">{{ country }}</option>
                </select>
-               <button (click)="onUpdateCountry()" class="w-full bg-gray-100 text-gray-800 rounded-xl py-2.5 text-xs font-semibold hover:bg-gray-200 active:scale-95 transition-all duration-200">Update Location</button>
+               <button (click)="onUpdateCountry()" class="w-full bg-[var(--brand-navy)] text-white rounded-xl py-3 text-xs font-black uppercase tracking-[0.2em] hover:bg-slate-800 active:scale-95 transition-all">Update</button>
           </div>
 
            <!-- Promo block -->
-            <div class="border-t border-gray-100 pt-4 mb-4">
-              <button (click)="toggleCouponForm()" class="text-xs font-medium text-gray-500 hover:text-gray-800 flex items-center gap-1.5 transition-colors duration-200">
-                <span class="material-icons text-[14px]">local_offer</span> Have a promo code?
+            <div class="mb-8 p-4 rounded-2xl bg-emerald-50/50 border border-emerald-100/50">
+              <button (click)="toggleCouponForm()" class="text-[10px] font-black uppercase tracking-widest text-emerald-700 hover:text-emerald-800 flex items-center gap-2 transition-colors">
+                <i class="bi bi-tag-fill"></i> Have a promo code?
               </button>
-              <div *ngIf="showCouponForm" class="mt-3 flex gap-2 animate-scale-in">
-                <input type="text" placeholder="Promo code" class="w-0 flex-grow bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-medium outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500">
-                <button class="bg-gray-900 text-white rounded-xl px-5 py-2.5 text-xs font-semibold hover:bg-gray-800 hover:scale-[1.02] active:scale-95 transition-all duration-200">Apply</button>
+              <div *ngIf="showCouponForm" class="mt-4 flex gap-2 animate-fade-in">
+                <input type="text" placeholder="CODE" class="w-0 flex-grow bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm font-bold uppercase tracking-widest outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500">
+                <button class="bg-emerald-600 text-white rounded-xl px-5 py-3 text-xs font-black uppercase tracking-widest hover:bg-emerald-700 active:scale-95 transition-all">Apply</button>
               </div>
             </div>
 
-          <div class="border-t border-gray-200 pt-5 flex justify-between items-center font-bold text-xl text-gray-900">
-            <span>Total</span>
+          <div class="flex justify-between items-center font-black text-2xl text-[var(--brand-navy)] tracking-tight pt-6 border-t border-slate-200">
+            <span class="text-xs uppercase tracking-[0.3em] text-slate-400">Total</span>
             <span>KSH {{ grandTotal.toLocaleString() }}</span>
           </div>
 
-          <button (click)="goToCheckout()" class="w-full mt-6 bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded-xl shadow-lg shadow-emerald-600/20 active:scale-95 hover:scale-[1.02] transition-all duration-200 font-semibold flex items-center justify-center gap-2">
-            Proceed to Checkout
+          <button (click)="goToCheckout()" class="w-full mt-10 bg-[var(--brand-coral)] hover:bg-[#dc2626] text-white py-4 rounded-[20px] shadow-xl shadow-red-500/20 active:scale-95 transition-all font-black uppercase tracking-[0.2em] text-sm flex items-center justify-center gap-3">
+            Secure Checkout <i class="bi bi-arrow-right text-lg"></i>
           </button>
         </div>
       </div>
