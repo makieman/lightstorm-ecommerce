@@ -1,9 +1,13 @@
 <section class="bg-gray-50 min-h-screen pb-32 pt-8 lg:pt-12">
   <main class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     
-    <div class="mb-8">
-      <h1 class="text-3xl font-bold text-gray-900">Shopping Cart</h1>
-      <p class="text-gray-500 mt-1">{{ cart.length }} items in your cart</p>
+    <div class="mb-10 px-4 md:px-0">
+      <p class="text-[10px] font-black uppercase tracking-[0.3em] text-[var(--brand-lime)] mb-2">My Shopping</p>
+      <h1 class="text-3xl font-black tracking-tight text-[var(--brand-navy)]">Shopping Cart</h1>
+      <p class="text-slate-500 mt-2 flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-[var(--brand-coral)]"></span>
+        {{ cart.length }} items selected
+      </p>
     </div>
 
     <!-- Layout -->
@@ -13,36 +17,41 @@
       <div class="flex-1 space-y-4">
         <ng-container *ngIf="cart.length > 0">
           <!-- Item -->
-          <div *ngFor="let item of cart; let i = index" class="bg-white rounded-2xl shadow-sm hover:shadow-md transition-all duration-200 p-4 sm:p-5 flex gap-4 sm:gap-6 items-start sm:items-center relative group border border-gray-100">
+          <div *ngFor="let item of cart; let i = index" class="bg-white/80 backdrop-blur-sm rounded-[24px] shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_50px_rgba(0,0,0,0.08)] transition-all duration-500 p-4 sm:p-5 flex gap-4 sm:gap-6 items-center relative group border border-slate-100/50">
             
-            <!-- Image -->
-            <img [src]="item.product.image" class="w-20 h-20 sm:w-28 sm:h-28 rounded-lg object-cover flex-shrink-0 bg-gray-50" />
+            <!-- Image Container -->
+            <div class="w-24 h-24 sm:w-32 sm:h-32 rounded-[20px] overflow-hidden bg-slate-50 flex-shrink-0 group-hover:scale-[1.02] transition-transform duration-500 shadow-sm">
+                <img [src]="item.product.image" class="w-full h-full object-cover" />
+            </div>
 
             <!-- Info -->
-            <div class="flex-1 min-w-0 pr-8">
+            <div class="flex-1 min-w-0">
               <div class="flex justify-between items-start">
                 <div>
-                    <h3 class="font-semibold text-gray-900 text-base sm:text-lg leading-tight">{{ item.product.title }}</h3>
-                    <p class="text-xs text-gray-400 mt-1">
-                      Qty: {{ item.quantity }} • Subtotal: KSH {{ (item.quantity * item.product.price).toLocaleString() }}
-                    </p>
-                    <p class="text-sm text-emerald-600 font-medium mt-1">In Stock</p>
-                    <p class="font-bold text-gray-900 mt-1 text-lg sm:text-xl">KSH {{ item.product.price.toLocaleString() }}</p>
+                    <h3 class="font-black text-slate-800 text-base sm:text-lg leading-tight group-hover:text-[var(--brand-coral)] transition-colors line-clamp-2">{{ item.product.title }}</h3>
+                    <div class="flex flex-wrap items-center gap-x-3 gap-y-1 mt-2 mb-3">
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 bg-slate-100 px-2 py-0.5 rounded-md">Qty: {{ item.quantity }}</span>
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md">In Stock</span>
+                    </div>
                 </div>
               </div>
 
-              <!-- Quantity -->
-              <div class="border-t border-gray-100 mt-3 pt-3 sm:mt-4 sm:pt-4">
-                <div class="flex items-center gap-3">
-                  <button (click)="decreaseProductQuantity(item.product._id)" class="w-10 h-10 rounded-full bg-gray-100 border border-gray-200 hover:bg-emerald-50 hover:text-emerald-600 active:scale-95 transition-all duration-200 text-gray-600 font-medium text-lg flex items-center justify-center">-</button>
-                  <span class="font-medium text-gray-900 w-6 text-center select-none">{{ item.quantity }}</span>
-                  <button (click)="increaseProductQuantity(item.product._id)" class="w-10 h-10 rounded-full bg-gray-100 border border-gray-200 hover:bg-emerald-50 hover:text-emerald-600 active:scale-95 transition-all duration-200 text-gray-600 font-medium text-lg flex items-center justify-center">+</button>
+              <!-- Price & Quantity -->
+              <div class="flex items-center justify-between mt-autp">
+                <p class="font-black text-[var(--brand-navy)] text-lg sm:text-xl">KSH {{ item.product.price.toLocaleString() }}</p>
+                
+                <div class="flex items-center gap-3 bg-slate-50 p-1 rounded-full border border-slate-100">
+                  <button (click)="decreaseProductQuantity(item.product._id)" class="w-8 h-8 rounded-full bg-white shadow-sm hover:bg-red-50 hover:text-red-500 active:scale-90 transition-all text-slate-600 flex items-center justify-center font-bold">-</button>
+                  <span class="font-bold text-slate-800 w-5 text-center text-sm select-none">{{ item.quantity }}</span>
+                  <button (click)="increaseProductQuantity(item.product._id)" class="w-8 h-8 rounded-full bg-white shadow-sm hover:bg-emerald-50 hover:text-emerald-600 active:scale-90 transition-all text-slate-600 flex items-center justify-center font-bold">+</button>
                 </div>
               </div>
             </div>
 
             <!-- Remove Button -->
-            <button (click)="deleteProduct(item.product._id)" class="text-gray-400 hover:text-red-500 hover:bg-red-50 transition-all duration-200 p-2 rounded-full absolute top-3 right-3 flex items-center justify-center z-10">✕</button>
+            <button (click)="deleteProduct(item.product._id)" class="text-slate-300 hover:text-red-500 hover:bg-red-50 transition-all duration-300 w-8 h-8 rounded-full absolute -top-1 -right-1 flex items-center justify-center z-10 bg-white shadow-md border border-slate-100 opacity-0 group-hover:opacity-100 transform translate-y-1 group-hover:translate-y-0">
+                <i class="bi bi-trash3 text-sm"></i>
+            </button>
           </div>
         </ng-container>
 
